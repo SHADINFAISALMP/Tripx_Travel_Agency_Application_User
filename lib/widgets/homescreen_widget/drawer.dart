@@ -43,6 +43,7 @@ final List<Map<String, dynamic>> drawerItems = [
     },
   },
 ];
+
 class Headdrawer extends StatelessWidget {
   const Headdrawer({
     super.key,
@@ -94,9 +95,22 @@ class Headdrawer extends StatelessWidget {
             onTap: () => Navigator.of(context).pop(),
             child: const Icon(Icons.arrow_back_ios_new_rounded),
           ),
+        ),
+        SizedBox(
+          height: mediaqueryheight(.019, context),
+        ),
+        Center(
+          child: Text(
+            "Version 1.0.0",
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                fontFamily: sedan,
+                fontSize: 17,
+                color: blackcolor,
+                ),
+          ),
         )
       ],
     );
   }
 }
-

@@ -17,9 +17,9 @@ class Headerservices extends StatelessWidget {
         children: [
           Column(
             children: [
-              Icon(
-                Icons.travel_explore,
-                size: mediaqueryheight(.04, context),
+              Image.asset(
+                'assets/images/resort.png',
+                width: mediaquerywidht(0.10, context),
                 color: whitecolor,
               ),
               SizedBox(
@@ -33,9 +33,9 @@ class Headerservices extends StatelessWidget {
           ),
           Column(
             children: [
-              Icon(
-                Icons.flight,
-                size: mediaqueryheight(.04, context),
+              Image.asset(
+                'assets/images/plane.png',
+                width: mediaquerywidht(0.10, context),
                 color: whitecolor,
               ),
               SizedBox(
@@ -49,9 +49,9 @@ class Headerservices extends StatelessWidget {
           ),
           Column(
             children: [
-              Icon(
-                Icons.hotel,
-                size: mediaqueryheight(.04, context),
+              Image.asset(
+                'assets/images/hotel.png',
+                width: mediaquerywidht(0.10, context),
                 color: whitecolor,
               ),
               SizedBox(

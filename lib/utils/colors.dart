@@ -9,5 +9,6 @@ const Color transperantcolor = Colors.transparent;
 const Color bluetheme = Color.fromRGBO(5, 194, 237, 0.93);
 const Color bluetheme2 = Color.fromARGB(234, 5, 194, 237);
 const Color splashcolor = Color.fromRGBO(30, 56, 65, 0.612);
-const Color colorteal = Colors.teal;
+const Color colorteal = Color(0xFF138675);
 const Color colortealaccent = Colors.tealAccent;
+const Color appcolor = Color.fromRGBO(8, 144, 130, 1);

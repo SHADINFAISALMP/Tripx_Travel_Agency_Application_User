@@ -1,8 +1,11 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:tripx_user_application/utils/colors.dart';
+import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
-import 'package:tripx_user_application/widgets/drawer.dart';
+import 'package:tripx_user_application/widgets/home_carosel.dart';
+import 'package:tripx_user_application/widgets/homescreen_widget/drawer.dart';
 import 'package:tripx_user_application/widgets/homescreen_widget/header_menu_profile.dart';
 import 'package:tripx_user_application/widgets/homescreen_widget/header_texts.dart';
 import 'package:tripx_user_application/widgets/homescreen_widget/services.dart';
@@ -67,8 +70,25 @@ class _HomeScreenState extends State<HomeScreen>
                       color: whitecolor),
                   width: double.infinity,
                   height: mediaqueryheight(.60, context),
-                  child: const Column(
-                    children: [],
+                  child: Column(
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.only(
+                        top: mediaqueryheight(0.02, context),
+                      )),
+                      mytext("Popular Destinations",
+                          fontFamily: sedan,
+                          fontSize: mediaqueryheight(0.025, context),
+                          color: blackcolor),
+                      SizedBox(
+                        height: mediaqueryheight(0.03, context),
+                      ),
+                      buildCarousel(),
+                      SizedBox(
+                        height: mediaqueryheight(0.02, context),
+                      ),
+                      buildindicator()
+                    ],
                   ),
                 ),
               ],
@@ -81,4 +101,52 @@ class _HomeScreenState extends State<HomeScreen>
       ),
     );
   }
+
+ 
+  Widget buildCarousel() => CarouselSlider.builder(
+      itemCount: images.length,
+      itemBuilder: (context, index, realindex) {
+        final imagess = images[index];
+        return buildImage(imagess, index);
+      },
+      options: CarouselOptions(
+          height: 340,
+          autoPlayCurve: Curves.linear,
+          onPageChanged: (index, reason) => setState(() => activeindex = index),
+          autoPlay: true));
+
+  Widget buildImage(String imagess, int index) => Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(25)),
+          color: colorteal,
+        ),
+        height: 300,
+        width: 330,
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: Image.asset(
+                imagess,
+                height: 280,
+                width: 330,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(
+              height: mediaqueryheight(0.01, context),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.location_on),
+                mytext(locations[index],
+                    fontFamily: sedan,
+                    fontSize: mediaqueryheight(0.027, context),
+                    color: whitecolor)
+              ],
+            )
+          ],
+        ),
+      );
 }

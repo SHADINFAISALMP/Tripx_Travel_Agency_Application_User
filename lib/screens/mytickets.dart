@@ -37,7 +37,7 @@ class _MyticketsState extends State<Mytickets> {
 
   Widget _buildBookingsList() {
     // Return your widget that displays the list of bookings
-    return Center(child: Text('Bookings List'));
+    return const Center(child: Text('Bookings List'));
   }
 
   Widget _buildNoBookings() {
@@ -46,7 +46,7 @@ class _MyticketsState extends State<Mytickets> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset('assets/images/animation.gif', width: 200, height: 200),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           mytext("Currently No Bookings",
               fontFamily: sedan, fontSize: 16, color: colorteal)
         ],

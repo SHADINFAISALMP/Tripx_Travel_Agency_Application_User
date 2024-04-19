@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripx_user_application/bloc/boarding/boarding_bloc_bloc.dart';
 import 'package:tripx_user_application/screens/boarding_widgets.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
-
+  final PageController pageController = PageController();
 class Boardingone extends StatefulWidget {
-  const Boardingone({
-    super.key,
-  });
+  final BoardingBlocBloc bloc;
+  const Boardingone({super.key, required this.bloc});
 
   @override
   State<Boardingone> createState() => _BoardingoneState();
 }
 
 class _BoardingoneState extends State<Boardingone> {
-  final PageController _pageController = PageController();
 
-  int _activepage = 0;
+
   void onNextpage() {
-    if (_activepage < _pages.length - 1) {
-      _pageController.nextPage(
+    if (BlocProvider.of<BoardingBlocBloc>(context, listen: true)
+            .state
+            .activepage <
+        _pages.length - 1) {
+      pageController.nextPage(
           duration: const Duration(milliseconds: 500), curve: Curves.linear);
     }
   }
@@ -43,26 +46,31 @@ class _BoardingoneState extends State<Boardingone> {
       'skip': false
     }
   ];
+
+  final BoardingBlocBloc boardingBloc = BoardingBlocBloc();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
           PageView.builder(
-              controller: _pageController,
+              controller: pageController,
               itemCount: _pages.length,
               onPageChanged: (int page) {
-                setState(() {
-                  _activepage = page;
-                });
+                context
+                    .read<BoardingBlocBloc>()
+                    .add(Boardingbuttonclick(index: page));
+                // setState(() {});
               },
               itemBuilder: (BuildContext context, int index) {
                 return Boardingwidgets(
-                    color: _pages[index]['color'],
-                    title: _pages[index]['title'],
-                    image: _pages[index]['image'],
-                    skip: _pages[index]['skip'],
-                    ontab: onNextpage);
+                  color: _pages[index]['color'],
+                  title: _pages[index]['title'],
+                  image: _pages[index]['image'],
+                  skip: _pages[index]['skip'],
+                  ontab: onNextpage,
+                  boardingBloc: boardingBloc,
+                );
               }),
           Positioned(
               top: MediaQuery.of(context).size.height / 1.30,
@@ -84,7 +92,10 @@ class _BoardingoneState extends State<Boardingone> {
   List<Widget> _buildindicator() {
     final indicator = <Widget>[];
     for (var i = 0; i < _pages.length; i++) {
-      if (_activepage == i) {
+      if (BlocProvider.of<BoardingBlocBloc>(context, listen: true)
+              .state
+              .activepage ==
+          i) {
         indicator.add(indicatortrue());
       } else {
         indicator.add(indicatorfalse());
@@ -94,7 +105,10 @@ class _BoardingoneState extends State<Boardingone> {
   }
 
   Widget indicatortrue() {
-    if (_activepage == 0) {}
+    if (BlocProvider.of<BoardingBlocBloc>(context, listen: true)
+            .state
+            .activepage ==
+        0) {}
     return AnimatedContainer(
       duration: const Duration(
         microseconds: 300,

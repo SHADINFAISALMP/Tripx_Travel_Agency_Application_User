@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripx_user_application/bloc/boarding/boarding_bloc_bloc.dart';
 import 'package:tripx_user_application/screens/boarding_1.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
@@ -16,7 +17,7 @@ class _SplashscreenState extends State<Splashscreen> {
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 5), () {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const Boardingone()));
+          MaterialPageRoute(builder: (context) =>  Boardingone(bloc: BoardingBlocBloc(),)));
     });
     return Scaffold(
       body: Stack(

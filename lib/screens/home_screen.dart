@@ -102,7 +102,6 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
- 
   Widget buildCarousel() => CarouselSlider.builder(
       itemCount: images.length,
       itemBuilder: (context, index, realindex) {
@@ -110,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen>
         return buildImage(imagess, index);
       },
       options: CarouselOptions(
-          height: 340,
+          height: mediaqueryheight(0.4, context),
           autoPlayCurve: Curves.linear,
           onPageChanged: (index, reason) => setState(() => activeindex = index),
           autoPlay: true));
@@ -120,8 +119,8 @@ class _HomeScreenState extends State<HomeScreen>
           borderRadius: BorderRadius.all(Radius.circular(25)),
           color: colorteal,
         ),
-        height: 300,
-        width: 330,
+        height: mediaqueryheight(0.7, context),
+        width: mediaquerywidht(0.75, context),
         child: Column(
           children: [
             ClipRRect(
@@ -129,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen>
               child: Image.asset(
                 imagess,
                 height: 280,
-                width: 330,
+                width: mediaquerywidht(0.75, context),
                 fit: BoxFit.cover,
               ),
             ),
@@ -139,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.location_on),
+                const Icon(Icons.location_on),
                 mytext(locations[index],
                     fontFamily: sedan,
                     fontSize: mediaqueryheight(0.027, context),

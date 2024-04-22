@@ -40,36 +40,36 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey, // Assign the key to the Scaffold
+      key: scaffoldKey, // Assign the key to the Scaffold
       body: Container(
         color: colorteal,
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Headermenuprofile(scaffoldKey: _scaffoldKey),
-                SizedBox(
-                  height: mediaqueryheight(.01, context),
-                ),
-                const Headertextone(),
-                const Headertexttwo(),
-                SizedBox(
-                  height: mediaqueryheight(.03, context),
-                ),
-                const Headerservices(),
-                SizedBox(
-                  height: mediaqueryheight(.03, context),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(
-                          mediaqueryheight(.1, context),
-                        ),
+          child: Column(
+            children: [
+              const Headermenuprofile(),
+              SizedBox(
+                height: mediaqueryheight(.01, context),
+              ),
+              const Headertextone(),
+              const Headertexttwo(),
+              SizedBox(
+                height: mediaqueryheight(.03, context),
+              ),
+              const Headerservices(),
+              SizedBox(
+                height: mediaqueryheight(.03, context),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(
+                        mediaqueryheight(.1, context),
                       ),
-                      color: whitecolor),
-                  width: double.infinity,
-                  height: mediaqueryheight(.60, context),
+                    ),
+                    color: whitecolor),
+                width: double.infinity,
+                height: mediaqueryheight(0.5644, context),
+                child: SingleChildScrollView(
                   child: Column(
                     children: [
                       Padding(
@@ -87,12 +87,16 @@ class _HomeScreenState extends State<HomeScreen>
                       SizedBox(
                         height: mediaqueryheight(0.02, context),
                       ),
-                      buildindicator()
+                      buildindicator(),
+                      SizedBox(
+                        height: mediaqueryheight(0.02, context),
+                      ),
+                      buildCarousel()
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

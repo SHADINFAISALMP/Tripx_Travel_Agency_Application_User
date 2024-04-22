@@ -8,10 +8,10 @@ mytext(String text,
     required double fontSize,
     required Color color,
     FontWeight? fontWeight,
-    TextAlign textAlign = TextAlign.start}) {
+    TextOverflow? overflow,  TextOverflow? textAlign}) {
   return Text(
     text,
-    textAlign: textAlign,
+    
     style: TextStyle(
         fontFamily: fontFamily,
         fontSize: fontSize,

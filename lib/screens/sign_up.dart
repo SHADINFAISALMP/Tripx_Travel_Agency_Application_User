@@ -16,14 +16,14 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-  XFile? _imageFile; // Initialize with null
+  XFile? imageFile; // Initialize with null
 
-  Future<void> _openGallery(BuildContext context) async {
+  Future<void> openGallery(BuildContext context) async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       setState(() {
-        _imageFile = pickedImage;
+        imageFile = pickedImage;
       });
     }
   }
@@ -61,11 +61,11 @@ class _SignupState extends State<Signup> {
                   alignment: Alignment.center,
                   children: [
                     GestureDetector(
-                      onTap: () => _openGallery(context),
+                      onTap: () => openGallery(context),
                       child: CircleAvatar(
                         radius: 100,
-                        backgroundImage: _imageFile != null
-                            ? FileImage(File(_imageFile!.path)) as ImageProvider
+                        backgroundImage: imageFile != null
+                            ? FileImage(File(imageFile!.path)) as ImageProvider
                             : const AssetImage("assets/images/Airplane.jpeg"),
                       ),
                     ),
@@ -73,7 +73,7 @@ class _SignupState extends State<Signup> {
                       right: 0, bottom: 1, // Adjust position as needed
                       child: GestureDetector(
                         onTap: () {
-                          _openGallery(context);
+                          openGallery(context);
                         },
                         child: CircleAvatar(
                           radius: mediaqueryheight(0.029, context),

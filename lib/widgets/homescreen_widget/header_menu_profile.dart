@@ -3,13 +3,12 @@ import 'package:tripx_user_application/screens/profile.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
 class Headermenuprofile extends StatelessWidget {
   const Headermenuprofile({
     super.key,
-    required GlobalKey<ScaffoldState> scaffoldKey,
-  }) : _scaffoldKey = scaffoldKey;
-
-  final GlobalKey<ScaffoldState> _scaffoldKey;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class Headermenuprofile extends StatelessWidget {
           IconButton(
             onPressed: () {
               // Open the drawer using the GlobalKey
-              _scaffoldKey.currentState!.openDrawer();
+              scaffoldKey.currentState!.openDrawer();
             },
             icon: Icon(
               Icons.menu,
@@ -34,13 +33,11 @@ class Headermenuprofile extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => const Profile())),
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => const Profile())),
             child: CircleAvatar(
               radius: mediaqueryheight(.03, context),
-              backgroundImage:
-                  const AssetImage("assets/images/paulwalker.jpg"),
+              backgroundImage: const AssetImage("assets/images/paulwalker.jpg"),
             ),
           ),
         ],
@@ -48,4 +45,3 @@ class Headermenuprofile extends StatelessWidget {
     );
   }
 }
-

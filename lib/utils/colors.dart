@@ -12,3 +12,4 @@ const Color splashcolor = Color.fromRGBO(30, 56, 65, 0.612);
 const Color colorteal = Color(0xFF138675);
 const Color colortealaccent = Colors.tealAccent;
 const Color appcolor = Color.fromRGBO(8, 144, 130, 1);
+const Color orangecolor = Color.fromRGBO(255, 153, 51, 1);

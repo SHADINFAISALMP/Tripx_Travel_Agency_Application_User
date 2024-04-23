@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen>
   late NotchBottomBarController _pageController;
   late List<Widget> pages;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey =
+  final GlobalKey<ScaffoldState> scaffoldKey =
       GlobalKey<ScaffoldState>(); // Define a GlobalKey
 
   @override
@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen>
           borderRadius: BorderRadius.all(Radius.circular(25)),
           color: colorteal,
         ),
-        height: mediaqueryheight(0.7, context),
+        height: mediaqueryheight(0.75, context),
         width: mediaquerywidht(0.75, context),
         child: Column(
           children: [

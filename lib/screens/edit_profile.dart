@@ -64,7 +64,7 @@ class _EditprofileState extends State<Editprofile> {
                               ? FileImage(File(imageFile!.path))
                                   as ImageProvider
                               : const AssetImage(
-                                  "assets/images/paulwalker.jpeg"),
+                                  "assets/images/paulwalker.jpg"),
                         ),
                       ),
                       const Icon(

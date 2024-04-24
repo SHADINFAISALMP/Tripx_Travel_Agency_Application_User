@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "104318694544",
+    "project_id": "tripxtravelagencyuserapp",
+    "storage_bucket": "tripxtravelagencyuserapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104318694544:android:f351b5599fc2b6ee271415",
+        "android_client_info": {
+          "package_name": "com.example.tripx_user_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ0LyymwIRIm7wCCkd_tjeQkKF7wnGxa0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

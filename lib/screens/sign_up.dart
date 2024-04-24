@@ -1,13 +1,16 @@
-import 'dart:io';
+import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tripx_user_application/bloc/signup/signup_bloc.dart';
-import 'package:tripx_user_application/screens/otp_verification.dart';
 
+import 'package:image_picker/image_picker.dart';
+
+import 'package:tripx_user_application/screens/otp_verification.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 import 'package:tripx_user_application/utils/textformfields.dart';
+import 'package:tripx_user_application/widgets/textformfieldcontroller/controller.dart';
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -18,6 +21,73 @@ class Signup extends StatefulWidget {
 
 class _SignupState extends State<Signup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Uint8List? imageinbytes;
+  String? imagepath;
+  String? imageValidationError;
+
+  Future<String?> addUserDetails(String url) async {
+    try {
+      await FirebaseFirestore.instance.collection('userdetails').add({
+        'name': namecontroller.text.trim(),
+        'email': emailcontroller.text.trim(),
+        'phonenumber': phonecontroller.text.trim(),
+        'password': passwordcontroller.text.trim(),
+        'confirmpassword': confirmpasswordcontroler.text.trim(),
+        'image': url
+      });
+    } catch (e) {}
+    return null;
+  }
+
+  Future<String?> uploadimage(Uint8List imgbyts, String filename) async {
+    try {
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref('Userimages')
+          .child(filename);
+      final meta = firebase_storage.SettableMetadata(contentType: "image/jpeg");
+      await ref.putData(imgbyts, meta);
+      String url = await ref.getDownloadURL();
+
+      return url;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  pickImage(ImageSource source) async {
+    final ImagePicker imagePicker = ImagePicker();
+    XFile? file = await imagePicker.pickImage(source: source);
+    if (file != null) {
+      final img = await file.readAsBytes();
+      setState(() {
+        imagepath = file.name;
+        imageinbytes = img;
+      });
+      return await file.readAsBytes();
+    }
+    print("No image selected");
+  }
+
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      if (imageinbytes != null) {
+        final url = await uploadimage(imageinbytes!, imagepath!);
+        await addUserDetails(url!);
+
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const OtpVerification()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please select an image'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,19 +123,12 @@ class _SignupState extends State<Signup> {
                     alignment: Alignment.center,
                     children: [
                       GestureDetector(
-                        onTap: () =>
-                            context.read<SignupBloc>().add(Imagebuttonpress()),
-                        child: BlocBuilder<SignupBloc, SignupState>(
-                          builder: (context, state) {
-                            return CircleAvatar(
-                              radius: 100,
-                              backgroundImage: state.imagepath.isNotEmpty
-                                  ? FileImage(File(state.imagepath))
-                                      as ImageProvider
-                                  : const AssetImage(
-                                      "assets/images/Airplane.jpeg"),
-                            );
-                          },
+                        onTap: () => pickImage(ImageSource.gallery),
+                        child: CircleAvatar(
+                          radius: 100,
+                          backgroundImage: imagepath != null
+                              ? MemoryImage(imageinbytes!) as ImageProvider
+                              : const AssetImage("assets/images/Airplane.jpeg"),
                         ),
                       ),
                       Positioned(
@@ -73,7 +136,7 @@ class _SignupState extends State<Signup> {
                         bottom: 1,
                         child: GestureDetector(
                           onTap: () {
-                            context.read<SignupBloc>().add(Imagebuttonpress());
+                            // context.read<SignupBloc>().add(Imagebuttonpress());
                           },
                           child: CircleAvatar(
                             radius: mediaqueryheight(0.029, context),
@@ -98,33 +161,47 @@ class _SignupState extends State<Signup> {
                   SizedBox(
                     height: mediaqueryheight(.011, context),
                   ),
-                  customtextformfieild('Enter Your Name', Icons.person, context,
-                      controller: namecontroller,
-                      validator: namevalidator,
-                      autovalidateMode: AutovalidateMode.onUserInteraction),
+                  customtextformfieild(
+                    'Enter Your Name',
+                    Icons.person,
+                    context,
+                    controller: namecontroller,
+                    validator: nameValidator,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
                   SizedBox(
                     height: mediaqueryheight(.015, context),
                   ),
-                  customtextformfieild("Enter Your Email", Icons.email, context,
-                      validator: emailValidator,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: emailcontroller),
+                  customtextformfieild(
+                    "Enter Your Email",
+                    Icons.email,
+                    context,
+                    validator: emailValidator,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: emailcontroller,
+                  ),
                   SizedBox(
                     height: mediaqueryheight(.015, context),
                   ),
                   Textformfieldphonenumber(
-                      validator: phoneValidator,
-                      controller: phonecontroller,
-                      autovalidateMode: AutovalidateMode.onUserInteraction),
-                  customtextformfiledpassword("Enter Your Password", context,
-                      controller: passwordcontroller,
-                      validator: passwordvalidator,
-                      autovalidateMode: AutovalidateMode.onUserInteraction),
+                    validator: phoneValidator,
+                    controller: phonecontroller,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
+                  customtextformfiledpassword(
+                    "Enter Your Password",
+                    context,
+                    controller: passwordcontroller,
+                    validator: passwordValidator,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
                   customtextformfiledconfirmpassword(
-                      "Confirm Password", context,
-                      controller: confirmpasswordcontroler,
-                      validator: confirmPasswordValidator,
-                      autovalidateMode: AutovalidateMode.onUserInteraction),
+                    "Confirm Password",
+                    context,
+                    controller: confirmpasswordcontroler,
+                    validator: confirmPasswordValidator,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
                   SizedBox(
                     height: mediaqueryheight(.011, context),
                   ),
@@ -150,11 +227,13 @@ class _SignupState extends State<Signup> {
                           SizedBox(
                             width: mediaquerywidht(.04, context),
                           ),
-                          mytext('Sign Up',
-                              color: black54,
-                              fontSize: mediaqueryheight(.021, context),
-                              fontWeight: FontWeight.normal,
-                              fontFamily: 'sedan'),
+                          mytext(
+                            'Sign Up',
+                            color: black54,
+                            fontSize: mediaqueryheight(.021, context),
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'sedan',
+                          ),
                         ],
                       ),
                     ),
@@ -167,78 +246,4 @@ class _SignupState extends State<Signup> {
       ),
     );
   }
-
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      if (context.read<SignupBloc>().state.imagepath.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select an image'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const OtpVerification()));
-      }
-    }
-  }
-}
-
-String? confirmPasswordValidator(
-  String? value,
-) {
-  if (value == null || value.isEmpty) {
-    return 'Please confirm your password';
-  }
-  if (value != passwordcontroller.text) {
-    return 'Passwords do not match';
-  }
-  return null;
-}
-
-String? emailValidator(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Please enter your email';
-  }
-  if (!value.contains('@')) {
-    return 'Email must contain "@" symbol';
-  }
-  final RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-  if (!emailRegExp.hasMatch(value)) {
-    return 'Please enter a valid email';
-  }
-  return null;
-}
-
-String? namevalidator(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Please enter your name';
-  }
-  final RegExp nameRegExp = RegExp(r'^[a-zA-Z\s]+$');
-  if (!nameRegExp.hasMatch(value)) {
-    return 'Please enter a valid name';
-  }
-  return null;
-}
-
-String? passwordvalidator(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Please enter your password';
-  }
-  if (value.length < 6) {
-    return 'Password must contain at least 6 characters';
-  }
-  return null;
-}
-
-String? phoneValidator(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Please enter your phone number';
-  }
-  // Check if the input consists of exactly 10 digits
-  if (value.length != 10 || int.tryParse(value) == null) {
-    return 'Phone number must be 10 digits';
-  }
-  return null;
 }

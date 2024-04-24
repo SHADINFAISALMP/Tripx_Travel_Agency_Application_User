@@ -5,15 +5,9 @@ import 'package:tripx_user_application/bloc/signup/signup_bloc.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
+import 'package:tripx_user_application/widgets/textformfieldcontroller/controller.dart';
 
-TextEditingController namecontroller = TextEditingController();
-TextEditingController emailcontroller = TextEditingController();
-TextEditingController phonecontroller = TextEditingController();
-TextEditingController passwordcontroller = TextEditingController();
-TextEditingController confirmpasswordcontroler = TextEditingController();
 
-TextEditingController emailcontrollerlog = TextEditingController();
-TextEditingController passwordcontrollerlog = TextEditingController();
 
 SizedBox customtextformfieild(
   String hinttext,

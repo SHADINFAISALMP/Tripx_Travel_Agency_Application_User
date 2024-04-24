@@ -6,6 +6,7 @@ import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 import 'package:tripx_user_application/utils/textformfields.dart';
+import 'package:tripx_user_application/widgets/textformfieldcontroller/controller.dart';
 
 final GlobalKey<FormState> formKeyy = GlobalKey<FormState>();
 
@@ -107,7 +108,7 @@ class _LoginState extends State<Login> {
                   customtextformfiledpassword('Enter Your Password', context,
                       controller: passwordcontrollerlog,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: passwordvalidator),
+                      validator: passwordValidator),
                   SizedBox(
                     height: mediaqueryheight(.05, context),
                   ),

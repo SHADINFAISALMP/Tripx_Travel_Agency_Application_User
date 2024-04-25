@@ -10,7 +10,6 @@ class ProfileimageBloc extends Bloc<ProfileimageEvent, ProfileimageState> {
   ProfileimageBloc() : super(const ProfileimageInitial(imagepath: '', imageInBytes: null)) {
     on<Imagepress>(_imagepress);
   }
-
    _imagepress(
       Imagepress event, Emitter<ProfileimageState> emit) async {
             String? imagePath;

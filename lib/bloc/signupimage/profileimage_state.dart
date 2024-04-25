@@ -12,6 +12,3 @@ final class ProfileimageInitial extends ProfileimageState {
   const ProfileimageInitial(
       {required super.imageInBytes, required super.imagepath});
 }
-// final class Imagenotpicked extends ProfileimageState {
-//   const Imagenotpicked({ required super.imageInBytes, required super.imagepath});
-// }

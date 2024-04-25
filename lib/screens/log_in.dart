@@ -8,7 +8,7 @@ import 'package:tripx_user_application/utils/mediaquery.dart';
 import 'package:tripx_user_application/utils/textformfields.dart';
 import 'package:tripx_user_application/widgets/textformfieldcontroller/controller.dart';
 
-final GlobalKey<FormState> formKeyy = GlobalKey<FormState>();
+final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _LoginState extends State<Login> {
         child: Center(
           child: SingleChildScrollView(
             child: Form(
-              key: formKeyy,
+              key: formKey,
               child: Column(
                 children: [
                   Padding(
@@ -181,7 +181,7 @@ class _LoginState extends State<Login> {
   }
 
   void submitForm() {
-    if (formKeyy.currentState!.validate()) {
+    if (formKey.currentState!.validate()) {
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const Bottomnavigation()));
     } else {

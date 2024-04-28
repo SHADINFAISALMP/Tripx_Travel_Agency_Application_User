@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tripx_user_application/bloc/login/login_bloc.dart';
+
 import 'package:tripx_user_application/bloc/signup/signup_bloc.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
@@ -56,7 +56,7 @@ class SubmitButtonVerify extends StatelessWidget {
 
 submitButton(BuildContext context, bool fromLogin) {
   fromLogin
-      ? context.read<SignupBloc>().add(VerifyEmailPressed(context))
+      ? context.read<SignupBloc>().add(VerifyEmailPressed(context))//here i changed
       : context.read<SignupBloc>().add(VerifyEmailPressed(context));
   return null;
 }

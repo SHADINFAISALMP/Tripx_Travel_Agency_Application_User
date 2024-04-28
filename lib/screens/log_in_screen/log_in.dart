@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripx_user_application/bloc/google_sign/google_bloc.dart';
 import 'package:tripx_user_application/bloc/login/login_bloc.dart';
 
 import 'package:tripx_user_application/screens/bottom_navigation/bottomnavigation.dart';
 import 'package:tripx_user_application/screens/log_in_screen/donthave_account.dart';
+import 'package:tripx_user_application/screens/log_in_screen/google_sign.dart';
 import 'package:tripx_user_application/screens/otp_verificaation/otp_verification.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
@@ -50,7 +52,9 @@ class _LoginState extends State<Login> {
               if (state is NavigateToOtpPage) {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const OtpVerification(fromlogin: true,)));
+                    builder: (context) => const OtpVerification(
+                          fromlogin: true,
+                        )));
               }
               if (state is AuthenicatingUser) {
                 showDialog(
@@ -83,6 +87,51 @@ class _LoginState extends State<Login> {
               }
             },
           ),
+          BlocListener<GoogleBloc, GoogleState>(
+            listener: (context, state) {
+              if (state is GoogleSuccessState) {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const Bottomnavigation()));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Google Sign In Success")));
+              }
+              if (state is GoogleLoadingstate) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.transparent,
+                      content: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Transform.scale(
+                              scale: 1.5,
+                              child: Image.asset(
+                                'assets/images/circle.gif',
+                                color: whitecolor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+              if (state is GoogleFailureState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Failed Logging in. Please try again")));
+              Navigator.pop(context);
+              }
+            },
+          )
         ],
         child: Container(
           decoration: const BoxDecoration(
@@ -118,39 +167,7 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       height: mediaqueryheight(.16, context),
                     ),
-                    Container(
-                      height: mediaqueryheight(.07, context),
-                      width: mediaquerywidht(.9, context),
-                      decoration: BoxDecoration(
-                        color: whitecolor,
-                        borderRadius: BorderRadius.all(Radius.circular(
-                          mediaqueryheight(.011, context),
-                        )),
-                      ),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: mediaquerywidht(.07, context),
-                            ),
-                            child: Image.asset(
-                              "assets/images/google.png",
-                              height: mediaqueryheight(.05, context),
-                            ),
-                          ),
-                          SizedBox(
-                            width: mediaquerywidht(.06, context),
-                          ),
-                          mytext(
-                            "Sign In With Google",
-                            color: blackcolor,
-                            fontFamily: sedan,
-                            fontWeight: FontWeight.w700,
-                            fontSize: mediaqueryheight(.021, context),
-                          ),
-                        ],
-                      ),
-                    ),
+                    const GoogleSignIn(),
                     SizedBox(
                       height: mediaqueryheight(.021, context),
                     ),
@@ -226,3 +243,5 @@ class _LoginState extends State<Login> {
     );
   }
 }
+
+

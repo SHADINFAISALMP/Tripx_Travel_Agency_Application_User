@@ -7,9 +7,10 @@ import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 
 class SubmitButtonVerify extends StatelessWidget {
-   final bool fromlogin;
+  final bool fromlogin;
   const SubmitButtonVerify({
-    super.key, required this.fromlogin,
+    super.key,
+    required this.fromlogin,
   });
 
   @override
@@ -55,7 +56,7 @@ class SubmitButtonVerify extends StatelessWidget {
 
 submitButton(BuildContext context, bool fromLogin) {
   fromLogin
-      ? context.read<LoginBloc>().add(Verifyemailpressedfromlogin(context))
+      ? context.read<SignupBloc>().add(VerifyEmailPressed(context))
       : context.read<SignupBloc>().add(VerifyEmailPressed(context));
   return null;
 }

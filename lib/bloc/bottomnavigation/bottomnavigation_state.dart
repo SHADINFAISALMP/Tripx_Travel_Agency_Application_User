@@ -1,12 +1,12 @@
 part of 'bottomnavigation_bloc.dart';
 
 @immutable
-sealed class BottomnavigationState {}
+sealed class BottomnavigationState {
+  final int currentpageindex;
 
-final class BottomnavigationInitial extends BottomnavigationState {}
+  const BottomnavigationState({required this.currentpageindex});
+}
 
-class TabChangedState extends BottomnavigationState {
-  final int selectedindex;
-
-  TabChangedState({required this.selectedindex});
+final class BottomnavigationInitial extends BottomnavigationState {
+  const BottomnavigationInitial({required super.currentpageindex});
 }

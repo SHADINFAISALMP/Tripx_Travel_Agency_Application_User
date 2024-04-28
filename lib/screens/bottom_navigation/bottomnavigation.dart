@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripx_user_application/bloc/bottomnavigation/bottomnavigation_bloc.dart';
 import 'package:tripx_user_application/utils/bottomnavigation_list.dart';
-
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 
@@ -15,7 +14,7 @@ class Bottomnavigation extends StatefulWidget {
 }
 
 class _BottomnavigationState extends State<Bottomnavigation> {
-   late NotchBottomBarController _pageController;
+  late NotchBottomBarController _pageController;
   @override
   void initState() {
     super.initState();
@@ -29,13 +28,15 @@ class _BottomnavigationState extends State<Bottomnavigation> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
+    // final itemposition = bottombarcolor(context ?? 0);
+    // final isselected = itemposition == state.currentpageindex;
     return BlocBuilder<BottomnavigationBloc, BottomnavigationState>(
       builder: (context, state) {
         return Scaffold(
-            body: pages[(BlocProvider.of<BottomnavigationBloc>(context).state
-                    as TabChangedState)
-                .selectedindex],
+            body: pages[state.currentpageindex],
             bottomNavigationBar: AnimatedNotchBottomBar(
               bottomBarItems: const [
                 BottomBarItem(
@@ -74,7 +75,8 @@ class _BottomnavigationState extends State<Bottomnavigation> {
               ],
               notchBottomBarController: _pageController,
               onTap: (int value) {
-                BlocProvider.of<BottomnavigationBloc>(context)
+                context
+                    .read<BottomnavigationBloc>()
                     .add(ChangeTabEvent(pageIndex: value));
               },
               kIconSize: mediaqueryheight(.03, context),

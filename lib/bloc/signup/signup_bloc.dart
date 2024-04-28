@@ -1,10 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripx_user_application/bloc/signupimage/profileimage_bloc.dart';
-import 'package:tripx_user_application/screens/sign_up.dart';
-import 'package:tripx_user_application/widgets/textformfieldcontroller/controller.dart';
+import 'package:tripx_user_application/firebase_auth/firebase_services.dart';
+import 'package:tripx_user_application/repository/user_registration.dart';
+import 'package:tripx_user_application/screens/signup_page/sign_up.dart';
 
 part 'signup_event.dart';
 part 'signup_state.dart';
@@ -13,6 +14,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   SignupBloc() : super(SignupInitial()) {
     on<Confirmpassword>(_confirmPassword);
     on<Signupbuttonpress>(_signupbuttonpress);
+    on<AuthenticateUserDetails>(_authenticateUserDetails);
+    on<ResendEmailButtonPressed>(_resendEmailButtonPressed);
+    on<VerifyEmailPressed>(_verifyEmailPressed);
   }
   _signupbuttonpress(
     Signupbuttonpress event,
@@ -25,41 +29,56 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               .state
               .imageInBytes !=
           null) {
-        
-        emit(AddingToDataToFirebase());
-        firebase_storage.Reference ref =
-            firebase_storage.FirebaseStorage.instance.ref('Userimages').child(
-                BlocProvider.of<ProfileimageBloc>(event.context, listen: false)
-                    .state
-                    .imagepath);
-        final meta =
-            firebase_storage.SettableMetadata(contentType: "image/jpeg");
-        await ref.putData(
-            BlocProvider.of<ProfileimageBloc>(event.context, listen: false)
-                .state
-                .imageInBytes!,
-            meta);
-        String url = await ref.getDownloadURL();
-
-        try {
-          await FirebaseFirestore.instance.collection('userdetails').add({
-            'name': namecontroller.text.trim(),
-            'email': emailcontroller.text.trim(),
-            'phonenumber': phonecontroller.text.trim(),
-            'password': passwordcontroller.text.trim(),
-            'confirmpassword': confirmpasswordcontroler.text.trim(),
-            'image': url
-          });
-          emit(Signupsuccess());
-        } catch (e) {
-         
-          emit(Signupfailure());
-        }
+        emit(AuthLoading());
+        add(AuthenticateUserDetails(event.context));
       } else {
-        emit(Imagenotpicked());
+        return;
       }
-    } else {
-      return;
+    }
+  }
+
+  _authenticateUserDetails(
+      AuthenticateUserDetails event, Emitter<SignupState> emit) async {
+    try {
+      FirebaseAuthServices auth = FirebaseAuthServices();
+      User? user = await auth.signUpWithEmailandPassword();
+      if (user != null) {
+        print("mownee");
+        await AddUserDetailsToFirebase().addDataToFirebase(event.context);
+        print("edaa ");
+        FirebaseAuth authenctication = FirebaseAuth.instance;
+        authenctication.currentUser!.sendEmailVerification();
+        emit(NavigateToEmailVerficationPage());
+      } else {
+        emit(Registerfail("email already exists"));
+      }
+    } catch (e) {
+      emit(Registerfail("something went wrong"));
+    }
+  }
+
+  _resendEmailButtonPressed(
+      ResendEmailButtonPressed event, Emitter<SignupState> emit) {
+    try {
+      FirebaseAuth authentication = FirebaseAuth.instance;
+      authentication.currentUser!.sendEmailVerification();
+    } catch (e) {
+      emit(Registerfail("some Things went wrong"));
+    }
+  }
+
+  _verifyEmailPressed(
+      VerifyEmailPressed event, Emitter<SignupState> emit) async {
+    emit(LoadingStateOtpScreen());
+    try {
+      FirebaseAuth.instance.currentUser?.reload();
+      final user = FirebaseAuth.instance.currentUser;
+      if (user!.emailVerified) {
+        emit(NavigateHomePage());
+        print("success");
+      }
+    } catch (e) {
+      emit(Registerfail("PLease Try Again"));
     }
   }
 
@@ -67,6 +86,5 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     emit(ConfirmPasswordState(
       isConfirmed: event.isconfirmpassword,
     ));
-   
   }
 }

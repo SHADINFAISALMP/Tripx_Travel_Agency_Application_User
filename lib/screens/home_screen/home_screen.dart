@@ -4,11 +4,11 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
-import 'package:tripx_user_application/widgets/home_carosel.dart';
-import 'package:tripx_user_application/widgets/homescreen_widget/drawer.dart';
-import 'package:tripx_user_application/widgets/homescreen_widget/header_menu_profile.dart';
-import 'package:tripx_user_application/widgets/homescreen_widget/header_texts.dart';
-import 'package:tripx_user_application/widgets/homescreen_widget/services.dart';
+import 'package:tripx_user_application/screens/home_screen/widgets/home_carosel.dart';
+import 'package:tripx_user_application/screens/home_screen/widgets/drawer.dart';
+import 'package:tripx_user_application/screens/home_screen/widgets/header_menu_profile.dart';
+import 'package:tripx_user_application/screens/home_screen/widgets/header_texts.dart';
+import 'package:tripx_user_application/screens/home_screen/widgets/services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

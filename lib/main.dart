@@ -7,7 +7,8 @@ import 'package:tripx_user_application/bloc/login/login_bloc.dart';
 import 'package:tripx_user_application/bloc/signup/signup_bloc.dart';
 import 'package:tripx_user_application/bloc/signupimage/profileimage_bloc.dart';
 import 'package:tripx_user_application/firebase_options.dart';
-import 'package:tripx_user_application/screens/splash_screen.dart';
+
+import 'package:tripx_user_application/screens/splash/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,6 @@ void main() async {
       ),
       BlocProvider(
         create: (context) => ProfileimageBloc(),
-        
       ),
       BlocProvider<BoardingBlocBloc>(create: (context) => BoardingBlocBloc()),
       BlocProvider(
@@ -27,6 +27,7 @@ void main() async {
       ),
       BlocProvider(
         create: (context) => BottomnavigationBloc(),
+       
       )
     ],
     child: const MyApp(),

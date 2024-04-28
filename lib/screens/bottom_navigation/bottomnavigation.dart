@@ -15,7 +15,7 @@ class Bottomnavigation extends StatefulWidget {
 }
 
 class _BottomnavigationState extends State<Bottomnavigation> {
-  late NotchBottomBarController _pageController;
+   late NotchBottomBarController _pageController;
   @override
   void initState() {
     super.initState();

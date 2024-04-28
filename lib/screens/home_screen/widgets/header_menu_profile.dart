@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tripx_user_application/screens/profile.dart';
+import 'package:tripx_user_application/screens/profile/profile.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 

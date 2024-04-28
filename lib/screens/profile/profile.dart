@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tripx_user_application/screens/edit_profile.dart';
-import 'package:tripx_user_application/screens/mytickets.dart';
+import 'package:tripx_user_application/screens/edit_profile/edit_profile.dart';
+import 'package:tripx_user_application/screens/my_tickets/mytickets.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 
-import '../widgets/homescreen_widget/header_menu_profile.dart';
+import '../home_screen/widgets/header_menu_profile.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});

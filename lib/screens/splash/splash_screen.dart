@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripx_user_application/bloc/boarding/boarding_bloc_bloc.dart';
-import 'package:tripx_user_application/screens/boarding_1.dart';
+import 'package:tripx_user_application/screens/boarding/boarding_1.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';

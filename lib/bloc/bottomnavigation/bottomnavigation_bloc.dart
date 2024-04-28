@@ -7,8 +7,10 @@ part 'bottomnavigation_state.dart';
 class BottomnavigationBloc
     extends Bloc<BottomnavigationEvent, BottomnavigationState> {
   BottomnavigationBloc() : super(BottomnavigationInitial()) {
-    on<ChangeTabEvent>((event, emit) {
-      emit(TabChangedState(selectedindex: event.pageIndex));
-    });
+    on<ChangeTabEvent>(ontabchanged);
+  }
+  ontabchanged(ChangeTabEvent event, Emitter<BottomnavigationState> emit) {
+    print("adnan");
+    emit(TabChangedState(selectedindex: event.pageIndex));
   }
 }

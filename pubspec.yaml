@@ -90,6 +90,7 @@ flutter:
     - assets/images/winter-kashmir.jpg
     - assets/images/singapore.jpeg
     - assets/images/line.gif
+    - assets/images/circle.gif
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

@@ -5,6 +5,7 @@ import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 
+
 import '../home_screen/widgets/header_menu_profile.dart';
 
 class Profile extends StatefulWidget {

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:tripx_user_application/screens/package_details/package_details.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -113,43 +114,55 @@ class _HomeScreenState extends State<HomeScreen>
         return buildImage(imagess, index);
       },
       options: CarouselOptions(
-          height: mediaqueryheight(0.4, context),
+          viewportFraction: 0.72,
+          enlargeCenterPage: true,
+          height: mediaqueryheight(0.45, context),
           autoPlayCurve: Curves.linear,
           onPageChanged: (index, reason) => setState(() => activeindex = index),
           autoPlay: true));
 
-  Widget buildImage(String imagess, int index) => Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          color: colorteal,
-        ),
-        height: mediaqueryheight(0.75, context),
-        width: mediaquerywidht(0.75, context),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: Image.asset(
-                imagess,
-                height: 280,
-                width: mediaquerywidht(0.75, context),
-                fit: BoxFit.cover,
+  Widget buildImage(String imagess, int index) => GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PackageDetails(
+                      images: [imagess],
+                    )),
+          );
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            color: colorteal,
+          ),
+          width: mediaquerywidht(0.75, context),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(25),
+                child: Image.asset(
+                  imagess,
+                  height: 300,
+                  width: mediaquerywidht(0.75, context),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            SizedBox(
-              height: mediaqueryheight(0.01, context),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.location_on),
-                mytext(locations[index],
-                    fontFamily: sedan,
-                    fontSize: mediaqueryheight(0.027, context),
-                    color: whitecolor)
-              ],
-            )
-          ],
+              SizedBox(
+                height: mediaqueryheight(0.01, context),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.location_on),
+                  mytext(locations[index],
+                      fontFamily: sedan,
+                      fontSize: mediaqueryheight(0.027, context),
+                      color: whitecolor),
+                ],
+              )
+            ],
+          ),
         ),
       );
 }

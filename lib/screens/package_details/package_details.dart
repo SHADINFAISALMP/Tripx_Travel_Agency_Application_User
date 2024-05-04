@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:tripx_user_application/screens/bottom_navigation/bottomnavigation.dart';
@@ -6,9 +7,9 @@ import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 
 class PackageDetails extends StatelessWidget {
-  final List<String> images;
+  final QueryDocumentSnapshot<Object?> itemslists;
 
-  const PackageDetails({Key? key, required this.images}) : super(key: key);
+  const PackageDetails({Key? key, required this.itemslists}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +17,10 @@ class PackageDetails extends StatelessWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const Bottomnavigation()));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const Bottomnavigation()));
           },
           child: const Icon(
             Icons.arrow_back_ios_new,
@@ -40,13 +43,15 @@ class PackageDetails extends StatelessWidget {
                   color: whitecolor,
                 ),
                 child: CarouselSlider.builder(
-                  itemCount: images.length,
+                  itemCount: itemslists['imagepath'].length,
                   itemBuilder: (context, index, realIndex) {
-                    final imagePath = images[index];
+                    List<String> imagess =
+                        (itemslists['imagepath'] as List<dynamic>)
+                            .cast<String>();
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        imagePath,
+                      child: Image.network(
+                        imagess[index],
                         width: double.infinity,
                         fit: BoxFit.cover,
                       ),
@@ -70,103 +75,103 @@ class PackageDetails extends StatelessWidget {
                 width: double.infinity,
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: mediaqueryheight(0.02, context),
-                        ),
-                        SizedBox(
-                          height: mediaqueryheight(0.01, context),
-                        ),
-                        const PackageDetailsContainers(
-                          text: "KASHMIR PACKAGE",
-                          topname: 'PACKAGE NAME',
-                        ),
-                        SizedBox(
-                          height: mediaqueryheight(0.01, context),
-                        ),
-                        const PackageDetailsContainers(
-                          text: "KASMIR , MANALI , ETC ",
-                          topname: 'DESTINATION NAMES',
-                        ),
-                        SizedBox(
-                          height: mediaqueryheight(0.01, context),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(right: 35),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Daysnightsrow(
-                                text: "3",
-                                topname: "DAYS",
-                              ),
-                              Daysnightsrow(
-                                text: "4",
-                                topname: "NIGHTS",
-                              ),
-                              Daysnightsrow(
-                                text: "2",
-                                topname: "COUNTRIES",
-                              ),
-                              Daysnightsrow(
-                                text: "5",
-                                topname: "CITIES",
-                              ),
-                            ],
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: mediaqueryheight(0.02, context),
                           ),
-                        ),
+                          SizedBox(
+                            height: mediaqueryheight(0.01, context),
+                          ),
+                          PackageDetailsContainers(
+                            text: itemslists['packagename'],
+                            topname: 'PACKAGE NAME',
+                          ),
+                          SizedBox(
+                            height: mediaqueryheight(0.01, context),
+                          ),
+                          PackageDetailsContainers(
+                            text: itemslists['placenames'],
+                            topname: 'DESTINATION NAMES',
+                          ),
+                          SizedBox(
+                            height: mediaqueryheight(0.01, context),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 35),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Daysnightsrow(
+                                  text: itemslists['days'],
+                                  topname: "DAYS",
+                                ),
+                                Daysnightsrow(
+                                  text: itemslists['night'],
+                                  topname: "NIGHTS",
+                                ),
+                                Daysnightsrow(
+                                  text: itemslists['country'],
+                                  topname: "COUNTRIES",
+                                ),
+                                Daysnightsrow(
+                                  text: itemslists['city'],
+                                  topname: "CITIES",
+                                ),
+                              ],
+                            ),
+                          ),
                         SizedBox(
                           height: mediaqueryheight(0.01, context),
                         ),
-                        const PackageDetailsContainers(
-                          text: "FLIGHT , BUS ",
-                          topname: 'TRANSPORTAION TYPES',
-                        ),
-                        SizedBox(
-                          height: mediaqueryheight(0.01, context),
-                        ),
-                        const PackageDetailsContainers(
-                          text: " WE PROVING HOTEL",
-                          topname: 'ACCOMODATION',
-                        ),
-                        SizedBox(
-                          height: mediaqueryheight(0.01, context),
-                        ),
-                        const PackageDetailsContainers(
-                          text: "BREAKFAST AND DINNER",
-                          topname: 'MEALS ',
-                        ),
-                        SizedBox(
-                          height: mediaqueryheight(0.01, context),
-                        ),
-                        const PackageDetailsContainers(
-                          text: "JUMPING , HORSE RIDING",
-                          topname: 'ACTIVITIES',
-                        ),
-                        SizedBox(
-                          height: mediaqueryheight(0.01, context),
-                        ),
-                        const PackageDetailsContainers(
-                          text: "25000RS",
-                          topname: 'PRICE DETAILS',
-                        ),
-                        SizedBox(
-                          height: mediaqueryheight(0.01, context),
-                        ),
-                        const PackageDetailsContainers(
-                          text: "INFORMATIONS",
-                          topname: 'BOOKING INFORMATION & POLICIES',
-                        ),
-                        SizedBox(
-                          height: mediaqueryheight(0.01, context),
-                        ),
-                        const PackageDetailsContainers(
-                          text: "ADITIONALSSS",
-                          topname: 'ADDITIONAL INFORMATIONS',
-                        ),
+                       PackageDetailsContainers(
+                            text: itemslists['transportation'],
+                            topname: 'TRANSPORTAION TYPES',
+                          ),
+                          SizedBox(
+                            height: mediaqueryheight(0.01, context),
+                          ),
+                          PackageDetailsContainers(
+                            text: itemslists['accodamotion'],
+                            topname: 'ACCOMODATION',
+                          ),
+                          SizedBox(
+                            height: mediaqueryheight(0.01, context),
+                          ),
+                          PackageDetailsContainers(
+                            text: itemslists['meals'],
+                            topname: 'MEALS ',
+                          ),
+                          SizedBox(
+                            height: mediaqueryheight(0.01, context),
+                          ),
+                          PackageDetailsContainers(
+                            text: itemslists['activity'],
+                            topname: 'ACTIVITIES',
+                          ),
+                          SizedBox(
+                            height: mediaqueryheight(0.01, context),
+                          ),
+                          PackageDetailsContainers(
+                            text: itemslists['price'],
+                            topname: 'PRICE DETAILS',
+                          ),
+                          SizedBox(
+                            height: mediaqueryheight(0.01, context),
+                          ),
+                          PackageDetailsContainers(
+                            text: itemslists['booking'],
+                            topname: 'BOOKING INFORMATION & POLICIES',
+                          ),
+                          SizedBox(
+                            height: mediaqueryheight(0.01, context),
+                          ),
+                          PackageDetailsContainers(
+                            text: itemslists['additional'],
+                            topname: 'ADDITIONAL INFORMATIONS',
+                          ),
                         SizedBox(
                           height: mediaqueryheight(0.04, context),
                         ),
@@ -261,6 +266,7 @@ class PackageDetailsContainers extends StatelessWidget {
     );
   }
 }
+
 class TopName extends StatelessWidget {
   final String text;
   const TopName({

@@ -1,11 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:tripx_user_application/screens/package_details/package_details.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
-import 'package:tripx_user_application/screens/home_screen/widgets/home_carosel.dart';
 import 'package:tripx_user_application/screens/home_screen/widgets/drawer.dart';
 import 'package:tripx_user_application/screens/home_screen/widgets/header_menu_profile.dart';
 import 'package:tripx_user_application/screens/home_screen/widgets/header_texts.dart';
@@ -88,11 +88,11 @@ class _HomeScreenState extends State<HomeScreen>
                       SizedBox(
                         height: mediaqueryheight(0.02, context),
                       ),
-                      buildindicator(),
+                      // buildindicator(),
                       SizedBox(
                         height: mediaqueryheight(0.02, context),
                       ),
-                      buildCarousel()
+                      // buildCarousel()
                     ],
                   ),
                 ),
@@ -107,27 +107,43 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget buildCarousel() => CarouselSlider.builder(
-      itemCount: images.length,
-      itemBuilder: (context, index, realindex) {
-        final imagess = images[index];
-        return buildImage(imagess, index);
-      },
-      options: CarouselOptions(
-          viewportFraction: 0.72,
-          enlargeCenterPage: true,
-          height: mediaqueryheight(0.45, context),
-          autoPlayCurve: Curves.linear,
-          onPageChanged: (index, reason) => setState(() => activeindex = index),
-          autoPlay: true));
+  final CollectionReference packageDetails =
+      FirebaseFirestore.instance.collection('packagedetails');
+  Widget buildCarousel() {
+    return StreamBuilder(
+        stream: packageDetails.snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+           final querySnapshot = snapshot.data as QuerySnapshot;
+          final packageCount = querySnapshot.docs.length;
+          return CarouselSlider.builder(
+              itemCount: packageCount,
+              itemBuilder: (context, index, realindex) {
+               final items = snapshot.data!.docs[index];
+                List<String> imagess =
+                    (items['imagepath'] as List<dynamic>).cast<String>();
+                return buildImage(imagess.first, index, items);
+              },
+              options: CarouselOptions(
+                  viewportFraction: 0.72,
+                  enlargeCenterPage: true,
+                  height: mediaqueryheight(0.45, context),
+                  autoPlayCurve: Curves.linear,
+                  onPageChanged: (index, reason) =>null,
+                    
+                  autoPlay: true));
+        });
+  }
 
-  Widget buildImage(String imagess, int index) => GestureDetector(
+  Widget buildImage(String imagess, int index, QueryDocumentSnapshot<Object?> items) => GestureDetector(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => PackageDetails(
-                      images: [imagess],
+                      itemslists: items,
                     )),
           );
         },
@@ -141,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen>
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(25),
-                child: Image.asset(
+                child: Image.network(
                   imagess,
                   height: 300,
                   width: mediaquerywidht(0.75, context),
@@ -155,14 +171,18 @@ class _HomeScreenState extends State<HomeScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.location_on),
-                  mytext(locations[index],
-                      fontFamily: sedan,
-                      fontSize: mediaqueryheight(0.027, context),
-                      color: whitecolor),
+                  Locationname(index,items),
                 ],
               )
             ],
           ),
         ),
       );
+
+  Locationname(int index ,item) {
+   return mytext(item['packagename'],
+                    fontFamily: sedan,
+                    fontSize: mediaqueryheight(0.027, context),
+                    color: whitecolor);
+  }
 }

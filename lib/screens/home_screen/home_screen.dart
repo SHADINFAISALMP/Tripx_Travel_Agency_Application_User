@@ -116,12 +116,12 @@ class _HomeScreenState extends State<HomeScreen>
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           }
-           final querySnapshot = snapshot.data as QuerySnapshot;
+          final querySnapshot = snapshot.data as QuerySnapshot;
           final packageCount = querySnapshot.docs.length;
           return CarouselSlider.builder(
               itemCount: packageCount,
               itemBuilder: (context, index, realindex) {
-               final items = snapshot.data!.docs[index];
+                final items = snapshot.data!.docs[index];
                 List<String> imagess =
                     (items['imagepath'] as List<dynamic>).cast<String>();
                 return buildImage(imagess.first, index, items);
@@ -131,13 +131,14 @@ class _HomeScreenState extends State<HomeScreen>
                   enlargeCenterPage: true,
                   height: mediaqueryheight(0.45, context),
                   autoPlayCurve: Curves.linear,
-                  onPageChanged: (index, reason) =>null,
-                    
+                  onPageChanged: (index, reason) => null,
                   autoPlay: true));
         });
   }
 
-  Widget buildImage(String imagess, int index, QueryDocumentSnapshot<Object?> items) => GestureDetector(
+  Widget buildImage(
+          String imagess, int index, QueryDocumentSnapshot<Object?> items) =>
+      GestureDetector(
         onTap: () {
           Navigator.push(
             context,
@@ -171,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.location_on),
-                  Locationname(index,items),
+                  Locationname(index, items),
                 ],
               )
             ],
@@ -179,10 +180,10 @@ class _HomeScreenState extends State<HomeScreen>
         ),
       );
 
-  Locationname(int index ,item) {
-   return mytext(item['packagename'],
-                    fontFamily: sedan,
-                    fontSize: mediaqueryheight(0.027, context),
-                    color: whitecolor);
+  Locationname(int index, item) {
+    return mytext(item['packagename'],
+        fontFamily: sedan,
+        fontSize: mediaqueryheight(0.027, context),
+        color: whitecolor);
   }
 }

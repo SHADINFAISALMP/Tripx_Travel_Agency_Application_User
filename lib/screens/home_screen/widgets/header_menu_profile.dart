@@ -23,8 +23,13 @@ class Headermenuprofile extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {
-              // Open the drawer using the GlobalKey
-              scaffoldKey.currentState!.openDrawer();
+              final ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
+              if (scaffoldState != null) {
+                scaffoldState.openDrawer();
+              } else {
+                // Handle the case where the Scaffold state is not available
+                print('Scaffold state is not available');
+              }
             },
             icon: Icon(
               Icons.menu,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripx_user_application/screens/flights_screen/flight_screen.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -31,21 +32,27 @@ class Headerservices extends StatelessWidget {
                   color: whitecolor),
             ],
           ),
-          Column(
-            children: [
-              Image.asset(
-                'assets/images/plane.png',
-                width: mediaquerywidht(0.10, context),
-                color: whitecolor,
-              ),
-              SizedBox(
-                height: mediaqueryheight(.01, context),
-              ),
-              mytext("FLIGHTS",
-                  fontFamily: bodoni,
-                  fontSize: mediaqueryheight(.017, context),
-                  color: whitecolor),
-            ],
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const FlightScreen()));
+            },
+            child: Column(
+              children: [
+                Image.asset(
+                  'assets/images/plane.png',
+                  width: mediaquerywidht(0.10, context),
+                  color: whitecolor,
+                ),
+                SizedBox(
+                  height: mediaqueryheight(.01, context),
+                ),
+                mytext("FLIGHTS",
+                    fontFamily: bodoni,
+                    fontSize: mediaqueryheight(.017, context),
+                    color: whitecolor),
+              ],
+            ),
           ),
           Column(
             children: [

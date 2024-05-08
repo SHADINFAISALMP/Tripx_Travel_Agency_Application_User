@@ -7,6 +7,7 @@ import 'package:tripx_user_application/screens/signup_page/create_account_image.
 import 'package:tripx_user_application/screens/signup_page/heading_welcome.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
+import 'package:tripx_user_application/utils/loading_indicator.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 import 'package:tripx_user_application/utils/textformfields.dart';
 import 'package:tripx_user_application/widgets/textformfieldcontroller/controller.dart';
@@ -58,33 +59,7 @@ class _SignupState extends State<Signup> {
                   ));
                 }
                 if (state is AuthLoading) {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        backgroundColor: Colors.transparent,
-                        content: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Transform.scale(
-                                scale: 1.5,
-                                child: Image.asset(
-                                  'assets/images/circle.gif',
-                                  color: whitecolor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                   DialogUtils.showLoadingDialog(context);
                 }
               },
               builder: (context, state) {

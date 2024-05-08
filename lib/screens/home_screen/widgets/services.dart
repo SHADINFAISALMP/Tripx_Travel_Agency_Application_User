@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tripx_user_application/screens/flights_screen/flight_screen.dart';
+import 'package:tripx_user_application/screens/holidays_screen/holidays_screen.dart';
+import 'package:tripx_user_application/screens/hotels_screen/hotel_screen.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -16,26 +18,32 @@ class Headerservices extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(
-            children: [
-              Image.asset(
-                'assets/images/resort.png',
-                width: mediaquerywidht(0.10, context),
-                color: whitecolor,
-              ),
-              SizedBox(
-                height: mediaqueryheight(.01, context),
-              ),
-              mytext("HOLIDAYS",
-                  fontFamily: bodoni,
-                  fontSize: mediaqueryheight(.017, context),
-                  color: whitecolor),
-            ],
-          ),
           InkWell(
             onTap: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const FlightScreen()));
+                  MaterialPageRoute(builder: (context) => const HolidaysScreen()));
+            },
+            child: Column(
+              children: [
+                Image.asset(
+                  'assets/images/resort.png',
+                  width: mediaquerywidht(0.10, context),
+                  color: whitecolor,
+                ),
+                SizedBox(
+                  height: mediaqueryheight(.01, context),
+                ),
+                mytext("HOLIDAYS",
+                    fontFamily: bodoni,
+                    fontSize: mediaqueryheight(.017, context),
+                    color: whitecolor),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const FlightScreen()));
             },
             child: Column(
               children: [
@@ -54,21 +62,27 @@ class Headerservices extends StatelessWidget {
               ],
             ),
           ),
-          Column(
-            children: [
-              Image.asset(
-                'assets/images/hotel.png',
-                width: mediaquerywidht(0.10, context),
-                color: whitecolor,
-              ),
-              SizedBox(
-                height: mediaqueryheight(.01, context),
-              ),
-              mytext("HOTELS",
-                  fontFamily: bodoni,
-                  fontSize: mediaqueryheight(.017, context),
-                  color: whitecolor),
-            ],
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) =>  const HotelScreen()));
+            },
+            child: Column(
+              children: [
+                Image.asset(
+                  'assets/images/hotel.png',
+                  width: mediaquerywidht(0.10, context),
+                  color: whitecolor,
+                ),
+                SizedBox(
+                  height: mediaqueryheight(.01, context),
+                ),
+                mytext("HOTELS",
+                    fontFamily: bodoni,
+                    fontSize: mediaqueryheight(.017, context),
+                    color: whitecolor),
+              ],
+            ),
           ),
         ],
       ),

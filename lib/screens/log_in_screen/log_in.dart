@@ -9,6 +9,7 @@ import 'package:tripx_user_application/screens/log_in_screen/google_sign.dart';
 import 'package:tripx_user_application/screens/otp_verificaation/otp_verification.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
+import 'package:tripx_user_application/utils/loading_indicator.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 import 'package:tripx_user_application/utils/textformfields.dart';
 import 'package:tripx_user_application/widgets/textformfieldcontroller/controller.dart';
@@ -57,33 +58,7 @@ class _LoginState extends State<Login> {
                         )));
               }
               if (state is AuthenicatingUser) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      backgroundColor: Colors.transparent,
-                      content: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Transform.scale(
-                              scale: 1.5,
-                              child: Image.asset(
-                                'assets/images/circle.gif',
-                                color: whitecolor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
+                DialogUtils.showLoadingDialog(context);
               }
             },
           ),
@@ -97,38 +72,12 @@ class _LoginState extends State<Login> {
                     const SnackBar(content: Text("Google Sign In Success")));
               }
               if (state is GoogleLoadingstate) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      backgroundColor: Colors.transparent,
-                      content: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Transform.scale(
-                              scale: 1.5,
-                              child: Image.asset(
-                                'assets/images/circle.gif',
-                                color: whitecolor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
+                DialogUtils.showLoadingDialog(context);
               }
               if (state is GoogleFailureState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Failed Logging in. Please try again")));
-              Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Failed Logging in. Please try again")));
+                Navigator.pop(context);
               }
             },
           )
@@ -243,5 +192,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-
-

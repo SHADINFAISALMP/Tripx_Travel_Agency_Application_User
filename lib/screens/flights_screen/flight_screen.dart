@@ -1,8 +1,8 @@
 // ignore_for_file: unused_field
 
 import 'package:flutter/material.dart';
-import 'package:tripx_user_application/screens/available_flights/available_flights.dart';
-import 'package:tripx_user_application/screens/available_flights/available_round.dart';
+import 'package:tripx_user_application/screens/flights_screen/available_flights/available_flights.dart';
+import 'package:tripx_user_application/screens/flights_screen/available_flights/available_round.dart';
 import 'package:tripx_user_application/screens/flights_screen/heading_icon.dart';
 import 'package:tripx_user_application/screens/flights_screen/tabBar_Heading.dart';
 import 'package:tripx_user_application/utils/colors.dart';

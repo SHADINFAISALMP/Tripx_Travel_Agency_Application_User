@@ -88,11 +88,10 @@ class _HomeScreenState extends State<HomeScreen>
                       SizedBox(
                         height: mediaqueryheight(0.02, context),
                       ),
-                      // buildindicator(),
+                      buildListView(),
                       SizedBox(
                         height: mediaqueryheight(0.02, context),
                       ),
-                      // buildCarousel()
                     ],
                   ),
                 ),
@@ -172,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.location_on),
-                  Locationname(index, items),
+                  locationname(index, items),
                 ],
               )
             ],
@@ -180,10 +179,136 @@ class _HomeScreenState extends State<HomeScreen>
         ),
       );
 
-  Locationname(int index, item) {
+  locationname(int index, item) {
     return mytext(item['packagename'],
         fontFamily: sedan,
         fontSize: mediaqueryheight(0.027, context),
         color: whitecolor);
+  }
+
+  //list view
+  Widget buildListView() {
+    return StreamBuilder(
+      stream: packageDetails.snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        final querySnapshot = snapshot.data as QuerySnapshot;
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: querySnapshot.docs.length,
+          itemBuilder: (context, index) {
+            final item = querySnapshot.docs[index];
+            List<String> images =
+                (item['imagepath'] as List<dynamic>).cast<String>();
+            return buildListItem(images.first, item);
+          },
+        );
+      },
+    );
+  }
+
+  Widget buildListItem(String imagePath, QueryDocumentSnapshot<Object?> item) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PackageDetails(
+              itemslists: item,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        height: mediaqueryheight(0.4, context),
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: colorteal,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                imagePath,
+                height: 260,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.tour, color: whitecolor),
+                const SizedBox(width: 5),
+                mytext(
+                  item['packagename'],
+                  fontFamily: sedan,
+                  fontSize: 25,
+                  color: whitecolor,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: mediaqueryheight(0.001, context),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Icon(Icons.place, color: whitecolor),
+                  const SizedBox(width: 5),
+                  mytext(item['placenames'],
+                      fontFamily: sedan,
+                      fontSize: 18,
+                      color: whitecolor,
+                      overflow: TextOverflow.ellipsis),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: mediaqueryheight(0.01, context),
+            ),
+            Row(
+              children: [
+                const SizedBox(width: 35),
+                const Icon(Icons.sunny, color: whitecolor),
+                const SizedBox(width: 5),
+                mytext(
+                  item['days'],
+                  fontFamily: sedan,
+                  fontSize: 18,
+                  color: whitecolor,
+                ),
+                const SizedBox(width: 55),
+                const Icon(Icons.nights_stay, color: whitecolor),
+                const SizedBox(width: 5),
+                mytext(
+                  item['night'],
+                  fontFamily: sedan,
+                  fontSize: 18,
+                  color: whitecolor,
+                ),
+                const SizedBox(width: 35),
+                const Icon(Icons.attach_money, color: whitecolor),
+                const SizedBox(width: 5),
+                mytext(
+                  item['price'],
+                  fontFamily: sedan,
+                  fontSize: 18,
+                  color: whitecolor,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

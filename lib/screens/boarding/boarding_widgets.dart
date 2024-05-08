@@ -136,6 +136,7 @@ class Boardingwidgets extends StatelessWidget {
                           ),
                           onPressed: () {
                             boardingBloc.add(Boardinggetstartedclick());
+                                    
                           },
                           child: mytext(
                             "Get Started",

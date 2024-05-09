@@ -28,12 +28,13 @@ class GoogleBloc extends Bloc<GoogleEvent, GoogleState> {
             idToken: googleSignInAuthentication.idToken,
             accessToken: googleSignInAuthentication.accessToken);
 
-        await firebaseAuth.signInWithCredential(credential);
-        emit(GoogleSuccessState());
+        final UserCredential userCredential =
+            await firebaseAuth.signInWithCredential(credential);
+        emit(GoogleSuccessState(userCredential.user!));
       }
     } catch (e) {
       emit(GoogleFailureState());
-      print("error occured while google sign in");
+      print("error occured while google sign in $e");
     }
   }
 }

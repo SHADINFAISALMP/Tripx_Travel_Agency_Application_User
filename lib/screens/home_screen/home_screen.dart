@@ -5,7 +5,7 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:tripx_user_application/firebase_collection_refernce/user_information.dart';
 import 'package:tripx_user_application/screens/log_in_screen/log_in.dart';
 import 'package:tripx_user_application/screens/package_details/package_details.dart';
-import 'package:tripx_user_application/screens/profile/profile.dart';
+
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -69,58 +69,11 @@ class _HomeScreenState extends State<HomeScreen>
                 child: Center(
                   child: Column(
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: mediaqueryheight(.060, context),
-                          right: mediaquerywidht(.03, context),
-                          left: mediaquerywidht(.03, context),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                final ScaffoldState? scaffoldState =
-                                    Scaffold.maybeOf(context);
-                                if (scaffoldState != null) {
-                                  scaffoldState.openDrawer();
-                                } else {
-                                  print('Scaffold state is not available');
-                                }
-                              },
-                              icon: Icon(
-                                Icons.menu,
-                                color: whitecolor,
-                                size: mediaqueryheight(.04, context),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => Profile())),
-                              child: CircleAvatar(
-                                radius: mediaqueryheight(.03, context),
-                                backgroundImage:
-                                    NetworkImage("${userProfile['imagepath']}"),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      HeaderProfile(userProfile: userProfile),
                       SizedBox(
                         height: mediaqueryheight(.01, context),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          right: mediaquerywidht(.5, context),
-                        ),
-                        child: mytext(
-                          "HELLO ${userProfile['name']},",
-                          color: blackcolor,
-                          fontFamily: 'sedan',
-                          fontSize: mediaqueryheight(.021, context),
-                        ),
-                      ),
+                      HeaderName(userProfile: userProfile),
                       const Headertexttwo(),
                       SizedBox(
                         height: mediaqueryheight(.03, context),

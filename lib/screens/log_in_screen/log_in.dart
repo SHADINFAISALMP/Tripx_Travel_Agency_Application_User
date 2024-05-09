@@ -64,7 +64,7 @@ class _LoginState extends State<Login> {
           BlocListener<GoogleBloc, GoogleState>(
             listener: (context, state) {
               if (state is GoogleSuccessState) {
-                userEmail = emailcontrollerlog.text;
+                userEmail = state.user.email;
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const Bottomnavigation()));

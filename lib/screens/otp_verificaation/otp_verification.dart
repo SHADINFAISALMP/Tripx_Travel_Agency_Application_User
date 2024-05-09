@@ -12,7 +12,7 @@ import 'package:tripx_user_application/widgets/textformfieldcontroller/controlle
 
 class OtpVerification extends StatelessWidget {
   final bool fromlogin;
-  const OtpVerification({super.key,required this.fromlogin});
+  const OtpVerification({super.key,required this.fromlogin, required String email});
 
   @override
   Widget build(BuildContext context) {

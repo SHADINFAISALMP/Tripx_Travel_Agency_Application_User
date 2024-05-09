@@ -14,6 +14,7 @@ import 'package:tripx_user_application/utils/mediaquery.dart';
 import 'package:tripx_user_application/utils/textformfields.dart';
 import 'package:tripx_user_application/widgets/textformfieldcontroller/controller.dart';
 
+String? userEmail;
 final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
 class Login extends StatefulWidget {
@@ -32,32 +33,30 @@ class _LoginState extends State<Login> {
           BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {
               if (state is LoginSuccess) {
+                userEmail = emailcontrollerlog.text;
                 Navigator.pop(context);
 
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const Bottomnavigation()));
-              }
-              if (state is IncorrectDetails) {
+              } else if (state is IncorrectDetails) {
                 emailcontrollerlog.clear();
                 passwordcontrollerlog.clear();
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("incorrect email or password")));
                 Navigator.pop(context);
-              }
-              if (state is EmailNotVerified) {
+              } else if (state is EmailNotVerified) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("please verify your email")));
-              }
-              if (state is NavigateToOtpPage) {
+              } else if (state is NavigateToOtpPage) {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const OtpVerification(
+                    builder: (context) => OtpVerification(
                           fromlogin: true,
+                          email: userEmail!,
                         )));
-              }
-              if (state is AuthenicatingUser) {
+              } else if (state is AuthenicatingUser) {
                 DialogUtils.showLoadingDialog(context);
               }
             },
@@ -65,6 +64,7 @@ class _LoginState extends State<Login> {
           BlocListener<GoogleBloc, GoogleState>(
             listener: (context, state) {
               if (state is GoogleSuccessState) {
+                userEmail = emailcontrollerlog.text;
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const Bottomnavigation()));
@@ -153,10 +153,7 @@ class _LoginState extends State<Login> {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          () {
-                            context.read<LoginBloc>().add(LoginEventButton());
-                            return null;
-                          }();
+                          context.read<LoginBloc>().add(LoginEventButton());
                         },
                         child: Row(
                           children: [

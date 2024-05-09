@@ -4,7 +4,9 @@ import 'package:tripx_user_application/bloc/boarding/boarding_bloc_bloc.dart';
 import 'package:tripx_user_application/screens/boarding/boarding_widgets.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
-  final PageController pageController = PageController();
+
+final PageController pageController = PageController();
+
 class Boardingone extends StatefulWidget {
   final BoardingBlocBloc bloc;
   const Boardingone({super.key, required this.bloc});
@@ -14,8 +16,6 @@ class Boardingone extends StatefulWidget {
 }
 
 class _BoardingoneState extends State<Boardingone> {
-
-
   void onNextpage() {
     if (BlocProvider.of<BoardingBlocBloc>(context, listen: true)
             .state

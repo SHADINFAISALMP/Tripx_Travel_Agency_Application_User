@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:tripx_user_application/bloc/signup/signup_bloc.dart';
+import 'package:tripx_user_application/screens/bottom_navigation/bottomnavigation.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -26,8 +27,8 @@ class SubmitButtonVerify extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //     builder: (context) => const Bottomnavigation()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const Bottomnavigation()));
           submitButton(context, fromlogin);
         },
         child: Row(
@@ -56,7 +57,9 @@ class SubmitButtonVerify extends StatelessWidget {
 
 submitButton(BuildContext context, bool fromLogin) {
   fromLogin
-      ? context.read<SignupBloc>().add(VerifyEmailPressed(context))//here i changed
+      ? context
+          .read<SignupBloc>()
+          .add(VerifyEmailPressed(context)) //here i changed
       : context.read<SignupBloc>().add(VerifyEmailPressed(context));
   return null;
 }

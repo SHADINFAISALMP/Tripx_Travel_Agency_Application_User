@@ -94,7 +94,12 @@ class Boardingwidgets extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Login()));
+                            },
                             child: mytext(
                               "Skip Now",
                               fontFamily: sedan,
@@ -136,7 +141,6 @@ class Boardingwidgets extends StatelessWidget {
                           ),
                           onPressed: () {
                             boardingBloc.add(Boardinggetstartedclick());
-                                    
                           },
                           child: mytext(
                             "Get Started",

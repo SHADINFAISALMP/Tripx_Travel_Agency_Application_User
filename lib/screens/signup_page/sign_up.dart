@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripx_user_application/bloc/signup/signup_bloc.dart';
+import 'package:tripx_user_application/screens/log_in_screen/log_in.dart';
 import 'package:tripx_user_application/screens/otp_verificaation/otp_verification.dart';
 import 'package:tripx_user_application/screens/signup_page/aignup_buttom.dart';
 import 'package:tripx_user_application/screens/signup_page/create_account_image.dart';
@@ -21,6 +22,8 @@ class Signup extends StatefulWidget {
   State<Signup> createState() => _SignupState();
 }
 
+
+
 class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
@@ -38,9 +41,13 @@ class _SignupState extends State<Signup> {
             child: BlocConsumer<SignupBloc, SignupState>(
               listener: (context, state) {
                 if (state is NavigateToEmailVerficationPage) {
+                  userEmail = emailcontroller.text;
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => const OtpVerification(fromlogin: false,)),
+                        builder: (context) => OtpVerification(
+                              fromlogin: false,
+                              email: userEmail!,
+                            )),
                   );
                 }
                 if (state is Imagenotpicked) {
@@ -59,7 +66,10 @@ class _SignupState extends State<Signup> {
                   ));
                 }
                 if (state is AuthLoading) {
-                   DialogUtils.showLoadingDialog(context);
+                  DialogUtils.showLoadingDialog(context);
+                }
+                if (state is Signupsuccess) {
+                  userEmail = emailcontroller.text;
                 }
               },
               builder: (context, state) {

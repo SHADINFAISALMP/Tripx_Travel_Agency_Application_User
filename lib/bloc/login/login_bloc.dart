@@ -19,29 +19,30 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   _loginButtonPressed(LoginEventButton event, Emitter<LoginState> emit) async {
+    print("padaaaa");
     if (formKey.currentState!.validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
 
       emit(AuthenicatingUser());
-
-      final User? user = await FirebaseAuthServices()
-          .signInWithEmailandPassword(emailcontrollerlog.text.trim(),
-              passwordcontrollerlog.text.trim());
-      if (user != null) {
+      try {
+        final UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: emailcontrollerlog.text.trim(),
+                password: passwordcontrollerlog.text.trim());
+        final User user = userCredential.user!;
+        print("done 1 ");
         if (user.emailVerified) {
           emit(LoginSuccess());
+          print("done 2");
         } else {
           emit(EmailNotVerified());
 
-          user.sendEmailVerification();
+          await user.sendEmailVerification();
           emit(NavigateToOtpPage(user));
         }
+            } catch (e) {
         return;
-      } else {
-        emit(IncorrectDetails());
       }
-    } else {
-      return;
     }
   }
 

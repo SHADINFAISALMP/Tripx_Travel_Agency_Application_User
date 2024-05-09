@@ -1,52 +1,55 @@
-import 'package:flutter/material.dart';
-import 'package:tripx_user_application/screens/profile/profile.dart';
-import 'package:tripx_user_application/utils/colors.dart';
-import 'package:tripx_user_application/utils/mediaquery.dart';
+// import 'package:flutter/material.dart';
+// import 'package:tripx_user_application/screens/log_in_screen/log_in.dart';
+// import 'package:tripx_user_application/screens/profile/profile.dart';
 
-final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+// import 'package:tripx_user_application/utils/colors.dart';
+// import 'package:tripx_user_application/utils/mediaquery.dart';
 
-class Headermenuprofile extends StatelessWidget {
-  const Headermenuprofile({
-    super.key,
-  });
+// final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: mediaqueryheight(.060, context),
-        right: mediaquerywidht(.03, context),
-        left: mediaquerywidht(.03, context),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () {
-              final ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
-              if (scaffoldState != null) {
-                scaffoldState.openDrawer();
-              } else {
-                // Handle the case where the Scaffold state is not available
-                print('Scaffold state is not available');
-              }
-            },
-            icon: Icon(
-              Icons.menu,
-              color: whitecolor,
-              size: mediaqueryheight(.04, context),
-            ),
-          ),
-          GestureDetector(
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => const Profile())),
-            child: CircleAvatar(
-              radius: mediaqueryheight(.03, context),
-              backgroundImage: const AssetImage("assets/images/paulwalker.jpg"),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class Headermenuprofile extends StatelessWidget {
+//    Headermenuprofile({
+//     super.key,
+//   });
+//   late String email;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.only(
+//         top: mediaqueryheight(.060, context),
+//         right: mediaquerywidht(.03, context),
+//         left: mediaquerywidht(.03, context),
+//       ),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           IconButton(
+//             onPressed: () {
+//               final ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
+//               if (scaffoldState != null) {
+//                 scaffoldState.openDrawer();
+//               } else {
+//                 print('Scaffold state is not available');
+//               }
+//             },
+//             icon: Icon(
+//               Icons.menu,
+//               color: whitecolor,
+//               size: mediaqueryheight(.04, context),
+//             ),
+//           ),
+//           GestureDetector(
+//             onTap: () => Navigator.of(context).push(MaterialPageRoute(
+//                 builder: (context) => Profile(
+                  
+//                     ))),
+//             child: CircleAvatar(
+//               radius: mediaqueryheight(.03, context),
+//               backgroundImage: const AssetImage("assets/images/paulwalker.jpg"),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

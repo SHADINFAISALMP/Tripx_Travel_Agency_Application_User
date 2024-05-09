@@ -2,12 +2,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:tripx_user_application/firebase_collection_refernce/user_information.dart';
+import 'package:tripx_user_application/screens/log_in_screen/log_in.dart';
 import 'package:tripx_user_application/screens/package_details/package_details.dart';
+import 'package:tripx_user_application/screens/profile/profile.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 import 'package:tripx_user_application/screens/home_screen/widgets/drawer.dart';
-import 'package:tripx_user_application/screens/home_screen/widgets/header_menu_profile.dart';
 import 'package:tripx_user_application/screens/home_screen/widgets/header_texts.dart';
 import 'package:tripx_user_application/screens/home_screen/widgets/services.dart';
 
@@ -22,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late NotchBottomBarController _pageController;
   late List<Widget> pages;
+  late Future<DocumentSnapshot?> _userprofile;
 
   final GlobalKey<ScaffoldState> scaffoldKey =
       GlobalKey<ScaffoldState>(); // Define a GlobalKey
@@ -30,6 +33,13 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     _pageController = NotchBottomBarController();
+    _userprofile = getUserProfileData();
+  }
+
+  Future<DocumentSnapshot> getUserProfileData() async {
+    final userProfileSnapshot =
+        await userDetails.where('email', isEqualTo: userEmail).get();
+    return userProfileSnapshot.docs.first;
   }
 
   @override
@@ -42,64 +52,125 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey, // Assign the key to the Scaffold
-      body: Container(
-        color: colorteal,
-        child: Center(
-          child: Column(
-            children: [
-              const Headermenuprofile(),
-              SizedBox(
-                height: mediaqueryheight(.01, context),
-              ),
-              const Headertextone(),
-              const Headertexttwo(),
-              SizedBox(
-                height: mediaqueryheight(.03, context),
-              ),
-              const Headerservices(),
-              SizedBox(
-                height: mediaqueryheight(.03, context),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(
-                        mediaqueryheight(.1, context),
-                      ),
-                    ),
-                    color: whitecolor),
-                width: double.infinity,
-                height: mediaqueryheight(0.5644, context),
-                child: SingleChildScrollView(
+      body: FutureBuilder(
+          future: _userprofile,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData) {
+              return const Text('No data available');
+            } else {
+              final userProfile = snapshot.data!.data() as Map<String, dynamic>;
+
+              return Container(
+                color: colorteal,
+                child: Center(
                   child: Column(
                     children: [
                       Padding(
-                          padding: EdgeInsets.only(
-                        top: mediaqueryheight(0.02, context),
-                      )),
-                      mytext("Popular Destinations",
-                          fontFamily: sedan,
-                          fontSize: mediaqueryheight(0.025, context),
-                          color: blackcolor),
-                      SizedBox(
-                        height: mediaqueryheight(0.03, context),
+                        padding: EdgeInsets.only(
+                          top: mediaqueryheight(.060, context),
+                          right: mediaquerywidht(.03, context),
+                          left: mediaquerywidht(.03, context),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                final ScaffoldState? scaffoldState =
+                                    Scaffold.maybeOf(context);
+                                if (scaffoldState != null) {
+                                  scaffoldState.openDrawer();
+                                } else {
+                                  print('Scaffold state is not available');
+                                }
+                              },
+                              icon: Icon(
+                                Icons.menu,
+                                color: whitecolor,
+                                size: mediaqueryheight(.04, context),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => Profile())),
+                              child: CircleAvatar(
+                                radius: mediaqueryheight(.03, context),
+                                backgroundImage:
+                                    NetworkImage("${userProfile['imagepath']}"),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      buildCarousel(),
                       SizedBox(
-                        height: mediaqueryheight(0.02, context),
+                        height: mediaqueryheight(.01, context),
                       ),
-                      buildListView(),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: mediaquerywidht(.5, context),
+                        ),
+                        child: mytext(
+                          "HELLO ${userProfile['name']},",
+                          color: blackcolor,
+                          fontFamily: 'sedan',
+                          fontSize: mediaqueryheight(.021, context),
+                        ),
+                      ),
+                      const Headertexttwo(),
                       SizedBox(
-                        height: mediaqueryheight(0.02, context),
+                        height: mediaqueryheight(.03, context),
+                      ),
+                      const Headerservices(),
+                      SizedBox(
+                        height: mediaqueryheight(.03, context),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(
+                                mediaqueryheight(.1, context),
+                              ),
+                            ),
+                            color: whitecolor),
+                        width: double.infinity,
+                        height: mediaqueryheight(0.5644, context),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                top: mediaqueryheight(0.02, context),
+                              )),
+                              mytext("Popular Destinations",
+                                  fontFamily: sedan,
+                                  fontSize: mediaqueryheight(0.025, context),
+                                  color: blackcolor),
+                              SizedBox(
+                                height: mediaqueryheight(0.03, context),
+                              ),
+                              buildCarousel(),
+                              SizedBox(
+                                height: mediaqueryheight(0.02, context),
+                              ),
+                              buildListView(),
+                              SizedBox(
+                                height: mediaqueryheight(0.02, context),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
+              );
+            }
+          }),
       drawer: const Drawer(
         child: Headdrawer(),
       ),

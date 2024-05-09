@@ -17,6 +17,7 @@ final class AddingToDataToFirebase extends SignupState {}
 
 final class Imagenotpicked extends SignupState {}
 
+// ignore: must_be_immutable
 final class Signupsuccess extends SignupState {
   late String userEmail;
 }

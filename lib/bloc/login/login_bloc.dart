@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tripx_user_application/firebase_auth/firebase_services.dart';
 import 'package:tripx_user_application/screens/log_in_screen/log_in.dart';
 import 'package:tripx_user_application/widgets/textformfieldcontroller/controller.dart';
 

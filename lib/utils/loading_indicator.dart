@@ -25,4 +25,8 @@ class DialogUtils {
       },
     );
   }
+
+  static void hide(BuildContext context) {
+    Navigator.of(context).pop();
+  }
 }

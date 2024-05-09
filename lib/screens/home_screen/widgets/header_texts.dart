@@ -20,42 +20,45 @@ class Headertexttwo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      "WHAT SERVICE ARE YOU LOOKING?",
-      textAlign: TextAlign.start,
-      style: TextStyle(
-          fontFamily: 'sedan',
-          fontSize: mediaqueryheight(.021, context),
-          color: whitecolor,
-          fontWeight: FontWeight.normal),
-    );
-  }
-}
-
-class HeaderName extends StatelessWidget {
-  const HeaderName({
-    super.key,
-    required this.userProfile,
-  });
-
-  final Map<String, dynamic> userProfile;
-
-  @override
-  Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        right: mediaquerywidht(0.3, context),
-      ),
-      child: mytext(
-        "HELLO ${userProfile['name'].toString().toUpperCase()},",
-        color: blackcolor,
-        overflow: TextOverflow.ellipsis,
-        fontFamily: 'sedan',
-        fontSize: mediaqueryheight(.021, context),
+      padding: const EdgeInsets.only(right: 20),
+      child: Text(
+        "WHAT SERVICE ARE YOU LOOKING?",
+        textAlign: TextAlign.start,
+        style: TextStyle(
+            fontFamily: 'sedan',
+            fontSize: mediaqueryheight(.021, context),
+            color: whitecolor,
+            fontWeight: FontWeight.normal),
       ),
     );
   }
 }
+
+// class HeaderName extends StatelessWidget {
+//   const HeaderName({
+//     super.key,
+//     required this.userProfile,
+//   });
+
+//   final Map<String, dynamic> userProfile;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.only(
+//         right: mediaquerywidht(0.3, context),
+//       ),
+//       child: mytext(
+//         "HELLO ${userProfile['name'].toString().toUpperCase()},",
+//         color: blackcolor,
+//         overflow: TextOverflow.ellipsis,
+//         fontFamily: 'sedan',
+//         fontSize: mediaqueryheight(.021, context),
+//       ),
+//     );
+//   }
+// }
 
 class HeaderProfile extends StatelessWidget {
   const HeaderProfile({
@@ -74,21 +77,18 @@ class HeaderProfile extends StatelessWidget {
         left: mediaquerywidht(.03, context),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          IconButton(
-            onPressed: () {
-              final ScaffoldState? scaffoldState = Scaffold.maybeOf(context);
-              if (scaffoldState != null) {
-                scaffoldState.openDrawer();
-              } else {
-                print('Scaffold state is not available');
-              }
-            },
-            icon: Icon(
-              Icons.menu,
+          Padding(
+            padding: EdgeInsets.only(
+              right: mediaquerywidht(0.2, context),
+            ),
+            child: mytext(
+              "HEY ${userProfile['name'].toUpperCase()}!",
               color: whitecolor,
-              size: mediaqueryheight(.04, context),
+              overflow: TextOverflow.ellipsis,
+              fontFamily: bodoni,
+              fontSize: mediaqueryheight(.021, context),
             ),
           ),
           GestureDetector(

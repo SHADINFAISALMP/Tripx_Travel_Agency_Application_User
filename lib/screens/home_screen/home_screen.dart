@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tripx_user_application/firebase_collection_refernce/user_information.dart';
 import 'package:tripx_user_application/screens/log_in_screen/log_in.dart';
 import 'package:tripx_user_application/screens/package_details/package_details.dart';
@@ -9,7 +10,6 @@ import 'package:tripx_user_application/screens/package_details/package_details.d
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
-import 'package:tripx_user_application/screens/home_screen/widgets/drawer.dart';
 import 'package:tripx_user_application/screens/home_screen/widgets/header_texts.dart';
 import 'package:tripx_user_application/screens/home_screen/widgets/services.dart';
 
@@ -56,7 +56,10 @@ class _HomeScreenState extends State<HomeScreen>
           future: _userprofile,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return Center(
+                child: LoadingAnimationWidget.threeArchedCircle(
+                    color: colorteal, size: 60),
+              );
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData) {
@@ -73,7 +76,6 @@ class _HomeScreenState extends State<HomeScreen>
                       SizedBox(
                         height: mediaqueryheight(.01, context),
                       ),
-                      HeaderName(userProfile: userProfile),
                       const Headertexttwo(),
                       SizedBox(
                         height: mediaqueryheight(.03, context),
@@ -91,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                             color: whitecolor),
                         width: double.infinity,
-                        height: mediaqueryheight(0.5644, context),
+                        height: mediaqueryheight(0.59461, context),
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -124,9 +126,6 @@ class _HomeScreenState extends State<HomeScreen>
               );
             }
           }),
-      drawer: const Drawer(
-        child: Headdrawer(),
-      ),
     );
   }
 
@@ -137,7 +136,10 @@ class _HomeScreenState extends State<HomeScreen>
         stream: packageDetails.snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return Center(
+              child: LoadingAnimationWidget.threeArchedCircle(
+                  color: colorteal, size: 60),
+            );
           }
           final querySnapshot = snapshot.data as QuerySnapshot;
           final packageCount = querySnapshot.docs.length;
@@ -216,7 +218,10 @@ class _HomeScreenState extends State<HomeScreen>
       stream: packageDetails.snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return Center(
+            child: LoadingAnimationWidget.threeArchedCircle(
+                color: whitecolor, size: 60),
+          );
         }
         final querySnapshot = snapshot.data as QuerySnapshot;
         return ListView.builder(

@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tripx_user_application/firebase_collection_refernce/user_information.dart';
 import 'package:tripx_user_application/screens/edit_profile/edit_profile.dart';
 import 'package:tripx_user_application/screens/home_screen/widgets/header_texts.dart';
-
 import 'package:tripx_user_application/screens/log_in_screen/log_in.dart';
-
-import 'package:tripx_user_application/screens/my_tickets/mytickets.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -43,7 +41,10 @@ class _ProfileState extends State<Profile> {
             future: _userprofile,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
+                return Center(
+                  child: LoadingAnimationWidget.threeArchedCircle(
+                      color: whitecolor, size: 60),
+                );
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData) {
@@ -72,7 +73,7 @@ class _ProfileState extends State<Profile> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 30,
                               ),
                               child: CircleAvatar(
@@ -109,31 +110,21 @@ class _ProfileState extends State<Profile> {
                                       fontFamily: sedan,
                                       fontSize: 20,
                                       color: colorteal),
-                                  SizedBox(
-                                    height: mediaqueryheight(0.01, context),
-                                  ),
-                                  mytext("DOB : 27/11/2004",
-                                      overflow: TextOverflow.ellipsis,
-                                      fontFamily: sedan,
-                                      fontSize: 20,
-                                      color: colorteal),
-                                  SizedBox(
-                                    height: mediaqueryheight(0.01, context),
-                                  ),
-                                  mytext("Password :${userProfile['password']}",
-                                      overflow: TextOverflow.ellipsis,
-                                      fontFamily: sedan,
-                                      fontSize: 20,
-                                      color: colorteal),
                                 ],
                               ),
                             ),
                             SizedBox(
-                              height: mediaqueryheight(0.05, context),
+                              height: mediaqueryheight(0.02, context),
+                            ),
+                            const Divider(
+                              thickness: 2,
+                              color: colorteal,
+                              endIndent: 30,
+                              indent: 30,
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: mediaquerywidht(0.05, context)),
+                                  left: mediaquerywidht(0.06, context)),
                               child: Column(
                                 children: [
                                   SizedBox(
@@ -148,7 +139,7 @@ class _ProfileState extends State<Profile> {
                                     child: Row(
                                       children: [
                                         const Icon(
-                                          Icons.edit,
+                                          Icons.mode_edit_outlined,
                                           color: colorteal,
                                           size: 30,
                                         ),
@@ -157,8 +148,12 @@ class _ProfileState extends State<Profile> {
                                         ),
                                         mytext("Edit Profile",
                                             fontFamily: sedan,
-                                            fontSize: 22,
+                                            fontSize: 20,
                                             color: colorteal),
+                                        SizedBox(
+                                          width: mediaquerywidht(0.45, context),
+                                        ),
+                                        const Icon(Icons.navigate_next_rounded),
                                       ],
                                     ),
                                   ),
@@ -166,25 +161,24 @@ class _ProfileState extends State<Profile> {
                                     height: mediaqueryheight(0.02, context),
                                   ),
                                   GestureDetector(
-                                    onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Mytickets())),
                                     child: Row(
                                       children: [
                                         const Icon(
-                                          Icons.airplane_ticket,
+                                          Icons.support_agent_sharp,
                                           color: colorteal,
                                           size: 30,
                                         ),
                                         SizedBox(
                                           width: mediaquerywidht(0.05, context),
                                         ),
-                                        mytext("My Tickets",
+                                        mytext("Support",
                                             fontFamily: sedan,
-                                            fontSize: 22,
+                                            fontSize: 20,
                                             color: colorteal),
+                                        SizedBox(
+                                          width: mediaquerywidht(0.52, context),
+                                        ),
+                                        const Icon(Icons.navigate_next_rounded),
                                       ],
                                     ),
                                   ),
@@ -194,7 +188,30 @@ class _ProfileState extends State<Profile> {
                                   Row(
                                     children: [
                                       const Icon(
-                                        Icons.share,
+                                        Icons.star_border_outlined,
+                                        color: colorteal,
+                                        size: 30,
+                                      ),
+                                      SizedBox(
+                                        width: mediaquerywidht(0.05, context),
+                                      ),
+                                      mytext("Rate App",
+                                          fontFamily: sedan,
+                                          fontSize: 20,
+                                          color: colorteal),
+                                      SizedBox(
+                                        width: mediaquerywidht(0.5, context),
+                                      ),
+                                      const Icon(Icons.navigate_next_rounded),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: mediaqueryheight(0.02, context),
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.share_outlined,
                                         color: colorteal,
                                         size: 30,
                                       ),
@@ -203,8 +220,58 @@ class _ProfileState extends State<Profile> {
                                       ),
                                       mytext("Share App",
                                           fontFamily: sedan,
-                                          fontSize: 22,
+                                          fontSize: 20,
                                           color: colorteal),
+                                      SizedBox(
+                                        width: mediaquerywidht(0.47, context),
+                                      ),
+                                      const Icon(Icons.navigate_next_rounded),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: mediaqueryheight(0.02, context),
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.info_outline,
+                                        color: colorteal,
+                                        size: 30,
+                                      ),
+                                      SizedBox(
+                                        width: mediaquerywidht(0.05, context),
+                                      ),
+                                      mytext("About us",
+                                          fontFamily: sedan,
+                                          fontSize: 20,
+                                          color: colorteal),
+                                      SizedBox(
+                                        width: mediaquerywidht(0.5, context),
+                                      ),
+                                      const Icon(Icons.navigate_next_rounded),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: mediaqueryheight(0.02, context),
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.privacy_tip_outlined,
+                                        color: colorteal,
+                                        size: 30,
+                                      ),
+                                      SizedBox(
+                                        width: mediaquerywidht(0.05, context),
+                                      ),
+                                      mytext("Privacy Policy",
+                                          fontFamily: sedan,
+                                          fontSize: 20,
+                                          color: colorteal),
+                                      SizedBox(
+                                        width: mediaquerywidht(0.4, context),
+                                      ),
+                                      const Icon(Icons.navigate_next_rounded),
                                     ],
                                   ),
                                   SizedBox(
@@ -218,43 +285,57 @@ class _ProfileState extends State<Profile> {
                                     child: Row(
                                       children: [
                                         const Icon(
-                                          Icons.settings,
+                                          Icons.feed_outlined,
                                           color: colorteal,
                                           size: 30,
                                         ),
                                         SizedBox(
                                           width: mediaquerywidht(0.05, context),
                                         ),
-                                        mytext("Settings",
+                                        mytext("Send Feedback",
                                             fontFamily: sedan,
-                                            fontSize: 22,
+                                            fontSize: 20,
                                             color: colorteal),
+                                        SizedBox(
+                                          width: mediaquerywidht(0.38, context),
+                                        ),
+                                        const Icon(Icons.navigate_next_rounded),
                                       ],
                                     ),
                                   ),
                                   SizedBox(
-                                    height: mediaqueryheight(0.1, context),
+                                    height: mediaqueryheight(0.02, context),
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.logout,
+                                        color: Colors.red,
+                                        size: 30,
+                                      ),
+                                      SizedBox(
+                                        width: mediaquerywidht(0.05, context),
+                                      ),
+                                      mytext("Log out",
+                                          fontFamily: sedan,
+                                          fontSize: 20,
+                                          color: Colors.red),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: mediaqueryheight(0.04, context),
                                   ),
                                   Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.logout,
-                                          color: Colors.red,
-                                          size: 30,
-                                        ),
-                                        SizedBox(
-                                          width: mediaquerywidht(0.05, context),
-                                        ),
-                                        mytext("Log Out",
-                                            fontFamily: sedan,
-                                            fontSize: 22,
-                                            color: Colors.red),
-                                      ],
+                                    child: Text(
+                                      "Version 1.0.1",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontFamily: sedan,
+                                        fontSize: 18,
+                                        color: blackcolor,
+                                      ),
                                     ),
-                                  ),
+                                  )
                                 ],
                               ),
                             )

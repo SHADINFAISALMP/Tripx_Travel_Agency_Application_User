@@ -5,6 +5,8 @@ import 'package:tripx_user_application/bloc/boarding/boarding_bloc_bloc.dart';
 import 'package:tripx_user_application/bloc/bottomnavigation/bottomnavigation_bloc.dart';
 import 'package:tripx_user_application/bloc/google_sign/google_bloc.dart';
 import 'package:tripx_user_application/bloc/login/login_bloc.dart';
+import 'package:tripx_user_application/bloc/packagess/package_bloc.dart';
+import 'package:tripx_user_application/bloc/profile/profile_bloc.dart';
 import 'package:tripx_user_application/bloc/signup/signup_bloc.dart';
 import 'package:tripx_user_application/bloc/signupimage/profileimage_bloc.dart';
 import 'package:tripx_user_application/firebase_options.dart';
@@ -27,11 +29,16 @@ void main() async {
       ),
       BlocProvider<BoardingBlocBloc>(create: (context) => BoardingBlocBloc()),
       BlocProvider(
-        
         create: (context) => LoginBloc(),
       ),
       BlocProvider(
         create: (context) => BottomnavigationBloc(),
+      ),
+      BlocProvider(
+        create: (context) => ProfileBloc(),
+      ),
+      BlocProvider(
+        create: (context) => PackageBloc(),
       )
     ],
     child: const MyApp(),

@@ -140,24 +140,33 @@ class _HomeScreenState extends State<HomeScreen>
               child: LoadingAnimationWidget.threeArchedCircle(
                   color: colorteal, size: 60),
             );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text('No Packages available'),
+            );
+          } else {
+            final querySnapshot = snapshot.data as QuerySnapshot;
+            final packageCount = querySnapshot.docs.length;
+            return CarouselSlider.builder(
+                itemCount: packageCount,
+                itemBuilder: (context, index, realindex) {
+                  final items = snapshot.data!.docs[index];
+                  List<String> imagess =
+                      (items['imagepath'] as List<dynamic>).cast<String>();
+                  return buildImage(imagess.first, index, items);
+                },
+                options: CarouselOptions(
+                    viewportFraction: 0.72,
+                    enlargeCenterPage: true,
+                    height: mediaqueryheight(0.45, context),
+                    autoPlayCurve: Curves.linear,
+                    onPageChanged: (index, reason) => null,
+                    autoPlay: true));
           }
-          final querySnapshot = snapshot.data as QuerySnapshot;
-          final packageCount = querySnapshot.docs.length;
-          return CarouselSlider.builder(
-              itemCount: packageCount,
-              itemBuilder: (context, index, realindex) {
-                final items = snapshot.data!.docs[index];
-                List<String> imagess =
-                    (items['imagepath'] as List<dynamic>).cast<String>();
-                return buildImage(imagess.first, index, items);
-              },
-              options: CarouselOptions(
-                  viewportFraction: 0.72,
-                  enlargeCenterPage: true,
-                  height: mediaqueryheight(0.45, context),
-                  autoPlayCurve: Curves.linear,
-                  onPageChanged: (index, reason) => null,
-                  autoPlay: true));
         });
   }
 
@@ -328,7 +337,7 @@ class _HomeScreenState extends State<HomeScreen>
                 const Icon(Icons.attach_money, color: whitecolor),
                 const SizedBox(width: 5),
                 mytext(
-                  item['price'],
+                  item['adult'],
                   fontFamily: sedan,
                   fontSize: 18,
                   color: whitecolor,

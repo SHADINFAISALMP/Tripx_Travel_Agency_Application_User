@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:slide_to_act_reborn/slide_to_act_reborn.dart';
+import 'package:tripx_user_application/screens/my_tickets/mytickets.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -11,15 +15,71 @@ class PackagePrice extends StatefulWidget {
 }
 
 class _PackagePriceState extends State<PackagePrice> {
+  late Razorpay _razorpay;
+
+  void openCheckout(grandtotal) {
+    grandtotal = grandtotal * 100;
+    var options = {
+      'key': 'rzp_test_9m06FqDA5cAjgM',
+      'totalamount': grandtotal,
+      'name': 'TRIPIX TRAVEL AGENCY',
+      'prefill': {
+        'contact': '9072051005',
+        'email': 'shadinfaisal305@gmail.com'
+      },
+      'external': {
+        'wallets': ['paytm', 'googlepay', 'phonepay']
+      }
+    };
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint('error : $e');
+    }
+  }
+
+  void handlePaymentsuccess(PaymentSuccessResponse response) {
+    Fluttertoast.showToast(
+        msg: "Payment Succesful${response.paymentId!}",
+        toastLength: Toast.LENGTH_LONG);
+  }
+
+  void handlePaymenterror(PaymentFailureResponse response) {
+    Fluttertoast.showToast(
+        msg: "Payment Failed${response.message!}",
+        toastLength: Toast.LENGTH_LONG);
+  }
+
+  void handleExtrnalWallet(ExternalWalletResponse response) {
+    Fluttertoast.showToast(
+        msg: "External Wallet${response.walletName!}",
+        toastLength: Toast.LENGTH_LONG);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentsuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymenterror);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExtrnalWallet);
+  }
+
   int numberOfTravelers = 1;
 
   @override
   Widget build(BuildContext context) {
-    final int packageCost = 295000;
-    final int perPersonCost = 1000;
-    final int hotelNightCost = 1500;
-    final int perChildCost = 1000;
-    final int taxCharges = 500;
+    const int packageCost = 295000;
+    const int perPersonCost = 1000;
+    const int hotelNightCost = 1500;
+    const int perChildCost = 1000;
+    const int taxCharges = 500;
     final int totalPassengersCost = perPersonCost * numberOfTravelers;
     final int totalAmount = packageCost +
         totalPassengersCost +
@@ -107,36 +167,6 @@ class _PackagePriceState extends State<PackagePrice> {
                 SizedBox(
                   height: mediaqueryheight(0.03, context),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      'NUMBER OF TRAVELERS: ',
-                      style: TextStyle(color: whitecolor, fontSize: 16),
-                    ),
-                    SizedBox(
-                      width: 50,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: '1',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 5),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            numberOfTravelers = int.tryParse(value) ?? 1;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: mediaqueryheight(0.03, context),
-                ),
                 UsableContainer(
                   text: 'TOTAL AMOUNT',
                   text2: '₹ $totalAmount',
@@ -151,35 +181,22 @@ class _PackagePriceState extends State<PackagePrice> {
                 SizedBox(
                   height: mediaqueryheight(0.03, context),
                 ),
-                InkWell(
-                  onTap: () {
-                    // Handle payment action
+                SlideAction(
+                  onSubmit: () {
+                    openCheckout(grandTotal);
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => const Mytickets()));
                   },
-                  child: Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: orangecolor,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: blackcolor,
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: Offset(1, 3),
-                          ),
-                        ],
-                      ),
-                      height: mediaqueryheight(0.05, context),
-                      width: mediaquerywidht(0.6, context),
-                      child: Center(
-                        child: mytext(
-                          "PAY AMOUNT",
-                          fontFamily: sedan,
-                          fontSize: 20,
-                          color: whitecolor,
-                        ),
-                      ),
-                    ),
+                  text: "PAY AMOUNT",
+                  sliderButtonIcon: Icon(Icons.chevron_right),
+                  borderRadius: 10.0,
+                  innerColor: whitecolor,
+                  outerColor: orangecolor,
+                  height: mediaqueryheight(0.05, context),
+                  textStyle: TextStyle(
+                    fontFamily: sedan,
+                    fontSize: 20,
+                    color: whitecolor,
                   ),
                 ),
               ],

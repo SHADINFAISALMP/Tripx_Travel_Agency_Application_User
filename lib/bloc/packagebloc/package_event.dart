@@ -3,22 +3,22 @@ part of 'package_bloc.dart';
 @immutable
 sealed class PackageEvent {}
 
-class UpdateNumberofadults extends PackageEvent {
-  final int numberofAdults;
+class UpdateAdultsCount extends PackageEvent {
+  final int count;
 
-  UpdateNumberofadults(this.numberofAdults);
+  UpdateAdultsCount(this.count);
 }
 
-class UpdateNumberofChildrens extends PackageEvent {
-  final int numberofchildren;
+class UpdateChildrenCount extends PackageEvent {
+  final int count;
 
-  UpdateNumberofChildrens(this.numberofchildren);
+  UpdateChildrenCount(this.count);
 }
 
-class UpdateNumberrooms extends PackageEvent {
-  final int numberofrooms;
+class UpdateRoomsCount extends PackageEvent {
+  final int count;
 
-  UpdateNumberrooms(this.numberofrooms);
+  UpdateRoomsCount(this.count);
 }
 
 class SavePackageDetails extends PackageEvent {}

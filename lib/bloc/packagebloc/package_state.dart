@@ -19,3 +19,10 @@ class Packageerror extends PackageState {
 
   Packageerror(this.errorMessage);
 }
+class PackageUpdated extends PackageState {
+  final int adultsCount;
+  final int childrenCount;
+  final int roomsCount;
+
+  PackageUpdated(this.adultsCount, this.childrenCount, this.roomsCount);
+}

@@ -12,7 +12,39 @@ class PackageBloc extends Bloc<PackageEvent, PackageState> {
   final FirebaseAuth auth;
   PackageBloc(this.firestore, this.auth) : super(PackageInitial()) {
     on<SubmitTravelPackage>(submittravelpackage);
+    on<UpdateAdultsCount>(_updateAdultsCount);
+    on<UpdateChildrenCount>(_updateChildrenCount);
+    on<UpdateRoomsCount>(_updateRoomsCount);
   }
+
+  void _updateAdultsCount(UpdateAdultsCount event, Emitter<PackageState> emit) {
+    final currentState = state;
+    if (currentState is PackageUpdated) {
+      emit(PackageUpdated(event.count, currentState.childrenCount, currentState.roomsCount));
+    } else {
+      emit(PackageUpdated(event.count, 0, 0));
+    }
+  }
+
+  void _updateChildrenCount(UpdateChildrenCount event, Emitter<PackageState> emit) {
+    final currentState = state;
+    if (currentState is PackageUpdated) {
+      emit(PackageUpdated(currentState.adultsCount, event.count, currentState.roomsCount));
+    } else {
+      emit(PackageUpdated(0, event.count, 0));
+    }
+  }
+
+  void _updateRoomsCount(UpdateRoomsCount event, Emitter<PackageState> emit) {
+    final currentState = state;
+    if (currentState is PackageUpdated) {
+      emit(PackageUpdated(currentState.adultsCount, currentState.childrenCount, event.count));
+    } else {
+      emit(PackageUpdated(0, 0, event.count));
+    }
+  }
+
+  
   Future<void> submittravelpackage(
       SubmitTravelPackage event, Emitter<PackageState> emit) async {
     emit(PackageLoading());
@@ -32,4 +64,6 @@ class PackageBloc extends Bloc<PackageEvent, PackageState> {
       emit(Packageerror("error on packahe"));
     }
   }
+
+
 }

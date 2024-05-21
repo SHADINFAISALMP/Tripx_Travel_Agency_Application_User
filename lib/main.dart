@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +7,7 @@ import 'package:tripx_user_application/bloc/boarding/boarding_bloc_bloc.dart';
 import 'package:tripx_user_application/bloc/bottomnavigation/bottomnavigation_bloc.dart';
 import 'package:tripx_user_application/bloc/google_sign/google_bloc.dart';
 import 'package:tripx_user_application/bloc/login/login_bloc.dart';
-import 'package:tripx_user_application/bloc/packagess/package_bloc.dart';
+import 'package:tripx_user_application/bloc/packagebloc/package_bloc.dart';
 import 'package:tripx_user_application/bloc/profile/profile_bloc.dart';
 import 'package:tripx_user_application/bloc/signup/signup_bloc.dart';
 import 'package:tripx_user_application/bloc/signupimage/profileimage_bloc.dart';
@@ -38,7 +40,7 @@ void main() async {
         create: (context) => ProfileBloc(),
       ),
       BlocProvider(
-        create: (context) => PackageBloc(),
+        create: (context) => PackageBloc(FirebaseFirestore.instance , FirebaseAuth.instance),
       )
     ],
     child: const MyApp(),

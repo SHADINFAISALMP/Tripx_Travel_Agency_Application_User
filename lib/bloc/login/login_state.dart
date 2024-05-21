@@ -13,6 +13,12 @@ class PasswordVisibleState extends LoginState {
 
 final class LoginSuccess extends LoginState {}
 
+final class LoginFailure extends LoginState {
+  
+
+  LoginFailure({required String error});
+}
+
 final class AuthenicatingUser extends LoginState {}
 
 final class IncorrectDetails extends LoginState {}
@@ -28,6 +34,7 @@ final class NavigateToOtpPage extends LoginState {
 
   NavigateToOtpPage(this.user);
 }
-final class EmailVerificationFailedFromOtpPage extends LoginState{}
 
-final class LoadingStateLogin extends LoginState{}
+final class EmailVerificationFailedFromOtpPage extends LoginState {}
+
+final class LoadingStateLogin extends LoginState {}

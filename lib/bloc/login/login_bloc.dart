@@ -18,9 +18,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   _loginButtonPressed(LoginEventButton event, Emitter<LoginState> emit) async {
-    print("padaaaa");
+    print("Login button pressed");
     if (formKey.currentState!.validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
+      userEmail = emailcontrollerlog.text;
 
       emit(AuthenicatingUser());
       try {
@@ -29,34 +30,53 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                 email: emailcontrollerlog.text.trim(),
                 password: passwordcontrollerlog.text.trim());
         final User user = userCredential.user!;
-        print("done 1 ");
+        print("Authentication successful");
+
         if (user.emailVerified) {
           emit(LoginSuccess());
-          print("done 2");
+          print("Email is verified");
         } else {
           emit(EmailNotVerified());
-
           await user.sendEmailVerification();
           emit(NavigateToOtpPage(user));
+          print("Email verification sent");
         }
-            } catch (e) {
-        return;
+      } catch (e) {
+        print("Error during authentication: $e");
+        emit(LoginFailure(error: e.toString()));
       }
+    } else {
+      print("Form validation failed");
+      emit(LoginFailure(error: "Form validation failed"));
     }
   }
 
   _resendEmailButtonPressed(
-      ResendEmailFromLogin event, Emitter<LoginState> emit) {
-    (state as NavigateToOtpPage).user.sendEmailVerification();
+      ResendEmailFromLogin event, Emitter<LoginState> emit) async {
+    try {
+      await (state as NavigateToOtpPage).user.sendEmailVerification();
+      print("Resent email verification");
+    } catch (e) {
+      print("Error resending email verification: $e");
+      emit(LoginFailure(error: e.toString()));
+    }
   }
 
-  _verifyEmailPressed(LoginEvent event, Emitter<LoginState> emit) {
+  _verifyEmailPressed(
+      Verifyemailpressedfromlogin event, Emitter<LoginState> emit) async {
     final user = (state as NavigateToOtpPage).user;
-    emit(LoginstateLogin());
-    if (user.emailVerified) {
-      emit(LoginSuccess());
-    } else {
-      emit(EmailVerificationFailedFromOtpPage());
+    try {
+      await user.reload();
+      if (user.emailVerified) {
+        emit(LoginSuccess());
+        print("Email verified successfully from OTP page");
+      } else {
+        emit(EmailVerificationFailedFromOtpPage());
+        print("Email verification failed from OTP page");
+      }
+    } catch (e) {
+      print("Error verifying email: $e");
+      emit(LoginFailure(error: e.toString()));
     }
   }
 }

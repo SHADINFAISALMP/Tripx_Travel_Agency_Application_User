@@ -7,6 +7,7 @@ part 'google_event.dart';
 part 'google_state.dart';
 
 class GoogleBloc extends Bloc<GoogleEvent, GoogleState> {
+  String? userEmail;
   GoogleBloc() : super(GoogleInitial()) {
     on<Googlepressed>(_googleSignButtonPressed);
   }
@@ -21,6 +22,7 @@ class GoogleBloc extends Bloc<GoogleEvent, GoogleState> {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
       if (googleSignInAccount != null) {
+        userEmail = googleSignInAccount.email;
         final GoogleSignInAuthentication googleSignInAuthentication =
             await googleSignInAccount.authentication;
 

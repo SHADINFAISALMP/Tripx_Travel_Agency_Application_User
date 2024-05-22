@@ -16,7 +16,6 @@ class PackagePerson extends StatefulWidget {
 }
 
 class _PackagePersonState extends State<PackagePerson> {
-
   @override
   void initState() {
     super.initState();
@@ -29,6 +28,7 @@ class _PackagePersonState extends State<PackagePerson> {
       childrenAgeControllers.add(TextEditingController());
     }
   }
+
   void _submitDetails() {
     for (int i = 0; i < adultsCount; i++) {
       if (adultNameControllers[i].text.isEmpty ||
@@ -185,4 +185,3 @@ class _PackagePersonState extends State<PackagePerson> {
     );
   }
 }
-

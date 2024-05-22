@@ -192,8 +192,14 @@ class PackageDetails extends StatelessWidget {
                         ),
                         PackageDetailsContainers(
                           text: itemslists['childper'],
-                          
                           topname: 'PER CHILD',
+                        ),
+                        SizedBox(
+                          height: mediaqueryheight(0.01, context),
+                        ),
+                        PackageDetailsContainers(
+                          text: itemslists['packageamount'],
+                          topname: 'PACKAGE AMOUNT',
                         ),
                         SizedBox(
                           height: mediaqueryheight(0.01, context),
@@ -217,7 +223,9 @@ class PackageDetails extends StatelessWidget {
                           child: InkWell(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const PackagePerson()));
+                                  builder: (context) => PackagePerson(
+                                        itemslists: itemslists,
+                                      )));
                             },
                             child: Container(
                               decoration: BoxDecoration(

@@ -337,7 +337,7 @@ class _HomeScreenState extends State<HomeScreen>
                 const Icon(Icons.attach_money, color: whitecolor),
                 const SizedBox(width: 5),
                 mytext(
-                  item['adult'],
+                  item['packageamount'],
                   fontFamily: sedan,
                   fontSize: 18,
                   color: whitecolor,

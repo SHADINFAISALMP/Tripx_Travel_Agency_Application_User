@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripx_user_application/bloc/packagebloc/package_bloc.dart';
@@ -9,13 +10,16 @@ import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 
 class PackagePerson extends StatefulWidget {
-  const PackagePerson({Key? key}) : super(key: key);
+  final QueryDocumentSnapshot<Object?> itemslists;
+  const PackagePerson({Key? key, required this.itemslists}) : super(key: key);
 
   @override
   _PackagePersonState createState() => _PackagePersonState();
 }
 
 class _PackagePersonState extends State<PackagePerson> {
+ 
+
   @override
   void initState() {
     super.initState();
@@ -90,8 +94,10 @@ class _PackagePersonState extends State<PackagePerson> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Travel package saved successfully!')),
           );
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const PackagePrice()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PackagePrice(
+                    itemslists:widget.itemslists,
+                  )));
         } else if (state is Packageerror) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Failed to save travel package!')),

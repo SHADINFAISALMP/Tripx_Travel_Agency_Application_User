@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -9,7 +10,8 @@ import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 
 class PackagePrice extends StatefulWidget {
-  const PackagePrice({super.key});
+  final QueryDocumentSnapshot<Object?> itemslists;
+  const PackagePrice({super.key, required this.itemslists});
 
   @override
   _PackagePriceState createState() => _PackagePriceState();
@@ -58,7 +60,7 @@ class _PackagePriceState extends State<PackagePrice> {
   }
 
   @override
-  void dispose() {
+  void dispose() { 
     super.dispose();
     _razorpay.clear();
   }
@@ -76,18 +78,7 @@ class _PackagePriceState extends State<PackagePrice> {
 
   @override
   Widget build(BuildContext context) {
-    const int packageCost = 295000;
-    const int perPersonCost = 1000;
-    const int hotelNightCost = 1500;
-    const int perChildCost = 1000;
-    const int taxCharges = 500;
-    final int totalPassengersCost = perPersonCost * numberOfTravelers;
-    final int totalAmount = packageCost +
-        totalPassengersCost +
-        hotelNightCost +
-        perChildCost +
-        taxCharges;
-    final int grandTotal = totalAmount * numberOfTravelers;
+    final int grandTotal = 10000;
 
     return Scaffold(
       backgroundColor: colorteal,
@@ -135,42 +126,42 @@ class _PackagePriceState extends State<PackagePrice> {
               children: [
                 UsableContainer(
                   text: 'PACKAGE COST',
-                  text2: '₹ $packageCost',
+                  text2: '₹ ${widget.itemslists['packageamount']}',
                 ),
                 SizedBox(
                   height: mediaqueryheight(0.03, context),
                 ),
                 UsableContainer(
                   text: 'PER PERSON',
-                  text2: '₹ $perPersonCost',
+                  text2: '₹ ${widget.itemslists['adult']}',
                 ),
                 SizedBox(
                   height: mediaqueryheight(0.03, context),
                 ),
                 UsableContainer(
                   text: 'HOTEL NIGHT',
-                  text2: '₹ $hotelNightCost',
+                  text2: '₹ ${widget.itemslists['hotelper']}',
                 ),
                 SizedBox(
                   height: mediaqueryheight(0.03, context),
                 ),
                 UsableContainer(
                   text: 'PER CHILD',
-                  text2: '₹ $perChildCost',
+                  text2: '₹ ${widget.itemslists['childper']}',
                 ),
                 SizedBox(
                   height: mediaqueryheight(0.03, context),
                 ),
                 UsableContainer(
-                  text: 'TAX & CHARGES',
-                  text2: '₹ $taxCharges',
+                  text: 'COMPANY CHARGES',
+                  text2: '₹ ${widget.itemslists['companycharge']}',
                 ),
                 SizedBox(
                   height: mediaqueryheight(0.03, context),
                 ),
                 UsableContainer(
                   text: 'TOTAL AMOUNT',
-                  text2: '₹ $totalAmount',
+                  text2: '₹ $grandTotal',
                 ),
                 SizedBox(
                   height: mediaqueryheight(0.03, context),

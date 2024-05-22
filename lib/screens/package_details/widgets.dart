@@ -4,16 +4,18 @@ import 'package:tripx_user_application/bloc/packagebloc/package_bloc.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
-  TextEditingController adultsController = TextEditingController(text: '1');
-  TextEditingController childrenController = TextEditingController();
-  TextEditingController roomsController = TextEditingController(text: '1');
-  int adultsCount = 1;
-  int childrenCount = 0;
-  int roomsCount = 1;
-  List<TextEditingController> adultNameControllers = [];
-  List<TextEditingController> adultAgeControllers = [];
-  List<TextEditingController> childrenNameControllers = [];
-  List<TextEditingController> childrenAgeControllers = [];
+
+TextEditingController adultsController = TextEditingController();
+TextEditingController childrenController = TextEditingController();
+TextEditingController roomsController = TextEditingController(text: '1');
+int adultsCount = 0;
+int childrenCount = 0;
+int roomsCount = 1;
+List<TextEditingController> adultNameControllers = [];
+List<TextEditingController> adultAgeControllers = [];
+List<TextEditingController> childrenNameControllers = [];
+List<TextEditingController> childrenAgeControllers = [];
+
 class appbarcontainer extends StatelessWidget {
   const appbarcontainer({
     super.key,
@@ -55,148 +57,153 @@ class appbarcontainer extends StatelessWidget {
     );
   }
 }
- List<Widget> buildAdultFields() {
-    List<Widget> adultFields = [];
-    for (int i = 0; i < adultsCount; i++) {
-      adultFields.add(
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Adult ${i + 1}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: whitecolor,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: adultNameControllers[i],
-                    decoration: const InputDecoration(
-                      hintText: 'Name',
-                      hintStyle: TextStyle(color: colorteal),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                      border: InputBorder.none,
-                    ),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                  TextFormField(
-                    controller: adultAgeControllers[i],
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: 'Age',
-                      hintStyle: TextStyle(color: colorteal),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                      border: InputBorder.none,
-                    ),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
-      );
-    }
-    return adultFields;
-  }
-  List<Widget> buildchildrenFields() {
-    if (childrenNameControllers.isEmpty || childrenAgeControllers.isEmpty) {
-      return [const Text('No children specified')];
-    }
 
-    List<Widget> childrenFields = [];
-    for (int i = 0; i < childrenCount; i++) {
-      childrenFields.add(
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Children ${i + 1}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: whitecolor,
-              ),
+List<Widget> buildAdultFields() {
+  if (adultNameControllers.isEmpty || adultAgeControllers.isEmpty) {
+    return [const Text('No adults specified')];
+  }
+  List<Widget> adultFields = [];
+  for (int i = 0; i < adultsCount; i++) {
+    adultFields.add(
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Adult ${i + 1}',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: whitecolor,
             ),
-            const SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: childrenNameControllers[i],
-                    decoration: const InputDecoration(
-                      hintText: 'Name',
-                      hintStyle: TextStyle(color: colorteal),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                      border: InputBorder.none,
-                    ),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                  TextFormField(
-                    controller: childrenAgeControllers[i],
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: 'Age',
-                      hintStyle: TextStyle(color: colorteal),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                      border: InputBorder.none,
-                    ),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-          ],
-        ),
-      );
-    }
-    return childrenFields;
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: adultNameControllers[i],
+                  decoration: const InputDecoration(
+                    hintText: 'Name',
+                    hintStyle: TextStyle(color: colorteal),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+                TextFormField(
+                  controller: adultAgeControllers[i],
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintText: 'Age',
+                    hintStyle: TextStyle(color: colorteal),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
+      ),
+    );
+  }
+  return adultFields;
+}
+
+List<Widget> buildchildrenFields() {
+  if (childrenNameControllers.isEmpty || childrenAgeControllers.isEmpty) {
+    return [const Text('No children specified')];
   }
 
-  class Numberofrooms extends StatelessWidget {
+  List<Widget> childrenFields = [];
+  for (int i = 0; i < childrenCount; i++) {
+    childrenFields.add(
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Children ${i + 1}',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: whitecolor,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: childrenNameControllers[i],
+                  decoration: const InputDecoration(
+                    hintText: 'Name',
+                    hintStyle: TextStyle(color: colorteal),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+                TextFormField(
+                  controller: childrenAgeControllers[i],
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintText: 'Age',
+                    hintStyle: TextStyle(color: colorteal),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
+      ),
+    );
+  }
+  return childrenFields;
+}
+
+class Numberofrooms extends StatelessWidget {
   const Numberofrooms({
     super.key,
   });
@@ -216,8 +223,7 @@ class appbarcontainer extends StatelessWidget {
             ),
           ],
           color: whitecolor,
-          borderRadius:
-              const BorderRadius.all(Radius.circular(10))),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -241,8 +247,7 @@ class appbarcontainer extends StatelessWidget {
               },
               decoration: const InputDecoration(
                 hintText: 'Enter',
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
                 border: InputBorder.none,
               ),
               style: const TextStyle(color: Colors.black),
@@ -274,8 +279,7 @@ class Numberofchildrens extends StatelessWidget {
             ),
           ],
           color: whitecolor,
-          borderRadius:
-              const BorderRadius.all(Radius.circular(10))),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -299,8 +303,7 @@ class Numberofchildrens extends StatelessWidget {
               },
               decoration: const InputDecoration(
                 hintText: 'Enter',
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
                 border: InputBorder.none,
               ),
               style: const TextStyle(color: Colors.black),
@@ -332,8 +335,7 @@ class Numberofadults extends StatelessWidget {
             ),
           ],
           color: whitecolor,
-          borderRadius:
-              const BorderRadius.all(Radius.circular(10))),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -351,14 +353,13 @@ class Numberofadults extends StatelessWidget {
               controller: adultsController,
               keyboardType: TextInputType.number,
               onChanged: (value) {
-                final int newCount = int.tryParse(value) ?? 1;
+                final int newCount = int.tryParse(value) ?? 0;
                 BlocProvider.of<PackageBloc>(context)
                     .add(UpdateAdultsCount(newCount));
               },
               decoration: const InputDecoration(
                 hintText: 'Enter',
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
                 border: InputBorder.none,
               ),
               style: const TextStyle(color: Colors.black),

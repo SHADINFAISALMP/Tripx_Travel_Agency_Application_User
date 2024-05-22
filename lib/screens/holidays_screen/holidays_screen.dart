@@ -144,7 +144,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                 const Icon(Icons.attach_money, color: blackcolor),
                 const SizedBox(width: 5),
                 mytext(
-                  item['adult'],
+                  item['packageamount'],
                   fontFamily: sedan,
                   fontSize: 18,
                   color: colorteal,

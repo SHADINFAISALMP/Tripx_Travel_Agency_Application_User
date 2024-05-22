@@ -16,21 +16,10 @@ class PackagePerson extends StatefulWidget {
 }
 
 class _PackagePersonState extends State<PackagePerson> {
-  TextEditingController adultsController = TextEditingController(text: '1');
-  TextEditingController childrenController = TextEditingController();
-  TextEditingController roomsController = TextEditingController(text: '1');
-  int adultsCount = 1;
-  int childrenCount = 0;
-  int roomsCount = 1;
-  List<TextEditingController> adultNameControllers = [];
-  List<TextEditingController> adultAgeControllers = [];
-  List<TextEditingController> childrenNameControllers = [];
-  List<TextEditingController> childrenAgeControllers = [];
 
   @override
   void initState() {
     super.initState();
-    // Initialize controllers for adults and children
     for (int i = 0; i < adultsCount; i++) {
       adultNameControllers.add(TextEditingController());
       adultAgeControllers.add(TextEditingController());
@@ -40,106 +29,26 @@ class _PackagePersonState extends State<PackagePerson> {
       childrenAgeControllers.add(TextEditingController());
     }
   }
-
-  List<Widget> buildAdultFields() {
-    List<Widget> adultFields = [];
-    for (int i = 0; i < adultsCount; i++) {
-      adultFields.add(
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Adult ${i + 1}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: whitecolor,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: adultNameControllers[i],
-                    decoration: const InputDecoration(
-                      hintText: 'Name',
-                      hintStyle: TextStyle(color: colorteal),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                      border: InputBorder.none,
-                    ),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                  TextFormField(
-                    controller: adultAgeControllers[i],
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: 'Age',
-                      hintStyle: TextStyle(color: colorteal),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                      border: InputBorder.none,
-                    ),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
-      );
-    }
-    return adultFields;
-  }
-
-  List<Widget> buildchildrenFields() {
-    List<Widget> childrenFields = [];
-    for (int i = 0; i < childrenCount; i++) {
-      childrenFields.add(
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Childrens ${i + 1}'),
-            TextFormField(
-              controller: childrenNameControllers[i],
-              decoration: const InputDecoration(
-                hintText: 'Name',
-              ),
-            ),
-            TextFormField(
-              controller: childrenAgeControllers[i],
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                hintText: 'Age',
-              ),
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
-      );
-    }
-    return childrenFields;
-  }
-
   void _submitDetails() {
+    for (int i = 0; i < adultsCount; i++) {
+      if (adultNameControllers[i].text.isEmpty ||
+          adultAgeControllers[i].text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please enter all adult details')),
+        );
+        return;
+      }
+    }
+    for (int i = 0; i < childrenCount; i++) {
+      if (childrenNameControllers[i].text.isEmpty ||
+          childrenAgeControllers[i].text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please enter all children details')),
+        );
+        return;
+      }
+    }
+
     List<Traveler> adults = [];
     for (int i = 0; i < adultsCount; i++) {
       adults.add(Traveler(
@@ -176,210 +85,64 @@ class _PackagePersonState extends State<PackagePerson> {
         preferredSize: Size.fromHeight(80.0),
         child: appbarcontainer(),
       ),
-      body: BlocListener<PackageBloc, PackageState>(
-        listener: (context, state) {
-          if (state is Packagesucess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Travel package saved successfully!')),
-            );
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const PackagePrice()));
-          } else if (state is Packageerror) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Failed to save travel package!')),
-            );
+      body: BlocConsumer<PackageBloc, PackageState>(listener: (context, state) {
+        if (state is Packagesucess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Travel package saved successfully!')),
+          );
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const PackagePrice()));
+        } else if (state is Packageerror) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to save travel package!')),
+          );
+        }
+      }, builder: (context, state) {
+        if (state is PackageLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state is PackageUpdated) {
+          while (adultNameControllers.length < state.adultsCount) {
+            adultNameControllers.add(TextEditingController());
+            adultAgeControllers.add(TextEditingController());
           }
-        },
-        child: SingleChildScrollView(
+          while (adultNameControllers.length > state.adultsCount) {
+            adultNameControllers.removeLast();
+            adultAgeControllers.removeLast();
+          }
+
+          while (childrenNameControllers.length < state.childrenCount) {
+            childrenNameControllers.add(TextEditingController());
+            childrenAgeControllers.add(TextEditingController());
+          }
+          while (childrenNameControllers.length > state.childrenCount) {
+            childrenNameControllers.removeLast();
+            childrenAgeControllers.removeLast();
+          }
+
+          adultsController.text = state.adultsCount.toString();
+          childrenController.text = state.childrenCount.toString();
+          roomsController.text = state.roomsCount.toString();
+          adultsCount = state.adultsCount;
+          childrenCount = state.childrenCount;
+          roomsCount = state.roomsCount;
+        }
+        return SingleChildScrollView(
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: mediaqueryheight(0.07, context),
-                    width: mediaquerywidht(0.9, context),
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                        color: whitecolor,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text(
-                          'Number of Adults:',
-                          style: TextStyle(color: colorteal),
-                        ),
-                        Container(
-                          width: mediaquerywidht(0.14, context),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: colorteal),
-                          ),
-                          child: TextFormField(
-                            controller: adultsController,
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              setState(() {
-                                adultsCount = int.tryParse(value) ?? 1;
-
-                                if (adultsCount > adultNameControllers.length) {
-                                  adultNameControllers.addAll(List.generate(
-                                      adultsCount - adultNameControllers.length,
-                                      (index) => TextEditingController()));
-                                  adultAgeControllers.addAll(List.generate(
-                                      adultsCount - adultAgeControllers.length,
-                                      (index) => TextEditingController()));
-                                } else {
-                                  adultNameControllers.removeRange(
-                                      adultsCount, adultNameControllers.length);
-                                  adultAgeControllers.removeRange(
-                                      adultsCount, adultAgeControllers.length);
-                                }
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              hintText: 'Enter',
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10),
-                              border: InputBorder.none,
-                            ),
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const Numberofadults(),
                   SizedBox(
                     height: mediaqueryheight(0.04, context),
                   ),
-                  Container(
-                    height: mediaqueryheight(0.07, context),
-                    width: mediaquerywidht(0.9, context),
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                        color: whitecolor,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text(
-                          'Number of Children:',
-                          style: TextStyle(color: colorteal),
-                        ),
-                        Container(
-                          width: mediaquerywidht(0.14, context),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: colorteal),
-                          ),
-                          child: TextFormField(
-                            controller: childrenController,
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              setState(() {
-                                childrenCount = int.tryParse(value) ?? 0;
-
-                                if (childrenCount >
-                                    childrenNameControllers.length) {
-                                  childrenNameControllers.addAll(List.generate(
-                                      childrenCount -
-                                          childrenNameControllers.length,
-                                      (index) => TextEditingController()));
-                                  childrenAgeControllers.addAll(List.generate(
-                                      childrenCount -
-                                          childrenAgeControllers.length,
-                                      (index) => TextEditingController()));
-                                } else {
-                                  childrenNameControllers.removeRange(
-                                      childrenCount,
-                                      childrenNameControllers.length);
-                                  childrenAgeControllers.removeRange(
-                                      childrenCount,
-                                      childrenAgeControllers.length);
-                                }
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              hintText: 'Enter',
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10),
-                              border: InputBorder.none,
-                            ),
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const Numberofchildrens(),
                   SizedBox(
                     height: mediaqueryheight(0.04, context),
                   ),
-                  Container(
-                    height: mediaqueryheight(0.07, context),
-                    width: mediaquerywidht(0.9, context),
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                        color: whitecolor,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text(
-                          'Number of Rooms:',
-                          style: TextStyle(color: colorteal),
-                        ),
-                        Container(
-                          width: mediaquerywidht(0.14, context),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: colorteal),
-                          ),
-                          child: TextFormField(
-                            controller: roomsController,
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              setState(() {
-                                roomsCount = int.tryParse(value) ?? 0;
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              hintText: 'Enter',
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10),
-                              border: InputBorder.none,
-                            ),
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const Numberofrooms(),
                   const SizedBox(height: 20),
                   ...buildAdultFields(),
                   const SizedBox(height: 20),
@@ -417,8 +180,9 @@ class _PackagePersonState extends State<PackagePerson> {
               ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
+

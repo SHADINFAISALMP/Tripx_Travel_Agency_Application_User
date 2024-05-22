@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:slide_to_act_reborn/slide_to_act_reborn.dart';
 import 'package:tripx_user_application/screens/my_tickets/mytickets.dart';
+import 'package:tripx_user_application/screens/package_details/widgets.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -184,8 +185,8 @@ class _PackagePriceState extends State<PackagePrice> {
                 SlideAction(
                   onSubmit: () {
                     openCheckout(grandTotal);
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => const Mytickets()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const Mytickets()));
                   },
                   text: "PAY AMOUNT",
                   sliderButtonIcon: Icon(Icons.chevron_right),
@@ -203,50 +204,6 @@ class _PackagePriceState extends State<PackagePrice> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class UsableContainer extends StatelessWidget {
-  final String text;
-  final String text2;
-
-  const UsableContainer({
-    super.key,
-    required this.text,
-    required this.text2,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: mediaqueryheight(0.07, context),
-      width: mediaquerywidht(0.9, context),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 4,
-            offset: const Offset(0, 3),
-          ),
-        ],
-        color: whitecolor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            text,
-            style: const TextStyle(color: colorteal),
-          ),
-          Text(
-            text2,
-            style: const TextStyle(color: colorteal),
-          ),
-        ],
       ),
     );
   }

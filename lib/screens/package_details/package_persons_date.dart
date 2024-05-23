@@ -18,12 +18,31 @@ class PackagePerson extends StatefulWidget {
 }
 
 class _PackagePersonState extends State<PackagePerson> {
- 
-
+  int adultsCount = 0;
+  int childrenCount = 0;
+  int roomsCount = 1;
+  List<TextEditingController> adultNameControllers = [];
+  List<TextEditingController> adultAgeControllers = [];
+  List<TextEditingController> childrenNameControllers = [];
+  List<TextEditingController> childrenAgeControllers = [];
+  TextEditingController adultsController = TextEditingController();
+  TextEditingController childrenController = TextEditingController();
+  TextEditingController roomsController = TextEditingController();
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < adultsCount; i++) {
+    context.read<PackageBloc>().add(UpdateAdultsCount(adultsCount));
+    context.read<PackageBloc>().add(UpdateChildrenCount(childrenCount));
+    context.read<PackageBloc>().add(UpdateRoomsCount(roomsCount));
+    _initializeControllers(adultsCount, childrenCount);
+  }
+
+  void _initializeControllers(int adultCount, int childrenCount) {
+    adultNameControllers.clear();
+    adultAgeControllers.clear();
+    childrenNameControllers.clear();
+    childrenAgeControllers.clear();
+    for (int i = 0; i < adultCount; i++) {
       adultNameControllers.add(TextEditingController());
       adultAgeControllers.add(TextEditingController());
     }
@@ -38,7 +57,7 @@ class _PackagePersonState extends State<PackagePerson> {
       if (adultNameControllers[i].text.isEmpty ||
           adultAgeControllers[i].text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please enter all adult details')),
+          const SnackBar(content: Text('Please enter all adult details')),
         );
         return;
       }
@@ -47,7 +66,7 @@ class _PackagePersonState extends State<PackagePerson> {
       if (childrenNameControllers[i].text.isEmpty ||
           childrenAgeControllers[i].text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please enter all children details')),
+          const SnackBar(content: Text('Please enter all children details')),
         );
         return;
       }
@@ -92,15 +111,18 @@ class _PackagePersonState extends State<PackagePerson> {
       body: BlocConsumer<PackageBloc, PackageState>(listener: (context, state) {
         if (state is Packagesucess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Travel package saved successfully!')),
+            const SnackBar(content: Text('Travel package saved successfully!')),
           );
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PackagePrice(
-                    itemslists:widget.itemslists,
+                    itemslists: widget.itemslists,
+                    adultsCount: adultsCount,
+                    childrenCount: childrenCount,
+                    roomsCount: roomsCount,
                   )));
         } else if (state is Packageerror) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to save travel package!')),
+            const SnackBar(content: Text('Failed to save travel package!')),
           );
         }
       }, builder: (context, state) {
@@ -108,30 +130,34 @@ class _PackagePersonState extends State<PackagePerson> {
           return const Center(child: CircularProgressIndicator());
         }
         if (state is PackageUpdated) {
-          while (adultNameControllers.length < state.adultsCount) {
+          print("shadin");
+          adultsCount = state.adultcount;
+          childrenCount = state.childrencount;
+          roomsCount = state.roomscount;
+          print("shadin");
+          _initializeControllers(adultsCount, childrenCount);
+
+          while (adultNameControllers.length < adultsCount) {
             adultNameControllers.add(TextEditingController());
             adultAgeControllers.add(TextEditingController());
           }
-          while (adultNameControllers.length > state.adultsCount) {
+          while (adultNameControllers.length > adultsCount) {
             adultNameControllers.removeLast();
             adultAgeControllers.removeLast();
           }
 
-          while (childrenNameControllers.length < state.childrenCount) {
+          while (childrenNameControllers.length < childrenCount) {
             childrenNameControllers.add(TextEditingController());
             childrenAgeControllers.add(TextEditingController());
           }
-          while (childrenNameControllers.length > state.childrenCount) {
+          while (childrenNameControllers.length > childrenCount) {
             childrenNameControllers.removeLast();
             childrenAgeControllers.removeLast();
           }
 
-          adultsController.text = state.adultsCount.toString();
-          childrenController.text = state.childrenCount.toString();
-          roomsController.text = state.roomsCount.toString();
-          adultsCount = state.adultsCount;
-          childrenCount = state.childrenCount;
-          roomsCount = state.roomsCount;
+          adultsController.text = state.adultcount.toString();
+          childrenController.text = state.childrencount.toString();
+          roomsController.text = state.roomscount.toString();
         }
         return SingleChildScrollView(
           child: SafeArea(
@@ -189,5 +215,141 @@ class _PackagePersonState extends State<PackagePerson> {
         );
       }),
     );
+  }
+
+  List<Widget> buildAdultFields() {
+    if (adultNameControllers.isEmpty || adultAgeControllers.isEmpty) {
+      return [const Text('No adults specified')];
+    }
+    return List<Widget>.generate(adultsCount, (index) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Adult ${index + 1}',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: whitecolor,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: adultNameControllers[index],
+                  decoration: const InputDecoration(
+                    hintText: 'Name',
+                    hintStyle: TextStyle(color: colorteal),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+                TextFormField(
+                  controller: adultAgeControllers[index],
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintText: 'Age',
+                    hintStyle: TextStyle(color: colorteal),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
+      );
+    });
+  }
+
+  List<Widget> buildchildrenFields() {
+    if (childrenNameControllers.isEmpty || childrenAgeControllers.isEmpty) {
+      return [const Text('No children specified')];
+    }
+    return List<Widget>.generate(childrenCount, (index) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Children ${index + 1}',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: whitecolor,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: childrenNameControllers[index],
+                  decoration: const InputDecoration(
+                    hintText: 'Name',
+                    hintStyle: TextStyle(color: colorteal),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+                TextFormField(
+                  controller: childrenAgeControllers[index],
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintText: 'Age',
+                    hintStyle: TextStyle(color: colorteal),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
+      );
+    });
   }
 }

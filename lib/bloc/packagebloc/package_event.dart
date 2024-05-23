@@ -1,7 +1,10 @@
 part of 'package_bloc.dart';
 
-@immutable
-sealed class PackageEvent {}
+class PackageEvent {
+  final Travelpackage? travelpackage;
+
+  PackageEvent({this.travelpackage});
+}
 
 class UpdateAdultsCount extends PackageEvent {
   final int count;
@@ -20,6 +23,8 @@ class UpdateRoomsCount extends PackageEvent {
 
   UpdateRoomsCount(this.count);
 }
+
+class FetchInitialData extends PackageEvent {}
 
 class SavePackageDetails extends PackageEvent {}
 

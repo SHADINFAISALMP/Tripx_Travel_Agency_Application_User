@@ -19,11 +19,11 @@ class Travelpackage {
   List<Traveler>? children;
 
   Travelpackage(
-      {required this.adultcount,
-      required this.childrencount,
-      required this.roomscount,
-      required this.adults,
-      required this.children});
+      { this.adultcount,
+       this.childrencount,
+       this.roomscount,
+       this.adults,
+       this.children});
 
   Map<String, dynamic> toJson() {
     return {

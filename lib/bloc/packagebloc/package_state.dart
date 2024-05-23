@@ -5,11 +5,6 @@ sealed class PackageState {}
 
 final class PackageInitial extends PackageState {}
 
-class PackageLoaded extends PackageState {
-  final Map<String, dynamic> packageDetails;
-  PackageLoaded(this.packageDetails);
-}
-
 class PackageLoading extends PackageState {}
 
 class Packagesucess extends PackageState {}
@@ -19,10 +14,21 @@ class Packageerror extends PackageState {
 
   Packageerror(this.errorMessage);
 }
-class PackageUpdated extends PackageState {
-  final int adultsCount;
-  final int childrenCount;
-  final int roomsCount;
 
-  PackageUpdated(this.adultsCount, this.childrenCount, this.roomsCount);
+class PackageUpdated extends PackageState {
+  final int adultcount;
+  final int childrencount;
+  final int roomscount;
+  final Travelpackage travelpackage;
+  PackageUpdated(
+      {required this.adultcount,
+      required this.childrencount,
+      required this.roomscount,
+      required this.travelpackage});
+}
+
+class PackageSaved extends PackageState {
+  final Travelpackage travelPackage;
+
+  PackageSaved(this.travelPackage);
 }

@@ -6,6 +6,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:slide_to_act_reborn/slide_to_act_reborn.dart';
 import 'package:tripx_user_application/bloc/packagebloc/package_bloc.dart';
 import 'package:tripx_user_application/models/traveller_model.dart';
+import 'package:tripx_user_application/screens/my_tickets/mytickets.dart';
 
 import 'package:tripx_user_application/screens/package_details/widgets.dart';
 import 'package:tripx_user_application/utils/colors.dart';
@@ -72,6 +73,8 @@ class _PackagePriceState extends State<PackagePrice> {
         msg: "Travel package saved successfully!",
         toastLength: Toast.LENGTH_LONG,
       );
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Mytickets()));
     } catch (e) {
       Fluttertoast.showToast(
         msg: "Failed to save travel package: $e",

@@ -9,6 +9,13 @@ class Traveler {
       'age': age,
     };
   }
+
+  factory Traveler.fromJson(Map<String, dynamic> json) {
+    return Traveler(
+      name: json['name'],
+      age: json['age'],
+    );
+  }
 }
 
 class Travelpackage {
@@ -19,11 +26,11 @@ class Travelpackage {
   List<Traveler>? children;
 
   Travelpackage(
-      { this.adultcount,
-       this.childrencount,
-       this.roomscount,
-       this.adults,
-       this.children});
+      {this.adultcount,
+      this.childrencount,
+      this.roomscount,
+      this.adults,
+      this.children});
 
   Map<String, dynamic> toJson() {
     return {
@@ -33,5 +40,17 @@ class Travelpackage {
       'adults': adults!.map((e) => e.toJson()).toList(),
       'children': children!.map((e) => e.toJson()).toList(),
     };
+  }
+
+  factory Travelpackage.fromJson(Map<String, dynamic> json) {
+    return Travelpackage(
+      adultcount: json['adultsCount'],
+      childrencount: json['childrenCount'],
+      roomscount: json['roomsCount'],
+      adults:
+          List<Traveler>.from(json['adults'].map((x) => Traveler.fromJson(x))),
+      children: List<Traveler>.from(
+          json['children'].map((x) => Traveler.fromJson(x))),
+    );
   }
 }

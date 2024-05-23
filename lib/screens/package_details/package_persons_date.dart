@@ -52,7 +52,7 @@ class _PackagePersonState extends State<PackagePerson> {
     }
   }
 
-  void _submitDetails() {
+  void navigateTopackageprice() {
     for (int i = 0; i < adultsCount; i++) {
       if (adultNameControllers[i].text.isEmpty ||
           adultAgeControllers[i].text.isEmpty) {
@@ -71,7 +71,6 @@ class _PackagePersonState extends State<PackagePerson> {
         return;
       }
     }
-
     List<Traveler> adults = [];
     for (int i = 0; i < adultsCount; i++) {
       adults.add(Traveler(
@@ -95,9 +94,13 @@ class _PackagePersonState extends State<PackagePerson> {
       adults: adults,
       children: children,
     );
-
-    BlocProvider.of<PackageBloc>(context)
-        .add(SubmitTravelPackage(travelPackage));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => PackagePrice(
+              itemslists: widget.itemslists,
+              adultsCount: adultsCount,
+              childrenCount: childrenCount,
+              roomsCount: roomsCount, travelpackage: travelPackage,
+            )));
   }
 
   @override
@@ -109,18 +112,7 @@ class _PackagePersonState extends State<PackagePerson> {
         child: appbarcontainer(),
       ),
       body: BlocConsumer<PackageBloc, PackageState>(listener: (context, state) {
-        if (state is Packagesucess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Travel package saved successfully!')),
-          );
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => PackagePrice(
-                    itemslists: widget.itemslists,
-                    adultsCount: adultsCount,
-                    childrenCount: childrenCount,
-                    roomsCount: roomsCount,
-                  )));
-        } else if (state is Packageerror) {
+        if (state is Packageerror) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Failed to save travel package!')),
           );
@@ -182,7 +174,7 @@ class _PackagePersonState extends State<PackagePerson> {
                   const SizedBox(height: 20),
                   InkWell(
                     onTap: () {
-                      _submitDetails();
+                      navigateTopackageprice();
                     },
                     child: Center(
                       child: Container(

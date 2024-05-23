@@ -17,12 +17,19 @@ class PackagePrice extends StatefulWidget {
   final int adultsCount;
   final int childrenCount;
   final int roomsCount;
+  final Travelpackage travelpackage;
   const PackagePrice(
       {super.key,
       required this.itemslists,
       required this.adultsCount,
       required this.childrenCount,
-      required this.roomsCount});
+      required this.roomsCount,
+      required this.travelpackage});
+
+  void _submitPackage(BuildContext context) {
+    BlocProvider.of<PackageBloc>(context)
+        .add(SubmitTravelPackage(travelpackage));
+  }
 
   @override
   _PackagePriceState createState() => _PackagePriceState();
@@ -51,10 +58,26 @@ class _PackagePriceState extends State<PackagePrice> {
     }
   }
 
-  void handlePaymentsuccess(PaymentSuccessResponse response) {
+  void handlePaymentsuccess(PaymentSuccessResponse response) async {
     Fluttertoast.showToast(
-        msg: "Payment Succesful${response.paymentId!}",
-        toastLength: Toast.LENGTH_LONG);
+      msg: "Payment Successful: ${response.paymentId!}",
+      toastLength: Toast.LENGTH_LONG,
+    );
+
+    try {
+      final packageEvent = SubmitTravelPackage(widget.travelpackage);
+      BlocProvider.of<PackageBloc>(context).add(packageEvent);
+
+      Fluttertoast.showToast(
+        msg: "Travel package saved successfully!",
+        toastLength: Toast.LENGTH_LONG,
+      );
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Failed to save travel package: $e",
+        toastLength: Toast.LENGTH_LONG,
+      );
+    }
   }
 
   void handlePaymenterror(PaymentFailureResponse response) {
@@ -140,91 +163,102 @@ class _PackagePriceState extends State<PackagePrice> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-            child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                UsableContainer(
-                  text: 'PACKAGE COST',
-                  text2: '₹ ${widget.itemslists['packageamount']}',
+        body: BlocConsumer<PackageBloc, PackageState>(
+          listener: (context, state) {
+            if (state is Packagesucess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text('Travel package saved successfully!')),
+              );
+              // Navigate to a confirmation screen or another screen if needed
+            } else if (state is Packageerror) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Failed to save travel package!')),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is PackageLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return SingleChildScrollView(
+                child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UsableContainer(
+                      text: 'PACKAGE COST',
+                      text2: '₹ ${widget.itemslists['packageamount']}',
+                    ),
+                    SizedBox(
+                      height: mediaqueryheight(0.03, context),
+                    ),
+                    UsableContainer(
+                      text: '$numberofAdults PERSON',
+                      text2: '₹ $totaladultcost',
+                    ),
+                    SizedBox(
+                      height: mediaqueryheight(0.03, context),
+                    ),
+                    UsableContainer(
+                      text: '$numberofrooms HOTEL NIGHT',
+                      text2: '₹ $totalhotelcost',
+                    ),
+                    SizedBox(
+                      height: mediaqueryheight(0.03, context),
+                    ),
+                    UsableContainer(
+                      text: '$numberofChildrens CHILD',
+                      text2: '₹ $totalchildcost',
+                    ),
+                    SizedBox(
+                      height: mediaqueryheight(0.03, context),
+                    ),
+                    UsableContainer(
+                      text: 'COMPANY CHARGES',
+                      text2: '₹ $companycharge',
+                    ),
+                    SizedBox(
+                      height: mediaqueryheight(0.03, context),
+                    ),
+                    UsableContainer(
+                      text: 'TOTAL AMOUNT',
+                      text2: '₹ $grandtotal',
+                    ),
+                    SizedBox(
+                      height: mediaqueryheight(0.03, context),
+                    ),
+                    UsableContainer(
+                      text: 'GRAND TOTAL',
+                      text2: '₹ $grandtotal',
+                    ),
+                    SizedBox(
+                      height: mediaqueryheight(0.03, context),
+                    ),
+                    SlideAction(
+                      onSubmit: () {
+                        openCheckout(grandtotal);
+                        debugPrint('Grand total: $grandtotal');
+                      },
+                      text: "PAY AMOUNT",
+                      sliderButtonIcon: const Icon(Icons.chevron_right),
+                      borderRadius: 10.0,
+                      innerColor: whitecolor,
+                      outerColor: orangecolor,
+                      height: mediaqueryheight(0.05, context),
+                      textStyle: TextStyle(
+                        fontFamily: sedan,
+                        fontSize: 20,
+                        color: whitecolor,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: mediaqueryheight(0.03, context),
-                ),
-                UsableContainer(
-                  text: '$numberofAdults PERSON',
-                  text2: '₹ $totaladultcost',
-                ),
-                SizedBox(
-                  height: mediaqueryheight(0.03, context),
-                ),
-                UsableContainer(
-                  text: '$numberofrooms HOTEL NIGHT',
-                  text2: '₹ $totalhotelcost',
-                ),
-                SizedBox(
-                  height: mediaqueryheight(0.03, context),
-                ),
-                UsableContainer(
-                  text: '$numberofChildrens CHILD',
-                  text2: '₹ $totalchildcost',
-                ),
-                SizedBox(
-                  height: mediaqueryheight(0.03, context),
-                ),
-                UsableContainer(
-                  text: 'COMPANY CHARGES',
-                  text2: '₹ $companycharge',
-                ),
-                SizedBox(
-                  height: mediaqueryheight(0.03, context),
-                ),
-                UsableContainer(
-                  text: 'TOTAL AMOUNT',
-                  text2: '₹ $grandtotal',
-                ),
-                SizedBox(
-                  height: mediaqueryheight(0.03, context),
-                ),
-                UsableContainer(
-                  text: 'GRAND TOTAL',
-                  text2: '₹ $grandtotal',
-                ),
-                SizedBox(
-                  height: mediaqueryheight(0.03, context),
-                ),
-                SlideAction(
-                  onSubmit: () {
-                    Travelpackage travelpackage = Travelpackage(
-                        adultcount: widget.adultsCount,
-                        childrencount: widget.childrenCount,
-                        roomscount: widget.roomsCount,
-                        children: [],
-                        adults: []);
-                    context
-                        .read<PackageBloc>()
-                        .add(SubmitTravelPackage(travelpackage));
-                    openCheckout(grandtotal);
-                    debugPrint('Grand total: $grandtotal');
-                  },
-                  text: "PAY AMOUNT",
-                  sliderButtonIcon: const Icon(Icons.chevron_right),
-                  borderRadius: 10.0,
-                  innerColor: whitecolor,
-                  outerColor: orangecolor,
-                  height: mediaqueryheight(0.05, context),
-                  textStyle: TextStyle(
-                    fontFamily: sedan,
-                    fontSize: 20,
-                    color: whitecolor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        )));
+              ),
+            ));
+          },
+        ));
   }
 }

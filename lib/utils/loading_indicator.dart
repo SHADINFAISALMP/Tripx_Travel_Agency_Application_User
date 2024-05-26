@@ -16,7 +16,7 @@ class DialogUtils {
               children: [
                 Transform.scale(
                     scale: 1,
-                    child: LoadingAnimationWidget.dotsTriangle(
+                    child: LoadingAnimationWidget.threeArchedCircle(
                         color: whitecolor, size: 60)),
               ],
             ),
@@ -28,5 +28,14 @@ class DialogUtils {
 
   static void hide(BuildContext context) {
     Navigator.of(context).pop();
+  }
+}
+
+class DialogUtilss {
+  static void showLoadingDialog(BuildContext context) {
+    Center(
+      child:
+          LoadingAnimationWidget.threeArchedCircle(color: whitecolor, size: 60),
+    );
   }
 }

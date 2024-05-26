@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tripx_user_application/bloc/packagebloc/package_bloc.dart';
-import 'package:tripx_user_application/models/traveller_model.dart';
-import 'package:tripx_user_application/screens/package_details/package_price.dart';
-import 'package:tripx_user_application/screens/package_details/widgets.dart';
+import 'package:tripx_user_application/widgets/packages_widgets/adults_textformfileds.dart';
+import 'package:tripx_user_application/widgets/packages_widgets/bookpackagetoprice.dart';
+import 'package:tripx_user_application/widgets/packages_widgets/no_of_rooms_childrens_adults.dart';
 import 'package:tripx_user_application/utils/colors.dart';
-import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
+import 'package:tripx_user_application/widgets/packages_widgets/usable_containers.dart';
 
 class PackagePerson extends StatefulWidget {
   final QueryDocumentSnapshot<Object?> itemslists;
@@ -18,16 +19,6 @@ class PackagePerson extends StatefulWidget {
 }
 
 class _PackagePersonState extends State<PackagePerson> {
-  int adultsCount = 0;
-  int childrenCount = 0;
-  int roomsCount = 1;
-  List<TextEditingController> adultNameControllers = [];
-  List<TextEditingController> adultAgeControllers = [];
-  List<TextEditingController> childrenNameControllers = [];
-  List<TextEditingController> childrenAgeControllers = [];
-  TextEditingController adultsController = TextEditingController();
-  TextEditingController childrenController = TextEditingController();
-  TextEditingController roomsController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -52,57 +43,6 @@ class _PackagePersonState extends State<PackagePerson> {
     }
   }
 
-  void navigateTopackageprice() {
-    for (int i = 0; i < adultsCount; i++) {
-      if (adultNameControllers[i].text.isEmpty ||
-          adultAgeControllers[i].text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter all adult details')),
-        );
-        return;
-      }
-    }
-    for (int i = 0; i < childrenCount; i++) {
-      if (childrenNameControllers[i].text.isEmpty ||
-          childrenAgeControllers[i].text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter all children details')),
-        );
-        return;
-      }
-    }
-    List<Traveler> adults = [];
-    for (int i = 0; i < adultsCount; i++) {
-      adults.add(Traveler(
-        name: adultNameControllers[i].text,
-        age: int.parse(adultAgeControllers[i].text),
-      ));
-    }
-
-    List<Traveler> children = [];
-    for (int i = 0; i < childrenCount; i++) {
-      children.add(Traveler(
-        name: childrenNameControllers[i].text,
-        age: int.parse(childrenAgeControllers[i].text),
-      ));
-    }
-
-    Travelpackage travelPackage = Travelpackage(
-      adultcount: adultsCount,
-      childrencount: childrenCount,
-      roomscount: roomsCount,
-      adults: adults,
-      children: children,
-    );
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => PackagePrice(
-              itemslists: widget.itemslists,
-              adultsCount: adultsCount,
-              childrenCount: childrenCount,
-              roomsCount: roomsCount, travelpackage: travelPackage,
-            )));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,14 +59,14 @@ class _PackagePersonState extends State<PackagePerson> {
         }
       }, builder: (context, state) {
         if (state is PackageLoading) {
-          return const Center(child: CircularProgressIndicator());
+          Center(
+              child: LoadingAnimationWidget.threeArchedCircle(
+                  color: whitecolor, size: 60));
         }
         if (state is PackageUpdated) {
-          print("shadin");
           adultsCount = state.adultcount;
           childrenCount = state.childrencount;
           roomsCount = state.roomscount;
-          print("shadin");
           _initializeControllers(adultsCount, childrenCount);
 
           while (adultNameControllers.length < adultsCount) {
@@ -172,34 +112,7 @@ class _PackagePersonState extends State<PackagePerson> {
                   const SizedBox(height: 20),
                   ...buildchildrenFields(),
                   const SizedBox(height: 20),
-                  InkWell(
-                    onTap: () {
-                      navigateTopackageprice();
-                    },
-                    child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: orangecolor,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: blackcolor,
-                              spreadRadius: 1,
-                              blurRadius: 2,
-                              offset: Offset(1, 3),
-                            ),
-                          ],
-                        ),
-                        height: mediaqueryheight(0.05, context),
-                        width: mediaquerywidht(0.6, context),
-                        child: Center(
-                            child: mytext("BOOK PACKAGE",
-                                fontFamily: sedan,
-                                fontSize: 20,
-                                color: whitecolor)),
-                      ),
-                    ),
-                  ),
+                  Bookpackage(widget: widget),
                 ],
               ),
             ),
@@ -214,66 +127,7 @@ class _PackagePersonState extends State<PackagePerson> {
       return [const Text('No adults specified')];
     }
     return List<Widget>.generate(adultsCount, (index) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Adult ${index + 1}',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: whitecolor,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: adultNameControllers[index],
-                  decoration: const InputDecoration(
-                    hintText: 'Name',
-                    hintStyle: TextStyle(color: colorteal),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                    border: InputBorder.none,
-                  ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-                TextFormField(
-                  controller: adultAgeControllers[index],
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'Age',
-                    hintStyle: TextStyle(color: colorteal),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                    border: InputBorder.none,
-                  ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-        ],
-      );
+      return Adultstextformfields(index: index);
     });
   }
 
@@ -282,66 +136,7 @@ class _PackagePersonState extends State<PackagePerson> {
       return [const Text('No children specified')];
     }
     return List<Widget>.generate(childrenCount, (index) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Children ${index + 1}',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: whitecolor,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: childrenNameControllers[index],
-                  decoration: const InputDecoration(
-                    hintText: 'Name',
-                    hintStyle: TextStyle(color: colorteal),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                    border: InputBorder.none,
-                  ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-                TextFormField(
-                  controller: childrenAgeControllers[index],
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'Age',
-                    hintStyle: TextStyle(color: colorteal),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                    border: InputBorder.none,
-                  ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-        ],
-      );
+      return Childrenstextfromfileds(index: index);
     });
   }
 }

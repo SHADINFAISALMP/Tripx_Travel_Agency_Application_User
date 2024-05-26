@@ -31,5 +31,5 @@ class SavePackageDetails extends PackageEvent {}
 class SubmitTravelPackage extends PackageEvent {
   final Travelpackage travelPackage;
 
-  SubmitTravelPackage(this.travelPackage);
+  SubmitTravelPackage( this.travelPackage);
 }

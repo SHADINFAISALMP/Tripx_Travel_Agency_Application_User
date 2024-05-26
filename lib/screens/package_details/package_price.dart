@@ -2,16 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:slide_to_act_reborn/slide_to_act_reborn.dart';
 import 'package:tripx_user_application/bloc/packagebloc/package_bloc.dart';
 import 'package:tripx_user_application/models/traveller_model.dart';
 import 'package:tripx_user_application/screens/my_tickets/mytickets.dart';
-
-import 'package:tripx_user_application/screens/package_details/widgets.dart';
+import 'package:tripx_user_application/screens/package_details/priceshowing.dart';
 import 'package:tripx_user_application/utils/colors.dart';
-import 'package:tripx_user_application/utils/fonts.dart';
-import 'package:tripx_user_application/utils/mediaquery.dart';
+import 'package:tripx_user_application/widgets/packages_widgets/usable_containers.dart';
 
 class PackagePrice extends StatefulWidget {
   final QueryDocumentSnapshot<Object?> itemslists;
@@ -27,37 +25,12 @@ class PackagePrice extends StatefulWidget {
       required this.roomsCount,
       required this.travelpackage});
 
-  void _submitPackage(BuildContext context) {
-    BlocProvider.of<PackageBloc>(context)
-        .add(SubmitTravelPackage(travelpackage));
-  }
-
   @override
   _PackagePriceState createState() => _PackagePriceState();
 }
 
 class _PackagePriceState extends State<PackagePrice> {
   late Razorpay _razorpay;
-
-  void openCheckout(int grandtotal) {
-    var options = {
-      'key': 'rzp_test_9m06FqDA5cAjgM',
-      'amount': grandtotal * 100,
-      'name': 'TRIPIX TRAVEL AGENCY',
-      'prefill': {
-        'contact': '9072051005',
-        'email': 'shadinfaisal305@gmail.com'
-      },
-      'external': {
-        'wallets': ['paytm', 'googlepay', 'phonepay']
-      }
-    };
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      debugPrint('error : $e');
-    }
-  }
 
   void handlePaymentsuccess(PaymentSuccessResponse response) async {
     Fluttertoast.showToast(
@@ -74,7 +47,7 @@ class _PackagePriceState extends State<PackagePrice> {
         toastLength: Toast.LENGTH_LONG,
       );
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Mytickets()));
+          context, MaterialPageRoute(builder: (context) => const Mytickets()));
     } catch (e) {
       Fluttertoast.showToast(
         msg: "Failed to save travel package: $e",
@@ -115,7 +88,6 @@ class _PackagePriceState extends State<PackagePrice> {
     final int numberofAdults = widget.adultsCount;
     final int numberofChildrens = widget.childrenCount;
     final int numberofrooms = widget.roomsCount;
-
     final int adultCost = int.parse(widget.itemslists['adult']);
     final int hotelcost = int.parse(widget.itemslists['hotelper']);
     final int childcost = int.parse(widget.itemslists['childper']);
@@ -149,21 +121,7 @@ class _PackagePriceState extends State<PackagePrice> {
               ),
               color: whitecolor,
             ),
-            child: AppBar(
-              leading: const Icon(
-                Icons.arrow_back_ios,
-                color: colorteal,
-              ),
-              centerTitle: true,
-              title: mytext(
-                'PRICE SUMMARY',
-                fontFamily: bodoni,
-                fontSize: 25,
-                color: colorteal,
-              ),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-            ),
+            child: const Appbar(),
           ),
         ),
         body: BlocConsumer<PackageBloc, PackageState>(
@@ -173,7 +131,6 @@ class _PackagePriceState extends State<PackagePrice> {
                 const SnackBar(
                     content: Text('Travel package saved successfully!')),
               );
-              // Navigate to a confirmation screen or another screen if needed
             } else if (state is Packageerror) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Failed to save travel package!')),
@@ -182,83 +139,25 @@ class _PackagePriceState extends State<PackagePrice> {
           },
           builder: (context, state) {
             if (state is PackageLoading) {
-              return const Center(child: CircularProgressIndicator());
+              Center(
+                  child: LoadingAnimationWidget.threeArchedCircle(
+                      color: orangecolor, size: 60));
             }
             return SingleChildScrollView(
                 child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    UsableContainer(
-                      text: 'PACKAGE COST',
-                      text2: '₹ ${widget.itemslists['packageamount']}',
-                    ),
-                    SizedBox(
-                      height: mediaqueryheight(0.03, context),
-                    ),
-                    UsableContainer(
-                      text: '$numberofAdults PERSON',
-                      text2: '₹ $totaladultcost',
-                    ),
-                    SizedBox(
-                      height: mediaqueryheight(0.03, context),
-                    ),
-                    UsableContainer(
-                      text: '$numberofrooms HOTEL NIGHT',
-                      text2: '₹ $totalhotelcost',
-                    ),
-                    SizedBox(
-                      height: mediaqueryheight(0.03, context),
-                    ),
-                    UsableContainer(
-                      text: '$numberofChildrens CHILD',
-                      text2: '₹ $totalchildcost',
-                    ),
-                    SizedBox(
-                      height: mediaqueryheight(0.03, context),
-                    ),
-                    UsableContainer(
-                      text: 'COMPANY CHARGES',
-                      text2: '₹ $companycharge',
-                    ),
-                    SizedBox(
-                      height: mediaqueryheight(0.03, context),
-                    ),
-                    UsableContainer(
-                      text: 'TOTAL AMOUNT',
-                      text2: '₹ $grandtotal',
-                    ),
-                    SizedBox(
-                      height: mediaqueryheight(0.03, context),
-                    ),
-                    UsableContainer(
-                      text: 'GRAND TOTAL',
-                      text2: '₹ $grandtotal',
-                    ),
-                    SizedBox(
-                      height: mediaqueryheight(0.03, context),
-                    ),
-                    SlideAction(
-                      onSubmit: () {
-                        openCheckout(grandtotal);
-                        debugPrint('Grand total: $grandtotal');
-                      },
-                      text: "PAY AMOUNT",
-                      sliderButtonIcon: const Icon(Icons.chevron_right),
-                      borderRadius: 10.0,
-                      innerColor: whitecolor,
-                      outerColor: orangecolor,
-                      height: mediaqueryheight(0.05, context),
-                      textStyle: TextStyle(
-                        fontFamily: sedan,
-                        fontSize: 20,
-                        color: whitecolor,
-                      ),
-                    ),
-                  ],
-                ),
+                child: PriceShowing(
+                    widget: widget,
+                    numberofAdults: numberofAdults,
+                    totaladultcost: totaladultcost,
+                    numberofrooms: numberofrooms,
+                    totalhotelcost: totalhotelcost,
+                    numberofChildrens: numberofChildrens,
+                    totalchildcost: totalchildcost,
+                    companycharge: companycharge,
+                    grandtotal: grandtotal,
+                    razorpay: _razorpay),
               ),
             ));
           },

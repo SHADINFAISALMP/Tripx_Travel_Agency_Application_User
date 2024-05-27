@@ -32,7 +32,7 @@ class homescreen_list_items extends StatelessWidget {
         );
       },
       child: Container(
-        height: mediaqueryheight(0.4, context),
+        height: mediaqueryheight(0.52, context),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -74,6 +74,20 @@ class homescreen_list_items extends StatelessWidget {
                   const Icon(Icons.place, color: whitecolor),
                   const SizedBox(width: 5),
                   mytext(item['placenames'],
+                      fontFamily: sedan,
+                      fontSize: 18,
+                      color: whitecolor,
+                      overflow: TextOverflow.ellipsis),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(width: 5),
+                  mytext(item['packagediscription'],
                       fontFamily: sedan,
                       fontSize: 18,
                       color: whitecolor,

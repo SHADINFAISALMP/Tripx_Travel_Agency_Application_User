@@ -39,7 +39,7 @@ class _LoginState extends State<Login> {
               if (state is LoginSuccess) {
                 userEmail = emailcontrollerlog.text;
                 Navigator.pop(context);
-
+                DialogUtils.showLoadingDialog(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(

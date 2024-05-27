@@ -43,6 +43,13 @@ class Detailsshowingcontents extends StatelessWidget {
         SizedBox(
           height: mediaqueryheight(0.01, context),
         ),
+        PackageDetailsContainers(
+          text: itemslists['packagediscription'],
+          topname: 'PACKAGE DISCRIPTION',
+        ),
+        SizedBox(
+          height: mediaqueryheight(0.01, context),
+        ),
         Padding(
           padding: const EdgeInsets.only(right: 35),
           child: Row(
@@ -167,6 +174,7 @@ class Detailsshowingcontents extends StatelessWidget {
     );
   }
 }
+
 class BookPackagebutton extends StatelessWidget {
   const BookPackagebutton({
     super.key,
@@ -203,12 +211,9 @@ class BookPackagebutton extends StatelessWidget {
           width: mediaquerywidht(0.6, context),
           child: Center(
               child: mytext("BOOK PACKAGE",
-                  fontFamily: sedan,
-                  fontSize: 20,
-                  color: whitecolor)),
+                  fontFamily: sedan, fontSize: 20, color: whitecolor)),
         ),
       ),
     );
   }
 }
-

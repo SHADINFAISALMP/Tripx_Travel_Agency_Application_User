@@ -9,7 +9,7 @@ import 'package:tripx_user_application/widgets/home_screen_widgets/home_screen_l
 
 class Carouselwidgets extends StatelessWidget {
   final CollectionReference packageDetails;
-  Carouselwidgets({required this.packageDetails});
+  const Carouselwidgets({super.key, required this.packageDetails});
 
   @override
   Widget  build(BuildContext context) {

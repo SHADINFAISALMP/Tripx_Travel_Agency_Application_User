@@ -60,10 +60,10 @@ class BookingService {
           }
         }
       }
-      return Stream.empty();
+      return const Stream.empty();
     } catch (e) {
       print('error fetching data : $e');
-      return Stream.empty();
+      return const Stream.empty();
     }
   }
 }

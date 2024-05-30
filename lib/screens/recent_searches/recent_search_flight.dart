@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripx_user_application/bloc/flight_recents/flight_recents_bloc.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -59,7 +61,8 @@ class _FlightRecentState extends State<FlightRecent> {
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
-                                  // Close the dialog
+                                  BlocProvider.of<RecentSearchBloc>(context)
+                                      .add(ClearSearchesEvent());
                                   Navigator.of(context).pop();
                                 },
                                 child: const Text('Yes',
@@ -82,63 +85,64 @@ class _FlightRecentState extends State<FlightRecent> {
                       size: 35,
                       color: whitecolor,
                     ),
-                  )
+                  ),
                 ],
               ),
               SizedBox(
                 height: mediaqueryheight(0.03, context),
               ),
-              Container(
-                height: mediaqueryheight(0.1, context),
-                width: mediaquerywidht(0.9, context),
-                decoration: BoxDecoration(
-                  color: whitecolor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: blackcolor,
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: Offset(1, 4),
-                    ),
-                  ],
-                ),
-                
-                child: Column(
-                  children: [
-                    mytext("ccj to dxb     -      one way",
-                        fontFamily: sedan, fontSize: 22, color: colorteal),
-                    mytext("08 apr 24 / 1 passenger / economy",
-                        fontFamily: sedan, fontSize: 20, color: colorteal),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: mediaqueryheight(0.04, context),
-              ),
-              Container(
-                height: mediaqueryheight(0.1, context),
-                width: mediaquerywidht(0.9, context),
-                decoration: BoxDecoration(
-                  color: whitecolor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: blackcolor,
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: Offset(1, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    mytext("ccj to dxb      -     Round trip",
-                        fontFamily: sedan, fontSize: 22, color: colorteal),
-                    mytext("08 apr 24 - 09 apr 24/ 1 passenger / economy",
-                        fontFamily: sedan, fontSize: 19, color: colorteal),
-                  ],
-                ),
+              BlocBuilder<RecentSearchBloc, RecentSearchState>(
+                builder: (context, state) {
+                  if (state is RecentSearchLoaded) {
+                    return Column(
+                      children: state.searches.map((search) {
+                        return Padding(
+                          key:
+                              UniqueKey(), // Ensure each container has a unique key
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                            height: mediaqueryheight(0.1, context),
+                            width: mediaquerywidht(0.9, context),
+                            decoration: BoxDecoration(
+                              color: whitecolor,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: blackcolor,
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: Offset(1, 4),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                mytext(
+                                  '${search['departureCity']} to ${search['arrivalCity']}',
+                                  fontFamily: sedan,
+                                  fontSize: 22,
+                                  color: colorteal,
+                                ),
+                                mytext(
+                                  '${search['date']}',
+                                  fontFamily: sedan,
+                                  fontSize: 20,
+                                  color: colorteal,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  } else {
+                    return Center(
+                      child: mytext("No recent searches",
+                          fontFamily: sedan, fontSize: 20, color: whitecolor),
+                    );
+                  }
+                },
               ),
             ],
           ),

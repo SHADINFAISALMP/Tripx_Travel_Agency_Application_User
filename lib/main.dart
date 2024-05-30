@@ -1,9 +1,9 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripx_user_application/bloc/boarding/boarding_bloc_bloc.dart';
 import 'package:tripx_user_application/bloc/bottomnavigation/bottomnavigation_bloc.dart';
+import 'package:tripx_user_application/bloc/flight_recents/flight_recents_bloc.dart';
 import 'package:tripx_user_application/bloc/google_sign/google_bloc.dart';
 import 'package:tripx_user_application/bloc/login/login_bloc.dart';
 import 'package:tripx_user_application/bloc/packagebloc/package_bloc.dart';
@@ -21,6 +21,9 @@ void main() async {
     providers: [
       BlocProvider(
         create: (context) => SignupBloc(),
+      ),
+      BlocProvider(
+        create: (context) => RecentSearchBloc(),
       ),
       BlocProvider(
         create: (context) => GoogleBloc(),

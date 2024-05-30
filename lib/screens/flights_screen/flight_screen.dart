@@ -233,6 +233,11 @@ class _FlightScreenState extends State<FlightScreen>
           setState(() {
             _loading = false;
           });
+          //    BlocProvider.of<RecentSearchBloc>(context).add(AddSearchEvent(
+          //   departureCity,
+          //   arrivalCity,
+          //   _departureDate!.toIso8601String().substring(0, 10),
+          // ));
           Navigator.push(
               context,
               MaterialPageRoute(

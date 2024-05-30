@@ -40,14 +40,14 @@ class FlightService {
           if (attempt == maxRetries) {
             // Show Snackbar for rate limit exceeded
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('Rate limit exceeded. Please try again later.'),
                 duration: Duration(seconds: 3),
               ),
             );
             throw Exception('Rate limit exceeded');
           }
-          await Future.delayed(Duration(seconds: retryDelaySeconds));
+          await Future.delayed(const Duration(seconds: retryDelaySeconds));
         } else {
           rethrow; // Rethrow for other errors
         }

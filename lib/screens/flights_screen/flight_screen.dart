@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripx_user_application/screens/flights_screen/available_flights/available_flights.dart';
 import 'package:tripx_user_application/screens/flights_screen/heading_icon.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
@@ -19,7 +20,15 @@ class _FlightScreenState extends State<FlightScreen>
   String? _arrivalCity;
   DateTime? _departureDate;
   bool _loading = false;
-  List<dynamic> _flightDetails = [];
+  final List<dynamic> _flightDetails = [];
+  final TextEditingController _departureDateController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    _departureDateController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +74,13 @@ class _FlightScreenState extends State<FlightScreen>
                     SizedBox(
                       height: mediaqueryheight(0.04, context),
                     ),
-                    _buildDatePicker(
-                        'Departure Date', (date) => _departureDate = date),
+                    _buildDatePicker('Departure Date', _departureDateController,
+                        (date) {
+                      _departureDate = date;
+                      _departureDateController.text = date != null
+                          ? '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}'
+                          : '';
+                    }),
                     SizedBox(
                       height: mediaqueryheight(0.08, context),
                     ),
@@ -102,17 +116,7 @@ class _FlightScreenState extends State<FlightScreen>
                           itemCount: _flightDetails.length,
                           itemBuilder: (context, index) {
                             final flight = _flightDetails[index];
-                            return ListTile(
-                              leading: Image.network(
-                                flight['airline_logo'],
-                                height: 40,
-                                width: 40,
-                              ),
-                              title: Text(
-                                  '${flight['flights'][0]['departure_airport']['name']} to ${flight['flights'][0]['arrival_airport']['name']}'),
-                              subtitle: Text(
-                                  'Duration: ${flight['total_duration']} mins\nPrice: \$${flight['price']}'),
-                            );
+                            return FlightItem(flight: flight);
                           },
                         ),
                       ),
@@ -148,11 +152,13 @@ class _FlightScreenState extends State<FlightScreen>
     );
   }
 
-  Widget _buildDatePicker(String label, Function(DateTime?) onChanged) {
+  Widget _buildDatePicker(String label, TextEditingController controller,
+      Function(DateTime?) onChanged) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.85,
       child: TextFormField(
         cursorColor: Colors.teal,
+        controller: controller,
         readOnly: true,
         decoration: InputDecoration(
           prefixIcon: const Icon(Icons.calendar_today),
@@ -225,9 +231,13 @@ class _FlightScreenState extends State<FlightScreen>
         final jsonResponse = json.decode(response.body);
         if (jsonResponse.containsKey('best_flights')) {
           setState(() {
-            _flightDetails = jsonResponse['best_flights'];
             _loading = false;
           });
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AvailableFlights(
+                      flightDetails: jsonResponse['best_flights'])));
         } else {
           // Handle the case where 'best_flights' is not in the response
           ScaffoldMessenger.of(context).showSnackBar(

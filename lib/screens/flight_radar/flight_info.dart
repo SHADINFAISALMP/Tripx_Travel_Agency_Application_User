@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tripx_user_application/models/all_state.dart';
-import 'package:tripx_user_application/models/flights_routes.dart';
+import 'package:tripx_user_application/models/flightradar/all_state.dart';
+import 'package:tripx_user_application/models/flightradar/flights_routes.dart';
 import 'package:tripx_user_application/screens/flight_radar/flight_routes_bloc.dart';
 import 'package:tripx_user_application/screens/flight_radar/routeinfo.dart';
 import 'package:tripx_user_application/utils/colors.dart';

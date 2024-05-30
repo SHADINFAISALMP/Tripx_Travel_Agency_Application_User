@@ -1,13 +1,10 @@
-// ignore_for_file: unused_field
-
 import 'package:flutter/material.dart';
-import 'package:tripx_user_application/screens/flights_screen/available_flights/available_flights.dart';
-import 'package:tripx_user_application/screens/flights_screen/available_flights/available_round.dart';
 import 'package:tripx_user_application/screens/flights_screen/heading_icon.dart';
-import 'package:tripx_user_application/screens/flights_screen/tabBar_Heading.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FlightScreen extends StatefulWidget {
   const FlightScreen({super.key});
@@ -18,27 +15,11 @@ class FlightScreen extends StatefulWidget {
 
 class _FlightScreenState extends State<FlightScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  String _deparaturecity = '';
-  String _arrivalcity = '';
-  String _classofservice = '';
-  DateTime? _departuredate;
-  DateTime? _returndate;
-  int _numbersofpassegngers = 1;
-  final bool _directflightonly = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+  String _departureCity = 'NYCA';
+  String? _arrivalCity;
+  DateTime? _departureDate;
+  bool _loading = false;
+  List<dynamic> _flightDetails = [];
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +34,7 @@ class _FlightScreenState extends State<FlightScreen>
                 height: mediaqueryheight(0.03, context),
               ),
               Container(
-                width: mediaqueryheight(0.43, context),
+                width: mediaquerywidht(0.9, context),
                 height: mediaqueryheight(0.8, context),
                 decoration: BoxDecoration(
                   boxShadow: const [
@@ -69,158 +50,72 @@ class _FlightScreenState extends State<FlightScreen>
                 ),
                 child: Column(
                   children: [
-                    TabBarHeading(tabController: _tabController),
-                    Expanded(
-                      child: TabBarView(
-                        viewportFraction: 2,
-                        controller: _tabController,
-                        children: [
-                          Column(
-                            children: [
-                              SizedBox(
-                                height: mediaqueryheight(0.04, context),
-                              ),
-                              _buildTextField(
-                                  'Departure City',
-                                  Icons.flight_takeoff_outlined,
-                                  (value) => _deparaturecity = value),
-                              SizedBox(
-                                height: mediaqueryheight(0.04, context),
-                              ),
-                              _buildTextField(
-                                  'Arrival City',
-                                  Icons.flight_land_outlined,
-                                  (value) => _arrivalcity = value),
-                              SizedBox(
-                                height: mediaqueryheight(0.04, context),
-                              ),
-                              _buildDatePicker('Departure Date',
-                                  (date) => _departuredate = date),
-                              SizedBox(
-                                height: mediaqueryheight(0.04, context),
-                              ),
-                              _buildDropdown(
-                                  'Number of Passengers',
-                                  ['1', '2', '3', '4', '5', '6', '7'],
-                                  (value) =>
-                                      _numbersofpassegngers = int.parse(value)),
-                              SizedBox(
-                                height: mediaqueryheight(0.04, context),
-                              ),
-                              _buildDropdown(
-                                  'Class of Service',
-                                  ['Economy', 'Business', 'First Class'],
-                                  (value) => _classofservice = value),
-                              SizedBox(
-                                height: mediaqueryheight(0.08, context),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AvailableFlights()));
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: orangecolor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: blackcolor,
-                                        spreadRadius: 1,
-                                        blurRadius: 2,
-                                        offset: Offset(1, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  height: mediaqueryheight(0.05, context),
-                                  width: mediaquerywidht(0.6, context),
-                                  child: Center(
-                                      child: mytext("SEARCH FLIGHTS",
-                                          fontFamily: sedan,
-                                          fontSize: 20,
-                                          color: whitecolor)),
-                                ),
-                              )
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                height: mediaqueryheight(0.04, context),
-                              ),
-                              _buildTextField(
-                                  'Departure City',
-                                  Icons.flight_takeoff_outlined,
-                                  (value) => _deparaturecity = value),
-                              SizedBox(
-                                height: mediaqueryheight(0.04, context),
-                              ),
-                              _buildTextField(
-                                  'Arrival City',
-                                  Icons.flight_land_outlined,
-                                  (value) => _arrivalcity = value),
-                              SizedBox(
-                                height: mediaqueryheight(0.03, context),
-                              ),
-                              _buildDatePicker('Departure Date',
-                                  (date) => _departuredate = date),
-                              SizedBox(
-                                height: mediaqueryheight(0.03, context),
-                              ),
-                              _buildDatePicker(
-                                  'Return Date', (date) => _returndate = date),
-                              SizedBox(
-                                height: mediaqueryheight(0.03, context),
-                              ),
-                              _buildDropdown(
-                                  'Number of Passengers',
-                                  ['1', '2', '3', '4', '5', '6', '7'],
-                                  (value) =>
-                                      _numbersofpassegngers = int.parse(value)),
-                              SizedBox(
-                                height: mediaqueryheight(0.03, context),
-                              ),
-                              _buildDropdown(
-                                  'Class of Service',
-                                  ['Economy', 'Business', 'First Class'],
-                                  (value) => _classofservice = value),
-                              SizedBox(
-                                height: mediaqueryheight(0.04, context),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RoundtripAvailableFlights()));
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: orangecolor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: blackcolor,
-                                        spreadRadius: 1,
-                                        blurRadius: 2,
-                                        offset: Offset(1, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  height: mediaqueryheight(0.05, context),
-                                  width: mediaquerywidht(0.6, context),
-                                  child: Center(
-                                      child: mytext("SEARCH FLIGHTS",
-                                          fontFamily: sedan,
-                                          fontSize: 20,
-                                          color: whitecolor)),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
+                    SizedBox(
+                      height: mediaqueryheight(0.04, context),
+                    ),
+                    _buildTextField(
+                        'Departure City',
+                        Icons.flight_takeoff_outlined,
+                        (value) => _departureCity = value),
+                    SizedBox(
+                      height: mediaqueryheight(0.04, context),
+                    ),
+                    _buildTextField('Arrival City', Icons.flight_land_outlined,
+                        (value) => _arrivalCity = value),
+                    SizedBox(
+                      height: mediaqueryheight(0.04, context),
+                    ),
+                    _buildDatePicker(
+                        'Departure Date', (date) => _departureDate = date),
+                    SizedBox(
+                      height: mediaqueryheight(0.08, context),
+                    ),
+                    InkWell(
+                      onTap: _searchFlights,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: orangecolor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: blackcolor,
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              offset: Offset(1, 3),
+                            ),
+                          ],
+                        ),
+                        height: mediaqueryheight(0.05, context),
+                        width: mediaquerywidht(0.6, context),
+                        child: Center(
+                            child: mytext("SEARCH FLIGHTS",
+                                fontFamily: sedan,
+                                fontSize: 20,
+                                color: whitecolor)),
                       ),
                     ),
+                    if (_loading)
+                      const CircularProgressIndicator()
+                    else
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: _flightDetails.length,
+                          itemBuilder: (context, index) {
+                            final flight = _flightDetails[index];
+                            return ListTile(
+                              leading: Image.network(
+                                flight['airline_logo'],
+                                height: 40,
+                                width: 40,
+                              ),
+                              title: Text(
+                                  '${flight['flights'][0]['departure_airport']['name']} to ${flight['flights'][0]['arrival_airport']['name']}'),
+                              subtitle: Text(
+                                  'Duration: ${flight['total_duration']} mins\nPrice: \$${flight['price']}'),
+                            );
+                          },
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -258,6 +153,7 @@ class _FlightScreenState extends State<FlightScreen>
       width: MediaQuery.of(context).size.width * 0.85,
       child: TextFormField(
         cursorColor: Colors.teal,
+        readOnly: true,
         decoration: InputDecoration(
           prefixIcon: const Icon(Icons.calendar_today),
           labelText: label,
@@ -278,41 +174,85 @@ class _FlightScreenState extends State<FlightScreen>
           );
           if (picked != null) {
             onChanged(picked);
+            // Update the text field with the selected date
+            setState(() {
+              _departureDate = picked;
+            });
           }
         },
       ),
     );
   }
 
-  Widget _buildDropdown(
-      String label, List<String> items, Function(String) onChanged) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.85,
-      child: DropdownButtonFormField<String>(
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: const TextStyle(color: Colors.teal),
-          border: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.teal, width: 2.0)),
-          focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.teal, width: 2.0)),
-          enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.teal, width: 2.0)),
+  Future<void> _searchFlights() async {
+    if (_arrivalCity == null || _departureDate == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    // Convert city codes to uppercase
+    String departureCity = _departureCity.toUpperCase();
+    String arrivalCity = _arrivalCity!.toUpperCase();
+
+    // Validate the format of the city codes
+    if (!RegExp(r'^[A-Z]{3}$').hasMatch(departureCity) ||
+        !RegExp(r'^[A-Z]{3}$').hasMatch(arrivalCity)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Please enter valid 3-letter IATA codes for cities')),
+      );
+      return;
+    }
+
+    setState(() {
+      _loading = true;
+    });
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+          'https://serpapi.com/search.json?engine=google_flights&type=2&departure_id=$departureCity&arrival_id=$arrivalCity&gl=us&hl=en&currency=USD&outbound_date=${_departureDate!.toIso8601String().substring(0, 10)}&api_key=6c85fbfd79fdcabfe8b5366842b277c39501f6eabded41ad96ceda658b200efc',
         ),
-        items: items.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
+      );
+
+      // Print the status code and response body for debugging
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        if (jsonResponse.containsKey('best_flights')) {
+          setState(() {
+            _flightDetails = jsonResponse['best_flights'];
+            _loading = false;
+          });
+        } else {
+          // Handle the case where 'best_flights' is not in the response
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('No flights found for the given criteria')),
           );
-        }).toList(),
-        onChanged: (String? value) {
-          if (value != null) {
-            setState(() {
-              onChanged(value);
-            });
-          }
-        },
-      ),
-    );
+          setState(() {
+            _loading = false;
+          });
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error fetching flight details')),
+        );
+        setState(() {
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 }

@@ -1,6 +1,6 @@
-import 'package:tripx_user_application/models/aircraft_info.dart';
-import 'package:tripx_user_application/models/airport_info.dart';
-import 'package:tripx_user_application/models/all_state.dart';
+import 'package:tripx_user_application/models/flightradar/aircraft_info.dart';
+import 'package:tripx_user_application/models/flightradar/airport_info.dart';
+import 'package:tripx_user_application/models/flightradar/all_state.dart';
 
 class FlightRoutes {
   final String? callSign;

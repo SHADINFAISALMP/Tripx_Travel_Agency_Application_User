@@ -5,8 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 
-import 'package:tripx_user_application/models/flights_routes.dart';
-import 'package:tripx_user_application/service/flight_service.dart';
+import 'package:tripx_user_application/models/flightradar/flights_routes.dart';
+import 'package:tripx_user_application/api_services/flight_service.dart';
 
 class FlightRoutesBloc extends Bloc<FlightRoutesEvent, FlightRouteState> {
   BuildContext? context;

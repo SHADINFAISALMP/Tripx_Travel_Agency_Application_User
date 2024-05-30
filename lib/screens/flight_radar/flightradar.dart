@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tripx_user_application/models/all_state.dart';
+import 'package:tripx_user_application/models/flightradar/all_state.dart';
 import 'package:tripx_user_application/screens/flight_radar/flight_info.dart';
-import 'package:tripx_user_application/service/flight_service.dart';
+import 'package:tripx_user_application/api_services/flight_service.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';

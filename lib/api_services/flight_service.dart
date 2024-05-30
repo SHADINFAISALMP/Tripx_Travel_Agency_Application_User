@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tripx_user_application/models/aircraft_info.dart';
-import 'package:tripx_user_application/models/airport_info.dart';
-import 'package:tripx_user_application/models/all_state.dart';
-import 'package:tripx_user_application/models/flights_routes.dart';
+import 'package:tripx_user_application/models/flightradar/aircraft_info.dart';
+import 'package:tripx_user_application/models/flightradar/airport_info.dart';
+import 'package:tripx_user_application/models/flightradar/all_state.dart';
+import 'package:tripx_user_application/models/flightradar/flights_routes.dart';
 import 'dart:async';
 
 class FlightService {

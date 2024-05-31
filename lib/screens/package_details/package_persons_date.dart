@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tripx_user_application/bloc/packagebloc/package_bloc.dart';
+import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/widgets/packages_widgets/adults_textformfileds.dart';
 import 'package:tripx_user_application/widgets/packages_widgets/bookpackagetoprice.dart';
 import 'package:tripx_user_application/widgets/packages_widgets/no_of_rooms_childrens_adults.dart';
@@ -104,7 +105,12 @@ class _PackagePersonState extends State<PackagePerson> {
                   ),
                   const Numberofchildrens(),
                   SizedBox(
-                    height: mediaqueryheight(0.04, context),
+                    height: mediaqueryheight(0.01, context),
+                  ),
+                  mytext("Childrens Between 6 To 12 Years",
+                      fontFamily: bodoni, fontSize: 16, color: white70),
+                  SizedBox(
+                    height: mediaqueryheight(0.02, context),
                   ),
                   const Numberofrooms(),
                   const SizedBox(height: 20),

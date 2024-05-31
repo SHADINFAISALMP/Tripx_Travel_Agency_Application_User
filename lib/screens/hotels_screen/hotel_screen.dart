@@ -325,7 +325,7 @@ class HotelItem extends StatelessWidget {
               color: whitecolor,
             ),
           ),
-          Divider(),
+          const Divider(),
           const SizedBox(height: 8.0),
           Text(
             hotel['description'] ?? 'Description not available',

@@ -76,10 +76,10 @@ class PackageDetails extends StatelessWidget {
                 height: mediaqueryheight(0.5747, context),
                 width: double.infinity,
                 child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30),
-                    child: Detailsshowingcontents(itemslists: itemslists, startDate: startDate, endDate: endDate),
-                  ),
+                  child: Detailsshowingcontents(
+                      itemslists: itemslists,
+                      startDate: startDate,
+                      endDate: endDate),
                 ),
               )
             ],
@@ -89,6 +89,3 @@ class PackageDetails extends StatelessWidget {
     );
   }
 }
-
-
-

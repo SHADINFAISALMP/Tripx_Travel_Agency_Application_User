@@ -114,6 +114,28 @@ flutter:
     - assets/images/flightradar3.jpg
     - assets/images/show2.png
     - assets/images/shadin.png
+    - assets/images/nights.jpeg
+    - assets/images/accomadation.jpeg
+    - assets/images/activity.jpeg
+    - assets/images/additional.jpeg
+    - assets/images/cash.jpeg
+    - assets/images/city.jpeg
+    - assets/images/couuntry.jpeg
+    - assets/images/dates.jpeg
+    - assets/images/days.jpeg
+    - assets/images/desitionationnames.jpeg
+    - assets/images/destianton.jpeg
+    - assets/images/discription.jpeg
+    - assets/images/meals.jpeg
+    - assets/images/name.jpeg
+    - assets/images/transportaion.jpeg
+    - assets/images/cash2.jpeg
+    - assets/images/cash3.jpeg
+    - assets/images/packageamount.jpeg
+    - assets/images/booking.jpeg
+    - assets/images/transportation.jpeg
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

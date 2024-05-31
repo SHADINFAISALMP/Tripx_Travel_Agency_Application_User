@@ -43,31 +43,67 @@ class Numberofrooms extends StatelessWidget {
             'Number of Rooms:',
             style: TextStyle(color: colorteal),
           ),
-          Container(
-            width: mediaquerywidht(0.14, context),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: colorteal),
-            ),
-            child: TextFormField(
-              controller: roomsController,
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                final int newCount = int.tryParse(value) ?? 1;
-                BlocProvider.of<PackageBloc>(context)
-                    .add(UpdateRoomsCount(newCount));
-              },
-              decoration: const InputDecoration(
-                hintText: 'Enter',
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                border: InputBorder.none,
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.remove, color: colorteal),
+                onPressed: () {
+                  _decrementCount(context, roomsController, 'rooms');
+                },
               ),
-              style: const TextStyle(color: Colors.black),
-            ),
+              Container(
+                width: mediaquerywidht(0.14, context),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: colorteal),
+                ),
+                child: TextFormField(
+                  controller: roomsController,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    final int newCount = int.tryParse(value) ?? 1;
+                    BlocProvider.of<PackageBloc>(context)
+                        .add(UpdateRoomsCount(newCount));
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Enter',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.add, color: colorteal),
+                onPressed: () {
+                  _incrementCount(context, roomsController, 'rooms');
+                },
+              ),
+            ],
           ),
         ],
       ),
     );
+  }
+
+  void _incrementCount(
+      BuildContext context, TextEditingController controller, String type) {
+    int count = int.tryParse(controller.text) ?? 0;
+    count++;
+    controller.text = count.toString();
+    if (type == 'rooms') {
+      BlocProvider.of<PackageBloc>(context).add(UpdateRoomsCount(count));
+    }
+  }
+
+  void _decrementCount(
+      BuildContext context, TextEditingController controller, String type) {
+    int count = int.tryParse(controller.text) ?? 0;
+    if (count > 0) count--;
+    controller.text = count.toString();
+    if (type == 'rooms') {
+      BlocProvider.of<PackageBloc>(context).add(UpdateRoomsCount(count));
+    }
   }
 }
 
@@ -79,51 +115,83 @@ class Numberofchildrens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: mediaqueryheight(0.07, context),
-      width: mediaquerywidht(0.9, context),
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 4,
-              offset: const Offset(0, 3),
-            ),
-          ],
-          color: whitecolor,
-          borderRadius: const BorderRadius.all(Radius.circular(10))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
+        height: mediaqueryheight(0.07, context),
+        width: mediaquerywidht(0.9, context),
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 4,
+                offset: const Offset(0, 3),
+              ),
+            ],
+            color: whitecolor,
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           const Text(
             'Number of Children:',
             style: TextStyle(color: colorteal),
           ),
-          Container(
-            width: mediaquerywidht(0.14, context),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: colorteal),
-            ),
-            child: TextFormField(
-              controller: childrenController,
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                final int newCount = int.tryParse(value) ?? 0;
-                BlocProvider.of<PackageBloc>(context)
-                    .add(UpdateChildrenCount(newCount));
-              },
-              decoration: const InputDecoration(
-                hintText: 'Enter',
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                border: InputBorder.none,
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.remove, color: colorteal),
+                onPressed: () {
+                  _decrementCount(context, childrenController, 'children');
+                },
               ),
-              style: const TextStyle(color: Colors.black),
-            ),
+              Container(
+                width: mediaquerywidht(0.14, context),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: colorteal),
+                ),
+                child: TextFormField(
+                  controller: childrenController,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    final int newCount = int.tryParse(value) ?? 0;
+                    BlocProvider.of<PackageBloc>(context)
+                        .add(UpdateChildrenCount(newCount));
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Enter',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.add, color: colorteal),
+                onPressed: () {
+                  _incrementCount(context, childrenController, 'children');
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ]));
+  }
+
+  void _incrementCount(
+      BuildContext context, TextEditingController controller, String type) {
+    int count = int.tryParse(controller.text) ?? 0;
+    count++;
+    controller.text = count.toString();
+    if (type == 'children') {
+      BlocProvider.of<PackageBloc>(context).add(UpdateChildrenCount(count));
+    }
+  }
+
+  void _decrementCount(
+      BuildContext context, TextEditingController controller, String type) {
+    int count = int.tryParse(controller.text) ?? 0;
+    if (count > 0) count--;
+    controller.text = count.toString();
+    if (type == 'children') {
+      BlocProvider.of<PackageBloc>(context).add(UpdateChildrenCount(count));
+    }
   }
 }
 
@@ -135,51 +203,82 @@ class Numberofadults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: mediaqueryheight(0.07, context),
-      width: mediaquerywidht(0.9, context),
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 4,
-              offset: const Offset(0, 3),
-            ),
-          ],
-          color: whitecolor,
-          borderRadius: const BorderRadius.all(Radius.circular(10))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
+        height: mediaqueryheight(0.07, context),
+        width: mediaquerywidht(0.9, context),
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 4,
+                offset: const Offset(0, 3),
+              ),
+            ],
+            color: whitecolor,
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           const Text(
             'Number of Adults:',
             style: TextStyle(color: colorteal),
           ),
-          Container(
-            width: mediaquerywidht(0.14, context),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: colorteal),
-            ),
-            child: TextFormField(
-              controller: adultsController,
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                final int newCount = int.tryParse(value) ?? 0;
-                BlocProvider.of<PackageBloc>(context)
-                    .add(UpdateAdultsCount(newCount));
-              },
-              decoration: const InputDecoration(
-                hintText: 'Enter',
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                border: InputBorder.none,
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.remove, color: colorteal),
+                onPressed: () {
+                  _decrementCount(context, adultsController, 'adults');
+                },
               ),
-              style: const TextStyle(color: Colors.black),
-            ),
+              Container(
+                width: mediaquerywidht(0.14, context),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: colorteal),
+                ),
+                child: TextFormField(
+                  controller: adultsController,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    final int newCount = int.tryParse(value) ?? 0;
+                    BlocProvider.of<PackageBloc>(context)
+                        .add(UpdateAdultsCount(newCount));
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Enter',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    border: InputBorder.none,
+                  ),
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.add, color: colorteal),
+                onPressed: () {
+                  _incrementCount(context, adultsController, 'adults');
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ]));
+  }
+
+  void _incrementCount(
+      BuildContext context, TextEditingController controller, String type) {
+    int count = int.tryParse(controller.text) ?? 0;
+    count++;
+    controller.text = count.toString();
+    if (type == 'adults') {
+      BlocProvider.of<PackageBloc>(context).add(UpdateAdultsCount(count));
+    }
+  }
+
+  void _decrementCount(
+      BuildContext context, TextEditingController controller, String type) {
+    int count = int.tryParse(controller.text) ?? 0;
+    if (count > 0) count--;
+    controller.text = count.toString();
+    if (type == 'adults') {
+      BlocProvider.of<PackageBloc>(context).add(UpdateAdultsCount(count));
+    }
   }
 }
-

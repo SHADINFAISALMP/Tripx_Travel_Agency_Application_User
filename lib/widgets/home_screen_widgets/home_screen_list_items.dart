@@ -16,6 +16,12 @@ class homescreen_list_items extends StatelessWidget {
   final BuildContext context;
   final String imagePath;
   final QueryDocumentSnapshot<Object?> item;
+  String _checkNullOrEmpty(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Not Available';
+    }
+    return value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +61,7 @@ class homescreen_list_items extends StatelessWidget {
                 const Icon(Icons.tour, color: whitecolor),
                 const SizedBox(width: 5),
                 mytext(
-                  item['packagename'],
+                  _checkNullOrEmpty(item['packagename']),
                   fontFamily: sedan,
                   fontSize: 25,
                   color: whitecolor,
@@ -72,7 +78,7 @@ class homescreen_list_items extends StatelessWidget {
                 children: [
                   const Icon(Icons.place, color: whitecolor),
                   const SizedBox(width: 5),
-                  mytext(item['placenames'],
+                  mytext(_checkNullOrEmpty(item['placenames']),
                       fontFamily: sedan,
                       fontSize: 18,
                       color: whitecolor,
@@ -86,7 +92,7 @@ class homescreen_list_items extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(width: 5),
-                  mytext(item['packagediscription'],
+                  mytext(_checkNullOrEmpty(item['packagediscription']),
                       fontFamily: sedan,
                       fontSize: 18,
                       color: whitecolor,
@@ -99,27 +105,24 @@ class homescreen_list_items extends StatelessWidget {
             ),
             Row(
               children: [
-                const SizedBox(width: 35),
+                const SizedBox(width: 30),
                 const Icon(Icons.sunny, color: whitecolor),
-                const SizedBox(width: 5),
                 mytext(
-                  item['days'],
+                  _checkNullOrEmpty(item['days']),
                   fontFamily: sedan,
                   fontSize: 18,
                   color: whitecolor,
                 ),
-                const SizedBox(width: 55),
+                const SizedBox(width: 20),
                 const Icon(Icons.nights_stay, color: whitecolor),
-                const SizedBox(width: 5),
                 mytext(
-                  item['night'],
+                  _checkNullOrEmpty(item['night']),
                   fontFamily: sedan,
                   fontSize: 18,
                   color: whitecolor,
                 ),
-                const SizedBox(width: 35),
+                const SizedBox(width: 20),
                 const Icon(Icons.attach_money, color: whitecolor),
-                const SizedBox(width: 5),
                 mytext(
                   item['packageamount'],
                   fontFamily: sedan,

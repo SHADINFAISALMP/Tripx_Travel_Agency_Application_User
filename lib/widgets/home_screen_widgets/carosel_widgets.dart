@@ -10,7 +10,12 @@ import 'package:tripx_user_application/widgets/home_screen_widgets/home_screen_l
 class Carouselwidgets extends StatelessWidget {
   final CollectionReference packageDetails;
   const Carouselwidgets({super.key, required this.packageDetails});
-
+ String _checkNullOrEmpty(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Not Available';
+    }
+    return value;
+  }
   @override
   Widget  build(BuildContext context) {
     return StreamBuilder(
@@ -90,7 +95,7 @@ class Carouselwidgets extends StatelessWidget {
   }
 
   Widget locationName(int index, item,BuildContext context) {
-    return mytext(item['packagename'],
+    return mytext( _checkNullOrEmpty(item['packagename']),
         fontFamily: sedan,
         fontSize: mediaqueryheight(0.027, context),
         color: whitecolor);

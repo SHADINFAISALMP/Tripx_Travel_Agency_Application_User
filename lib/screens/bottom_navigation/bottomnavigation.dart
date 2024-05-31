@@ -52,14 +52,14 @@ class _BottomnavigationState extends State<Bottomnavigation> {
                 ),
                 BottomBarItem(
                   inActiveItem: Icon(
-                    Icons.search,
+                    Icons.flight,
                     color: whitecolor,
                   ),
                   activeItem: Icon(
-                    Icons.search,
+                    Icons.flight,
                     color: colorteal,
                   ),
-                  itemLabel: 'SEARCH',
+                  itemLabel: 'FLIGHT',
                 ),
                 BottomBarItem(
                   inActiveItem: Icon(

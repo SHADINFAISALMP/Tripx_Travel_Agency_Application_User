@@ -13,6 +13,13 @@ class HolidaysScreen extends StatefulWidget {
 }
 
 class _HolidaysScreenState extends State<HolidaysScreen> {
+  String _checkNullOrEmpty(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Not Available';
+    }
+    return value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +75,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
         );
       },
       child: Container(
-        height: mediaqueryheight(0.4, context),
+        height: mediaqueryheight(0.52, context),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -92,7 +99,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                 const Icon(Icons.tour, color: blackcolor),
                 const SizedBox(width: 5),
                 mytext(
-                  item['packagename'],
+                  _checkNullOrEmpty(item['packagename']),
                   fontFamily: sedan,
                   fontSize: 25,
                   color: colorteal,
@@ -109,7 +116,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                 children: [
                   const Icon(Icons.place, color: blackcolor),
                   const SizedBox(width: 5),
-                  mytext(item['placenames'],
+                  mytext(_checkNullOrEmpty(item['placenames']),
                       fontFamily: sedan,
                       fontSize: 18,
                       color: colorteal,
@@ -117,32 +124,40 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                 ],
               ),
             ),
-            SizedBox(
-              height: mediaqueryheight(0.01, context),
+            Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(width: 5),
+                  mytext(_checkNullOrEmpty(item['packagediscription']),
+                      fontFamily: sedan,
+                      fontSize: 18,
+                      color: colorteal,
+                      overflow: TextOverflow.ellipsis),
+                ],
+              ),
             ),
             Row(
               children: [
-                const SizedBox(width: 35),
+                const SizedBox(width: 30),
                 const Icon(Icons.sunny, color: blackcolor),
-                const SizedBox(width: 5),
                 mytext(
-                  item['days'],
+                  _checkNullOrEmpty(item['days']),
                   fontFamily: sedan,
                   fontSize: 18,
                   color: colorteal,
                 ),
-                const SizedBox(width: 55),
+                const SizedBox(width: 30),
                 const Icon(Icons.nights_stay, color: blackcolor),
-                const SizedBox(width: 5),
                 mytext(
-                  item['night'],
+                  _checkNullOrEmpty(item['night']),
                   fontFamily: sedan,
                   fontSize: 18,
                   color: colorteal,
                 ),
-                const SizedBox(width: 35),
+                const SizedBox(width: 20),
                 const Icon(Icons.attach_money, color: blackcolor),
-                const SizedBox(width: 5),
                 mytext(
                   item['packageamount'],
                   fontFamily: sedan,

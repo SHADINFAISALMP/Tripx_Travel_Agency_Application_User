@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tripx_user_application/models/traveller_model.dart';
 import 'package:tripx_user_application/screens/package_details/package_persons_date.dart';
@@ -7,11 +8,10 @@ import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 import 'package:tripx_user_application/widgets/packages_widgets/no_of_rooms_childrens_adults.dart';
 
+// ignore: must_be_immutable
 class Bookpackage extends StatefulWidget {
-  const Bookpackage({
-    super.key,
-    required this.widget,
-  });
+  QueryDocumentSnapshot<Object?> itemslists;
+  Bookpackage({super.key, required this.widget, required this.itemslists});
 
   final PackagePerson widget;
 
@@ -56,12 +56,21 @@ class _BookpackageState extends State<Bookpackage> {
     }
 
     Travelpackage travelPackage = Travelpackage(
-      adultcount: adultsCount,
-      childrencount: childrenCount,
-      roomscount: roomsCount,
-      adults: adults,
-      children: children,
-    );
+        adultcount: adultsCount,
+        childrencount: childrenCount,
+        roomscount: roomsCount,
+        adults: adults,
+        children: children,
+        packagename: widget.itemslists['packagename'],
+        packaageamount: widget.itemslists['packageamount'],
+        childprice: widget.itemslists['childper'],
+        adultprice: widget.itemslists['adult'],
+        days: widget.itemslists['days'],
+        night: widget.itemslists['night'],
+        startdate: widget.itemslists['startdate'],
+        endate: widget.itemslists['enddate'],
+        placename: widget.itemslists['placenames'],
+        hotelprice: widget.itemslists['hotelper']);
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => PackagePrice(
               itemslists: widget.widget.itemslists,

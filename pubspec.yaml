@@ -134,7 +134,9 @@ flutter:
     - assets/images/packageamount.jpeg
     - assets/images/booking.jpeg
     - assets/images/transportation.jpeg
-
+    - assets/images/ani.gif
+    - assets/images/time.png
+    - assets/images/time2-removebg-preview.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

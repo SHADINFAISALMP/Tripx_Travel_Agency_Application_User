@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tripx_user_application/models/traveller_model.dart';
+import 'package:tripx_user_application/screens/my_tickets/fulldeatails.dart';
 import 'package:tripx_user_application/utils/colors.dart';
-
 import '../../utils/fonts.dart';
 
 class NoBookings extends StatelessWidget {
@@ -31,6 +31,7 @@ class NoBookings extends StatelessWidget {
 class BookingList extends StatelessWidget {
   final QuerySnapshot snapshot;
   const BookingList({Key? key, required this.snapshot}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -50,45 +51,65 @@ class BookingList extends StatelessWidget {
           travelerInfo +=
               '${package.children![i].name} (${package.children![i].age}), ';
         }
-        travelerInfo = travelerInfo.substring(0, travelerInfo.length - 2);
+        if (travelerInfo.isNotEmpty) {
+          travelerInfo = travelerInfo.substring(0, travelerInfo.length - 2);
+        }
 
-        return Card(
-          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          elevation: 4.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: ListTile(
-            title: Text(
-              "Booking ${index + 1}",
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18.0,
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Fulldetalshowing(
+                    document: document), // Pass the document here
               ),
+            );
+          },
+          child: Card(
+            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            elevation: 4.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
             ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 8.0),
-                const Text(
-                  "Traveler Information:",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
+            child: ListTile(
+              title: Text(
+                "Booking ${index + 1}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                ),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Package Name: ${package.packagename}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4.0),
-                Text(
-                  travelerInfo,
-                  style: const TextStyle(fontSize: 14.0),
-                ),
-                const SizedBox(height: 8.0),
-                Text(
-                  "Adults: ${package.adultcount}, Children: ${package.childrencount}, Rooms: ${package.roomscount}",
-                  style: const TextStyle(fontSize: 14.0),
-                ),
-                const SizedBox(height: 8.0),
-              ],
+                  const SizedBox(height: 8.0),
+                  Text(
+                    "Traveler Information:",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  const SizedBox(height: 4.0),
+                  Text(
+                    travelerInfo,
+                    style: const TextStyle(fontSize: 14.0),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    "Adults: ${package.adultcount}, Children: ${package.childrencount}, Rooms: ${package.roomscount}",
+                    style: const TextStyle(fontSize: 14.0),
+                  ),
+                  const SizedBox(height: 8.0),
+                ],
+              ),
             ),
           ),
         );

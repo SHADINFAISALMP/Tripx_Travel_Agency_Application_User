@@ -14,7 +14,22 @@ class PackageBloc extends Bloc<PackageEvent, PackageState> {
   int childrencount = 0;
   int roomscount = 1;
   Travelpackage travelPackage = Travelpackage(
-      adultcount: 0, childrencount: 0, roomscount: 0, adults: [], children: []);
+    adultcount: 0,
+    childrencount: 0,
+    roomscount: 1,
+    adults: [],
+    children: [],
+    packagename: '',
+    packaageamount: '',
+    placename: '',
+    adultprice: '',
+    childprice: '',
+    days: '',
+    endate: '',
+    hotelprice: '',
+    night: '',
+    startdate: '',
+  );
 
   PackageBloc() : super(PackageInitial()) {
     on<SubmitTravelPackage>(submittravelpackage);

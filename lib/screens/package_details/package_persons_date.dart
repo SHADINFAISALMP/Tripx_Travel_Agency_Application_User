@@ -118,7 +118,7 @@ class _PackagePersonState extends State<PackagePerson> {
                   const SizedBox(height: 20),
                   ...buildchildrenFields(),
                   const SizedBox(height: 20),
-                  Bookpackage(widget: widget),
+                  Bookpackage(widget: widget, itemslists: widget.itemslists,),
                 ],
               ),
             ),

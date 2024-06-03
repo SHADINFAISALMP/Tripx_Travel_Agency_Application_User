@@ -17,7 +17,7 @@ class Detailsshowingcontents extends StatelessWidget {
   final QueryDocumentSnapshot<Object?> itemslists;
   final String startDate;
   final String endDate;
- String _checkNullOrEmpty(String? value) {
+  String _checkNullOrEmpty(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Not Available';
     }
@@ -33,6 +33,7 @@ class Detailsshowingcontents extends StatelessWidget {
     }
     return value;
   }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -53,8 +54,7 @@ class Detailsshowingcontents extends StatelessWidget {
           ),
           PackageDetailsContainers(
             imagepath: 'assets/images/desitionationnames.jpeg',
-            text:_checkNullOrEmpty(
-                        itemslists['placenames']),
+            text: _checkNullOrEmpty(itemslists['placenames']),
             topname: 'DESTINATION NAMES',
           ),
           SizedBox(
@@ -74,12 +74,12 @@ class Detailsshowingcontents extends StatelessWidget {
               Startdateandenddate(
                 imagepath: 'assets/images/dates.jpeg',
                 topname: 'STARTDATE',
-                text:_checkDate(startDate) ,
+                text: _checkDate(startDate),
               ),
               Startdateandenddate(
                 imagepath: 'assets/images/dates.jpeg',
                 topname: 'END DATE',
-                text:_checkDate(endDate) ,
+                text: _checkDate(endDate),
               ),
             ],
           ),
@@ -91,12 +91,12 @@ class Detailsshowingcontents extends StatelessWidget {
             children: [
               Daysnightsrow(
                 imagepath: 'assets/images/days.jpeg',
-                text:_checkNullOrEmpty(itemslists['days']),
+                text: _checkNullOrEmpty(itemslists['days']),
                 topname: "DAYS",
               ),
               Daysnightsrow(
                 imagepath: 'assets/images/nights.jpeg',
-                text:  _checkNullOrEmpty(itemslists['night']),
+                text: _checkNullOrEmpty(itemslists['night']),
                 topname: "NIGHTS",
               ),
             ],
@@ -114,7 +114,7 @@ class Detailsshowingcontents extends StatelessWidget {
               ),
               Daysnightsrow(
                 imagepath: 'assets/images/city.jpeg',
-                text:  _checkNullOrEmpty(itemslists['city']),
+                text: _checkNullOrEmpty(itemslists['city']),
                 topname: "CITIES",
               ),
             ],
@@ -140,7 +140,7 @@ class Detailsshowingcontents extends StatelessWidget {
           ),
           PackageDetailsContainers(
             imagepath: 'assets/images/meals.jpeg',
-            text:_checkNullOrEmpty(itemslists['meals']),
+            text: _checkNullOrEmpty(itemslists['meals']),
             topname: 'MEALS ',
           ),
           SizedBox(
@@ -148,7 +148,7 @@ class Detailsshowingcontents extends StatelessWidget {
           ),
           PackageDetailsContainers(
             imagepath: 'assets/images/activity.jpeg',
-            text:_checkNullOrEmpty(itemslists['activity']),
+            text: _checkNullOrEmpty(itemslists['activity']),
             topname: 'ACTIVITIES',
           ),
           SizedBox(
@@ -174,7 +174,7 @@ class Detailsshowingcontents extends StatelessWidget {
           ),
           PackageDetailsContainers(
             imagepath: 'assets/images/cash2.jpeg',
-            text:  _checkNullOrEmpty(itemslists['childper']),
+            text: _checkNullOrEmpty(itemslists['childper']),
             topname: 'PER CHILD',
             isMoney: true,
           ),

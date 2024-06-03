@@ -38,7 +38,7 @@ class Editprofilesavebutton extends StatelessWidget {
         newEmail: newEmail,
         newPhonenumber: newPhonenumber,
         newPassword: newPassword));
-    print("User Email: $userEmail");
+    debugPrint("User Email: $userEmail");
    
   }
     return GestureDetector(

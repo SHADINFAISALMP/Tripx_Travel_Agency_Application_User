@@ -16,6 +16,7 @@ class PackagePerson extends StatefulWidget {
   const PackagePerson({Key? key, required this.itemslists}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _PackagePersonState createState() => _PackagePersonState();
 }
 
@@ -50,7 +51,7 @@ class _PackagePersonState extends State<PackagePerson> {
       backgroundColor: colorteal,
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(80.0),
-        child: appbarcontainer(),
+        child: Appbarcontainer(),
       ),
       body: BlocConsumer<PackageBloc, PackageState>(listener: (context, state) {
         if (state is Packageerror) {

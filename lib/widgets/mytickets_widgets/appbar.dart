@@ -16,8 +16,10 @@ class MyticketsAppbar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       leading: IconButton(
         onPressed: () {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const Bottomnavigation()));
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const Bottomnavigation()));
         },
         color: whitecolor,
         icon: const Icon(
@@ -62,7 +64,7 @@ class BookingService {
       }
       return const Stream.empty();
     } catch (e) {
-      print('error fetching data : $e');
+      debugPrint('error fetching data : $e');
       return const Stream.empty();
     }
   }

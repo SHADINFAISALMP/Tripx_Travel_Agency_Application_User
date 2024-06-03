@@ -18,7 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   _loginButtonPressed(LoginEventButton event, Emitter<LoginState> emit) async {
-    print("Login button pressed");
+    debugPrint("Login button pressed");
     if (formKey.currentState!.validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
       userEmail = emailcontrollerlog.text;
@@ -30,23 +30,23 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                 email: emailcontrollerlog.text.trim(),
                 password: passwordcontrollerlog.text.trim());
         final User user = userCredential.user!;
-        print("Authentication successful");
+        debugPrint("Authentication successful");
 
         if (user.emailVerified) {
           emit(LoginSuccess());
-          print("Email is verified");
+          debugPrint("Email is verified");
         } else {
           emit(EmailNotVerified());
           await user.sendEmailVerification();
           emit(NavigateToOtpPage(user));
-          print("Email verification sent");
+          debugPrint("Email verification sent");
         }
       } catch (e) {
-        print("Error during authentication: $e");
+        debugPrint("Error during authentication: $e");
         emit(LoginFailure(error: e.toString()));
       }
     } else {
-      print("Form validation failed");
+      debugPrint("Form validation failed");
       emit(LoginFailure(error: "Form validation failed"));
     }
   }
@@ -55,9 +55,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       ResendEmailFromLogin event, Emitter<LoginState> emit) async {
     try {
       await (state as NavigateToOtpPage).user.sendEmailVerification();
-      print("Resent email verification");
+      debugPrint("Resent email verification");
     } catch (e) {
-      print("Error resending email verification: $e");
+      debugPrint("Error resending email verification: $e");
       emit(LoginFailure(error: e.toString()));
     }
   }
@@ -69,13 +69,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await user.reload();
       if (user.emailVerified) {
         emit(LoginSuccess());
-        print("Email verified successfully from OTP page");
+        debugPrint("Email verified successfully from OTP page");
       } else {
         emit(EmailVerificationFailedFromOtpPage());
-        print("Email verification failed from OTP page");
+        debugPrint("Email verification failed from OTP page");
       }
     } catch (e) {
-      print("Error verifying email: $e");
+      debugPrint("Error verifying email: $e");
       emit(LoginFailure(error: e.toString()));
     }
   }

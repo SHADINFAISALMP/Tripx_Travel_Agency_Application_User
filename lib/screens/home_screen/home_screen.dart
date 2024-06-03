@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
@@ -27,8 +26,7 @@ class _HomeScreenState extends State<HomeScreen>
   late List<Widget> pages;
   late Future<DocumentSnapshot?> _userprofile;
 
-  final GlobalKey<ScaffoldState> scaffoldKey =
-      GlobalKey<ScaffoldState>(); 
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -36,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen>
     _pageController = NotchBottomBarController();
     _userprofile = UserProfileService.getUserProfileData(userEmail!);
   }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -63,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen>
           }),
     );
   }
+
   Widget homecontent(Map<String, dynamic> userProfile, BuildContext context) {
     return Container(
       color: colorteal,
@@ -87,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
     );
   }
+
   Widget contentcontainer(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -108,13 +109,20 @@ class _HomeScreenState extends State<HomeScreen>
             mytext("Popular Destinations",
                 fontFamily: sedan,
                 fontSize: mediaqueryheight(0.025, context),
-                color: blackcolor),
+                color: blackcolor,
+                fontWeight: FontWeight.bold),
             SizedBox(
               height: mediaqueryheight(0.03, context),
             ),
-            Carouselwidgets(packageDetails: packageDetails,),
+            Carouselwidgets(
+              packageDetails: packageDetails,
+            ),
             SizedBox(
               height: mediaqueryheight(0.02, context),
+            ),
+            const Text(
+              "Scroll Down For More!",
+              style: TextStyle(color: Colors.grey, fontSize: 14),
             ),
             Homescreenimagelistview(packageDetails: packageDetails),
             SizedBox(
@@ -125,5 +133,4 @@ class _HomeScreenState extends State<HomeScreen>
       ),
     );
   }
-  
 }

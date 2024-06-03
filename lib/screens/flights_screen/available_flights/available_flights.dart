@@ -1,4 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
+import 'package:tripx_user_application/screens/bottom_navigation/bottomnavigation.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -10,6 +13,7 @@ class AvailableFlights extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AvailableFlightsState createState() => _AvailableFlightsState();
 }
 
@@ -21,7 +25,8 @@ class _AvailableFlightsState extends State<AvailableFlights> {
         toolbarHeight: 60,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (Context) => const Bottomnavigation()));
           },
           icon: const Icon(
             Icons.arrow_back_ios,
@@ -46,8 +51,7 @@ class _AvailableFlightsState extends State<AvailableFlights> {
         child: Column(
           children: [
             SizedBox(
-              height: mediaqueryheight(0.03
-              , context),
+              height: mediaqueryheight(0.03, context),
             ),
             Expanded(
               child: ListView.builder(

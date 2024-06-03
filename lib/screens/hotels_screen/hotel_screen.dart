@@ -1,10 +1,12 @@
-// ignore_for_file: unused_field
+// ignore_for_file: unused_field, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:tripx_user_application/screens/hotels_screen/hotel_details.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -44,9 +46,14 @@ class _HotelScreenState extends State<HotelScreen> {
                 padding: const EdgeInsets.only(left: 20, top: 10),
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.arrow_back_ios_new_outlined,
-                      color: whitecolor,
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_outlined,
+                        color: whitecolor,
+                      ),
                     ),
                     SizedBox(
                       width: mediaquerywidht(0.20, context),
@@ -130,18 +137,26 @@ class _HotelScreenState extends State<HotelScreen> {
                       height: 10,
                     ),
                     if (_loading)
-                      const CircularProgressIndicator()
+                      Center(
+                        child: LoadingAnimationWidget.threeArchedCircle(
+                          color: colorteal,
+                          size: 60,
+                        ),
+                      )
                     else
                       Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _hotelDetails.length,
-                          itemBuilder: (context, index) {
-                            final hotel = _hotelDetails[index];
-                            return HotelItem(
-                                hotel: hotel); // Use the HotelItem widget here
-                          },
-                        ),
+                        child: _hotelDetails.isEmpty
+                            ? const Center(
+                                child: Text('No hotels found'),
+                              )
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: _hotelDetails.length,
+                                itemBuilder: (context, index) {
+                                  final hotel = _hotelDetails[index];
+                                  return HotelItem(hotel: hotel);
+                                },
+                              ),
                       ),
                   ],
                 ),
@@ -180,6 +195,14 @@ class _HotelScreenState extends State<HotelScreen> {
     Function(DateTime?) onChanged,
     TextEditingController controller,
   ) {
+    ThemeData themeData = ThemeData(
+      primaryColor: colorteal,
+      colorScheme: const ColorScheme.light(
+        primary: colorteal,
+        onPrimary: whitecolor,
+        onSurface: colorteal,
+      ),
+    );
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.40,
       child: TextFormField(
@@ -203,6 +226,22 @@ class _HotelScreenState extends State<HotelScreen> {
             initialDate: DateTime.now(),
             firstDate: DateTime(2000),
             lastDate: DateTime(2100),
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: themeData.copyWith(
+                  colorScheme: const ColorScheme.light(
+                    primary: colorteal,
+                    onPrimary: whitecolor,
+                    onSurface: colorteal,
+                  ),
+                  buttonTheme: const ButtonThemeData(
+                    textTheme: ButtonTextTheme.primary,
+                  ),
+                  dialogBackgroundColor: whitecolor,
+                ),
+                child: child!,
+              );
+            },
           );
           if (picked != null) {
             onChanged(picked);
@@ -229,28 +268,40 @@ class _HotelScreenState extends State<HotelScreen> {
     try {
       final url =
           'https://serpapi.com/search.json?engine=google_hotels&q=$_hotelcity&gl=us&hl=en&currency=USD&check_in_date=${_checkin?.toString().substring(0, 10)}&check_out_date=${_checkout?.toString().substring(0, 10)}&api_key=6c85fbfd79fdcabfe8b5366842b277c39501f6eabded41ad96ceda658b200efc';
-      print('Request URL: $url');
+      debugPrint('Request URL: $url');
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        if (jsonResponse.containsKey('hotels')) {
-          final List<dynamic> data = jsonResponse['hotels'];
-          print('Hotel Data: $data');
-          setState(() {
-            _hotelDetails.addAll(data);
-            _loading = false;
-          });
-        } else if (jsonResponse.containsKey('properties')) {
-          final List<dynamic> data = jsonResponse['properties'];
-          print('Hotel Data: $data');
-          setState(() {
-            _hotelDetails.addAll(data);
-            _loading = false;
-          });
+        if (jsonResponse.containsKey('hotels') ||
+            jsonResponse.containsKey('properties')) {
+          final List<dynamic>? data = jsonResponse.containsKey('hotels')
+              ? jsonResponse['hotels']
+              : jsonResponse['properties'];
+          debugPrint('Hotel Data: $data');
+          if (data != null && data.isNotEmpty) {
+            setState(() {
+              _hotelDetails.addAll(data);
+              _loading = false;
+            });
+          } else if (jsonResponse.containsKey('properties')) {
+            final List<dynamic> data = jsonResponse['properties'];
+            debugPrint('Hotel Data: $data');
+            setState(() {
+              _hotelDetails.addAll(data);
+              _loading = false;
+            });
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text('No hotels found for the given search query')),
+            );
+            setState(() {
+              _loading = false;
+            });
+          }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('No hotels found for the given search query')),
+            const SnackBar(content: Text('Unexpected API response')),
           );
           setState(() {
             _loading = false;
@@ -268,7 +319,7 @@ class _HotelScreenState extends State<HotelScreen> {
         _loading = false;
       });
     } catch (e) {
-      print('Error: $e');
+      debugPrint('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
@@ -279,110 +330,4 @@ class _HotelScreenState extends State<HotelScreen> {
   }
 }
 
-const double usdToInrConversionRate = 74.5;
 
-class HotelItem extends StatelessWidget {
-  final Map<String, dynamic> hotel;
-
-  const HotelItem({Key? key, required this.hotel}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double priceInUsd = 0.0;
-    if (hotel['rate_per_night'] != null) {
-      String priceString = hotel['rate_per_night']['lowest'];
-
-      priceString = priceString.replaceAll('\$', '');
-
-      priceInUsd = double.tryParse(priceString) ?? 0.0;
-    }
-    double priceInInr = priceInUsd * usdToInrConversionRate;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: colorteal,
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 8.0),
-          Text(
-            hotel['name'] ?? 'Name not available',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: whitecolor,
-            ),
-          ),
-          const Divider(),
-          const SizedBox(height: 8.0),
-          Text(
-            hotel['description'] ?? 'Description not available',
-            style: const TextStyle(
-              fontSize: 14,
-              color: whitecolor,
-            ),
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            hotel['rate_per_night'] != null
-                ? 'Rate per night: ${hotel['rate_per_night']['lowest']} (USD) | ₹${priceInInr.toStringAsFixed(2)} (INR)'
-                : 'Rate not available',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: orangecolor,
-            ),
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            'Check-in Time: ${hotel['check_in_time']}',
-            style: const TextStyle(
-              fontSize: 14,
-              color: whitecolor,
-            ),
-          ),
-          Text(
-            'Check-out Time: ${hotel['check_out_time']}',
-            style: const TextStyle(
-              fontSize: 14,
-              color: whitecolor,
-            ),
-          ),
-          const SizedBox(height: 8.0),
-          const Text(
-            'Nearby places:',
-            style: TextStyle(
-              fontSize: 14,
-              color: orangecolor,
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(
-              hotel['nearby_places'].length,
-              (index) => Text(
-                '- ${hotel['nearby_places'][index]['name']}',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: whitecolor,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

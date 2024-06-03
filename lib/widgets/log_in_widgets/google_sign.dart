@@ -68,7 +68,7 @@ class GoogleSignIn extends StatelessWidget {
 
   Future<void> updateUserProfile(String email, String name, String imagepath,
       String phonenumber, String password, String confirmpassword) async {
-    print("hppoooii ");
+    debugPrint("hppoooii ");
     try {
       final userProfileSnapshot =
           await userDetails.where('email', isEqualTo: email).get();
@@ -84,7 +84,7 @@ class GoogleSignIn extends StatelessWidget {
           'confirmpassword': confirmpassword
         });
       } else {
-        print("hppoooii2 ");
+        debugPrint("hppoooii2 ");
         await userDetails.doc().set({
           'email': email,
           'phonenumber': phonenumber,
@@ -95,7 +95,7 @@ class GoogleSignIn extends StatelessWidget {
         });
       }
     } catch (error) {
-      print("Error updating user profile: $error");
+      debugPrint("Error updating user profile: $error");
     }
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
@@ -43,9 +45,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       FirebaseAuthServices auth = FirebaseAuthServices();
       User? user = await auth.signUpWithEmailandPassword();
       if (user != null) {
-        print("mownee");
+        debugPrint("mownee");
         await AddUserDetailsToFirebase().addDataToFirebase(event.context);
-        print("edaa ");
+        debugPrint("edaa ");
         FirebaseAuth authenctication = FirebaseAuth.instance;
         authenctication.currentUser!.sendEmailVerification();
         emit(NavigateToEmailVerficationPage());
@@ -75,7 +77,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       final user = FirebaseAuth.instance.currentUser;
       if (user!.emailVerified) {
         emit(NavigateHomePage());
-        print("success");
+        debugPrint("success");
       }
     } catch (e) {
       emit(Registerfail("PLease Try Again"));

@@ -10,14 +10,15 @@ import 'package:tripx_user_application/widgets/home_screen_widgets/home_screen_l
 class Carouselwidgets extends StatelessWidget {
   final CollectionReference packageDetails;
   const Carouselwidgets({super.key, required this.packageDetails});
- String _checkNullOrEmpty(String? value) {
+  String _checkNullOrEmpty(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Not Available';
     }
     return value;
   }
+
   @override
-  Widget  build(BuildContext context) {
+  Widget build(BuildContext context) {
     return StreamBuilder(
         stream: packageDetails.snapshots(),
         builder: (context, snapshot) {
@@ -38,7 +39,7 @@ class Carouselwidgets extends StatelessWidget {
                   final items = snapshot.data!.docs[index];
                   List<String> imagess =
                       (items['imagepath'] as List<dynamic>).cast<String>();
-                  return buildImage(imagess.first, index, items,context);
+                  return buildImage(imagess.first, index, items, context);
                 },
                 options: CarouselOptions(
                     viewportFraction: 0.72,
@@ -50,7 +51,9 @@ class Carouselwidgets extends StatelessWidget {
           }
         });
   }
- Widget buildImage(String image, int index, QueryDocumentSnapshot<Object?> items,BuildContext context) {
+
+  Widget buildImage(String image, int index,
+      QueryDocumentSnapshot<Object?> items, BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -84,8 +87,11 @@ class Carouselwidgets extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.location_on),
-                locationName(index, items,context),
+                const Icon(
+                  Icons.location_on,
+                  color: white70,
+                ),
+                locationName(index, items, context),
               ],
             )
           ],
@@ -94,8 +100,8 @@ class Carouselwidgets extends StatelessWidget {
     );
   }
 
-  Widget locationName(int index, item,BuildContext context) {
-    return mytext( _checkNullOrEmpty(item['packagename']),
+  Widget locationName(int index, item, BuildContext context) {
+    return mytext(_checkNullOrEmpty(item['packagename']),
         fontFamily: sedan,
         fontSize: mediaqueryheight(0.027, context),
         color: whitecolor);

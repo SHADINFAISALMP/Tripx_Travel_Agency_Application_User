@@ -21,6 +21,7 @@ class Addimagetofirebase {
       String url = await ref.getDownloadURL();
       return url;
     } catch (e) {
+      // ignore: avoid_print
       print("$e");
       return null;
     }

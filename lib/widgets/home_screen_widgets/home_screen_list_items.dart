@@ -5,8 +5,9 @@ import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 
-class homescreen_list_items extends StatelessWidget {
-  const homescreen_list_items({
+// ignore: camel_case_types
+class Homescreen_list_items extends StatelessWidget {
+  const Homescreen_list_items({
     super.key,
     required this.context,
     required this.imagePath,
@@ -37,7 +38,6 @@ class homescreen_list_items extends StatelessWidget {
         );
       },
       child: Container(
-        height: mediaqueryheight(0.52, context),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -86,6 +86,7 @@ class homescreen_list_items extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(width: 5),
             Padding(
               padding: const EdgeInsets.only(left: 30),
               child: Column(
@@ -131,6 +132,7 @@ class homescreen_list_items extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),

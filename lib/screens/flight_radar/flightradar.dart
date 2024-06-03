@@ -59,7 +59,7 @@ class _SearchpageState extends State<Flightradar> {
         });
       } catch (e) {
         // Handle the error by showing an alert or a message
-        print("Error fetching data: $e");
+        debugPrint("Error fetching data: $e");
       }
     });
   }
@@ -77,7 +77,7 @@ class _SearchpageState extends State<Flightradar> {
       doSetState();
     } catch (e) {
       // Handle the error by showing an alert or a message
-      print("Error fetching data: $e");
+      debugPrint("Error fetching data: $e");
     }
   }
 
@@ -128,7 +128,7 @@ class _SearchpageState extends State<Flightradar> {
       doSetState();
     } catch (e) {
       // Handle the error by showing an alert or a message
-      print("Error fetching data: $e");
+      debugPrint("Error fetching data: $e");
     }
   }
 

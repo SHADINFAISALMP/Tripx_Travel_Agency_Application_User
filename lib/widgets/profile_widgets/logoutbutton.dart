@@ -56,12 +56,13 @@ Future<void> _logout(BuildContext context) async {
               Navigator.of(context).pop();
               try {
                 await FirebaseAuth.instance.signOut();
+                // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const Login()),
                 );
               } catch (e) {
-                print("Error signing out: $e");
+                debugPrint("Error signing out: $e");
               }
             },
             child: const Text(

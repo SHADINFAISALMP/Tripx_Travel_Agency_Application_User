@@ -61,10 +61,11 @@ class BookingList extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => Fulldetalshowing(
-                    document: document), // Pass the document here
+                    document: document),
               ),
             );
-          },
+          }, 
+
           child: Card(
             margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             elevation: 4.0,
@@ -90,9 +91,9 @@ class BookingList extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8.0),
-                  Text(
+                  const Text(
                     "Traveler Information:",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16.0,
                     ),

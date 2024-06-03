@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tripx_user_application/models/traveller_model.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
@@ -41,7 +42,11 @@ class Fulldetalshowing extends StatelessWidget {
     return Scaffold(
       backgroundColor: colorteal,
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back_ios_new_outlined),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_ios_new_outlined)),
         title: Text(
           ' ${_checkNullOrEmpty(package.packagename).toUpperCase()} DETAILS',
           style: TextStyle(
@@ -49,143 +54,162 @@ class Fulldetalshowing extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: whitecolor,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: colorteal,
         ),
         toolbarHeight: 60,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/time2.png',
-                height: 240,
-                fit: BoxFit.cover,
-              ),
-              Container(
-                height: mediaqueryheight(0.60, context),
-                width: mediaquerywidht(0.95, context),
-                decoration: BoxDecoration(
-                    color: whitecolor, borderRadius: BorderRadius.circular(10)),
+      body: FutureBuilder(
+          future: Future.delayed(const Duration(seconds: 2)),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: LoadingAnimationWidget.threeArchedCircle(
+                    color: whitecolor, size: 60),
+              );
+            } else {
+              return SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 5),
-                        _buildDetailRow(
-                          'Package Name :',
-                          _checkNullOrEmpty(package.packagename),
-                        ),
-                        SizedBox(height: 16),
-                        _buildDetailRow(
-                          'Place Names :',
-                          _checkNullOrEmpty(package.placename),
-                        ),
-                        SizedBox(height: 16),
-                        _buildDetailRow(
-                          'Traveler Info :',
-                          travelerInfo,
-                        ),
-                        SizedBox(height: 16),
-                        _buildDetailRow(
-                          'Adult count :',
-                          _checkNullOrEmpty(package.adultcount),
-                        ),
-                        SizedBox(height: 16),
-                        _buildDetailRow(
-                          'Childrens Count :',
-                          _checkNullOrEmpty(package.childrencount),
-                        ),
-                        SizedBox(height: 16),
-                        _buildDetailRow(
-                          'Rooms Count :',
-                          _checkNullOrEmpty(package.roomscount),
-                        ),
-                        SizedBox(height: 16),
-                        _buildDetailRow(
-                          'Adult Price :',
-                          _checkNullOrEmpty(package.adultprice),
-                        ),
-                        SizedBox(height: 16),
-                        _buildDetailRow(
-                          'Children Price :',
-                          _checkNullOrEmpty(package.childprice),
-                        ),
-                        SizedBox(height: 16),
-                        _buildDetailRow(
-                          'Room Price :',
-                          _checkNullOrEmpty(package.hotelprice),
-                        ),
-                        SizedBox(height: 16),
-                        _buildDetailRow(
-                          'Package Amount :',
-                          _checkNullOrEmpty(package.packaageamount),
-                        ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(Icons.label_outline_sharp),
-                            Text(
-                              'Days :',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: colorteal,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Playfair Display',
-                              ),
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'assets/images/time.png',
+                        height: 240,
+                        fit: BoxFit.cover,
+                      ),
+                      Container(
+                        height: mediaqueryheight(0.60, context),
+                        width: mediaquerywidht(0.95, context),
+                        decoration: BoxDecoration(
+                            color: whitecolor,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 5),
+                                _buildDetailRow(
+                                  'Package Name :',
+                                  _checkNullOrEmpty(package.packagename)
+                                      .toUpperCase(),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildDetailRow(
+                                  'Place Names :',
+                                  _checkNullOrEmpty(package.placename)
+                                      .toUpperCase(),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildDetailRow(
+                                  'Traveler Info :',
+                                  travelerInfo.toUpperCase(),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildDetailRow(
+                                  'Adult count :',
+                                  _checkNullOrEmpty(package.adultcount),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildDetailRow(
+                                  'Childrens Count :',
+                                  _checkNullOrEmpty(package.childrencount),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildDetailRow(
+                                  'Rooms Count :',
+                                  _checkNullOrEmpty(package.roomscount),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildDetailRow(
+                                  'Adult Price :',
+                                  _checkNullOrEmpty("₹${package.adultprice}"),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildDetailRow(
+                                  'Children Price :',
+                                  _checkNullOrEmpty("₹${package.childprice}"),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildDetailRow(
+                                  'Room Price :',
+                                  _checkNullOrEmpty("₹${package.hotelprice}"),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildDetailRow(
+                                  'Package Amount :',
+                                  _checkNullOrEmpty(
+                                      "₹${package.packaageamount}"),
+                                ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Icon(Icons.label_outline_sharp),
+                                    const Text(
+                                      'Days :',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: colorteal,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Playfair Display',
+                                      ),
+                                    ),
+                                    Text(
+                                      _checkNullOrEmpty(package.days),
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        color: colorteal,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Playfair Display',
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Nights :',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: colorteal,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Playfair Display',
+                                      ),
+                                    ),
+                                    Text(
+                                      _checkNullOrEmpty(package.night),
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        color: colorteal,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Playfair Display',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            Text(
-                              _checkNullOrEmpty(package.days),
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: colorteal,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Playfair Display',
-                              ),
-                            ),
-                            Text(
-                              'Nights :',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: colorteal,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Playfair Display',
-                              ),
-                            ),
-                            Text(
-                              _checkNullOrEmpty(package.night),
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: colorteal,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Playfair Display',
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
+              );
+            }
+          }),
     );
   }
 
   Widget _buildDetailRow(String label, String value) {
     return Row(
       children: [
-        Icon(Icons.label_outline_sharp),
+        const Icon(Icons.label_outline_sharp),
+        const SizedBox(
+          width: 5,
+        ),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 20,
             color: colorteal,
             fontWeight: FontWeight.bold,
@@ -195,7 +219,7 @@ class Fulldetalshowing extends StatelessWidget {
         Expanded(
           child: Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               color: colorteal,
               fontWeight: FontWeight.bold,

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -34,7 +36,7 @@ class FlightService {
     while (attempt < maxRetries) {
       try {
         return await request();
-      } on DioError catch (e) {
+      } on DioException catch (e) {
         if (e.response?.statusCode == 429) {
           attempt++;
           if (attempt == maxRetries) {

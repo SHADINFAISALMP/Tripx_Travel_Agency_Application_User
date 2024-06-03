@@ -46,8 +46,8 @@ class UsableContainer extends StatelessWidget {
     );
   }
 }
-class appbarcontainer extends StatelessWidget {
-  const appbarcontainer({
+class Appbarcontainer extends StatelessWidget {
+  const Appbarcontainer({
     super.key,
   });
 

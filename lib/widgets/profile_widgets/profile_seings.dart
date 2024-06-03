@@ -6,6 +6,7 @@ import 'package:tripx_user_application/utils/mediaquery.dart';
 import 'package:tripx_user_application/widgets/home_screen_widgets/header_texts.dart';
 import 'package:tripx_user_application/widgets/profile_widgets/logoutbutton.dart';
 
+// ignore: camel_case_types
 class Profile_settings extends StatelessWidget {
   const Profile_settings({
     super.key,

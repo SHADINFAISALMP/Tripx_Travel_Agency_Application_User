@@ -10,6 +10,7 @@ class AddUserDetailsToFirebase {
       final data = Userdetailsdata().userData(profileImageUrl!);
     await  userDetails.add(data);
     } catch (e) {
+      // ignore: avoid_print
       print("error $e");
     }
   }

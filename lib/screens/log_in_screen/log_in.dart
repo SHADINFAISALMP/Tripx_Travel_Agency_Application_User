@@ -4,6 +4,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tripx_user_application/bloc/google_sign/google_bloc.dart';
 import 'package:tripx_user_application/bloc/login/login_bloc.dart';
 import 'package:tripx_user_application/screens/bottom_navigation/bottomnavigation.dart';
+import 'package:tripx_user_application/screens/otp_verificaation/otp_verification.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/loading_indicator.dart';
 import 'package:tripx_user_application/widgets/log_in_widgets/login_content.dart';
@@ -51,18 +52,18 @@ class _LoginState extends State<Login> {
                     content: Text("incorrect email or password")));
                 Navigator.pop(context);
               }
-              // else if (state is EmailNotVerified) {
-              //   ScaffoldMessenger.of(context).showSnackBar(
-              //       const SnackBar(content: Text("please verify your email")));
-              // }
-              //  else if (state is NavigateToOtpPage) {
-              //   Navigator.pop(context);
-              //   Navigator.of(context).push(MaterialPageRoute(
-              //       builder: (context) => OtpVerification(
-              //             fromlogin: true,
-              //             email: userEmail!,
-              //           )));
-              // }
+              else if (state is EmailNotVerified) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("please verify your email")));
+              }
+               else if (state is NavigateToOtpPage) {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => OtpVerification(
+                          fromlogin: true,
+                          email: userEmail!,
+                        )));
+              }
               else if (state is AuthenicatingUser) {
                 DialogUtils.showLoadingDialog(context);
               }
@@ -75,8 +76,15 @@ class _LoginState extends State<Login> {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const Bottomnavigation()));
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Google Sign In Success")));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  backgroundColor: colorteal,
+                  content: Text(
+                    "Google Sign In Success",
+                    style: TextStyle(
+                      color: whitecolor,
+                    ),
+                  ),
+                ));
               }
               if (state is GoogleLoadingstate) {
                 Center(

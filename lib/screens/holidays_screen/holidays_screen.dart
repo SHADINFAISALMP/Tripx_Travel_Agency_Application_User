@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tripx_user_application/screens/package_details/package_details.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
@@ -24,17 +25,27 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: const Icon(
-            Icons.arrow_back_ios_new,
-            color: whitecolor,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: colorteal,
+            ),
           ),
-          backgroundColor: colorteal,
+          backgroundColor: whitecolor,
           centerTitle: true,
           title: mytext("HOLIDAYS PACKAGES",
-              fontFamily: bodoni, fontSize: 22, color: whitecolor),
+              fontFamily: bodoni,
+              fontSize: 22,
+              color: colorteal,
+              fontWeight: FontWeight.bold),
         ),
         backgroundColor: colorteal,
-        body: SafeArea(child: buildListView()));
+        body: SafeArea(
+          child: buildListView(),
+        ));
   }
 
   Widget buildListView() {
@@ -44,7 +55,10 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
         stream: packageDetails.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return Center(
+              child: LoadingAnimationWidget.threeArchedCircle(
+                  color: whitecolor, size: 60),
+            );
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
@@ -75,7 +89,6 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
         );
       },
       child: Container(
-        height: mediaqueryheight(0.52, context),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -96,7 +109,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.tour, color: blackcolor),
+                const Icon(Icons.tour, color: black54),
                 const SizedBox(width: 5),
                 mytext(
                   _checkNullOrEmpty(item['packagename']),
@@ -114,7 +127,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(Icons.place, color: blackcolor),
+                  const Icon(Icons.place, color: black54),
                   const SizedBox(width: 5),
                   mytext(_checkNullOrEmpty(item['placenames']),
                       fontFamily: sedan,
@@ -124,6 +137,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                 ],
               ),
             ),
+            const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.only(left: 30),
               child: Column(
@@ -138,10 +152,11 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                 ],
               ),
             ),
+            const SizedBox(height: 8),
             Row(
               children: [
                 const SizedBox(width: 30),
-                const Icon(Icons.sunny, color: blackcolor),
+                const Icon(Icons.sunny, color: black54),
                 mytext(
                   _checkNullOrEmpty(item['days']),
                   fontFamily: sedan,
@@ -149,7 +164,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                   color: colorteal,
                 ),
                 const SizedBox(width: 30),
-                const Icon(Icons.nights_stay, color: blackcolor),
+                const Icon(Icons.nights_stay, color: black54),
                 mytext(
                   _checkNullOrEmpty(item['night']),
                   fontFamily: sedan,
@@ -157,7 +172,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                   color: colorteal,
                 ),
                 const SizedBox(width: 20),
-                const Icon(Icons.attach_money, color: blackcolor),
+                const Icon(Icons.attach_money, color: black54),
                 mytext(
                   item['packageamount'],
                   fontFamily: sedan,
@@ -166,6 +181,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 8),
           ],
         ),
       ),

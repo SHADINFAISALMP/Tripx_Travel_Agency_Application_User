@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tripx_user_application/screens/recent_searches/recent_search_flight.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -34,14 +33,14 @@ class Headiconname extends StatelessWidget {
         ),
         IconButton(
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const FlightRecent()));
+              // Navigator.of(context).push(MaterialPageRoute(
+              //     builder: (context) => const FlightRecent()));
             },
             icon: const Icon(
               Icons.find_replace_outlined,
               size: 35,
               color: whitecolor,
-            ))
+            )),
       ],
     );
   }

@@ -64,35 +64,33 @@ class FlightInfoScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 70,
-                                height: 40,
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/flightradar1.jpg'),
-                                        fit: BoxFit.cover)),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Text(
-                                "Flight ${routes.operatorIata}${routes.flightnumber}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall!
-                                    .copyWith(
-                                        color: orangecolor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 22),
-                              )
-                            ],
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: 70,
+                              height: 40,
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/flightradar1.jpg'),
+                                      fit: BoxFit.cover)),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              "Flight ${routes.operatorIata}${routes.flightnumber}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .copyWith(
+                                      color: orangecolor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22),
+                            )
+                          ],
                         ),
                       ),
                       const SizedBox(
@@ -120,118 +118,114 @@ class FlightInfoScreen extends StatelessWidget {
                       const SizedBox(
                         height: 16,
                       ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    (routes.routes != null)
-                                        ? '${routes.routes!.fromAirport}'
-                                        : '',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium
-                                        ?.copyWith(
-                                            color: colorteal,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25),
-                                  ),
-                                  Text(
-                                    (routes.airportInfofrom != null)
-                                        ? '${routes.airportInfofrom.municipality}'
-                                        : '',
-                                    style: const TextStyle(color: black54),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                height: 35,
-                                width: 70,
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/flightradar1.jpg'),
-                                        fit: BoxFit.cover)),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    (routes.routes != null)
-                                        ? '${routes.routes!.toAirport}'
-                                        : '',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium
-                                        ?.copyWith(
-                                            color: colorteal,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25),
-                                  ),
-                                  Text(
-                                    (routes.airportInfoto != null)
-                                        ? '${routes.airportInfoto.municipality}'
-                                        : '',
-                                    style: const TextStyle(color: black54),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  (routes.routes != null)
+                                      ? '${routes.routes!.fromAirport}'
+                                      : '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(
+                                          color: colorteal,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25),
+                                ),
+                                Text(
+                                  (routes.airportInfofrom != null)
+                                      ? '${routes.airportInfofrom.municipality}'
+                                      : '',
+                                  style: const TextStyle(color: black54),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              height: 35,
+                              width: 70,
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/flightradar1.jpg'),
+                                      fit: BoxFit.cover)),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  (routes.routes != null)
+                                      ? '${routes.routes!.toAirport}'
+                                      : '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(
+                                          color: colorteal,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25),
+                                ),
+                                Text(
+                                  (routes.airportInfoto != null)
+                                      ? '${routes.airportInfoto.municipality}'
+                                      : '',
+                                  style: const TextStyle(color: black54),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            children: <Widget>[
-                              displayinfo(
-                                  context,
-                                  (routes.airCraftInfo != null)
-                                      ? routes.airCraftInfo.model
-                                      : '',
-                                  'Model'),
-                              displayinfo(
-                                  context,
-                                  (routes.airCraftInfo != null)
-                                      ? routes.airCraftInfo.owner
-                                      : '',
-                                  'Owner'),
-                              displayinfo(
-                                  context,
-                                  (routes != null)
-                                      ? '${routes.operatorIata}${routes.flightnumber}'
-                                      : '' ,'Flight'),
-                              displayinfo(
-                                  context,
-                                  (routes != null) ? routes.state.callsign : '',
-                                  'Callsign'),
-                              displayinfo(
-                                  context,
-                                  (routes != null) ? routes.state.velocity : '',
-                                  'velocity'),
-                              displayinfo(
-                                  context,
-                                  (routes != null)
-                                      ? routes.state.geoAltituce
-                                      : '',
-                                  'Geom. Altitude (M)'),
-                              displayinfo(
-                                  context,
-                                  (routes != null)
-                                      ? routes.state.baroAltitude
-                                      : '',
-                                  'borem. Altitude (M)')
-                            ],
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          children: <Widget>[
+                            displayinfo(
+                                context,
+                                (routes.airCraftInfo != null)
+                                    ? routes.airCraftInfo.model
+                                    : '',
+                                'Model'),
+                            displayinfo(
+                                context,
+                                (routes.airCraftInfo != null)
+                                    ? routes.airCraftInfo.owner
+                                    : '',
+                                'Owner'),
+                            displayinfo(
+                                context,
+                                (routes != null)
+                                    ? '${routes.operatorIata}${routes.flightnumber}'
+                                    : '' ,'Flight'),
+                            displayinfo(
+                                context,
+                                (routes != null) ? routes.state.callsign : '',
+                                'Callsign'),
+                            displayinfo(
+                                context,
+                                (routes != null) ? routes.state.velocity : '',
+                                'velocity'),
+                            displayinfo(
+                                context,
+                                (routes != null)
+                                    ? routes.state.geoAltituce
+                                    : '',
+                                'Geom. Altitude (M)'),
+                            displayinfo(
+                                context,
+                                (routes != null)
+                                    ? routes.state.baroAltitude
+                                    : '',
+                                'borem. Altitude (M)')
+                          ],
                         ),
                       )
                     ],
@@ -248,6 +242,7 @@ class FlightInfoScreen extends StatelessWidget {
   }
 
   Container displayinfo(BuildContext context, dynamic info, String title) {
+    // ignore: avoid_unnecessary_containers
     return Container(
       child: Row(
         children: <Widget>[

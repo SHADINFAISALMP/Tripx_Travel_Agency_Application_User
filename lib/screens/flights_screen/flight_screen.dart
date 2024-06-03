@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tripx_user_application/screens/flights_screen/available_flights/available_flights.dart';
 import 'package:tripx_user_application/screens/flights_screen/heading_icon.dart';
 import 'package:tripx_user_application/utils/colors.dart';
@@ -109,7 +112,11 @@ class _FlightScreenState extends State<FlightScreen>
                       ),
                     ),
                     if (_loading)
-                      const CircularProgressIndicator()
+                      Center(
+                          child: LoadingAnimationWidget.threeArchedCircle(
+                        color: colorteal,
+                        size: 60,
+                      ))
                     else
                       Expanded(
                         child: ListView.builder(
@@ -154,6 +161,14 @@ class _FlightScreenState extends State<FlightScreen>
 
   Widget _buildDatePicker(String label, TextEditingController controller,
       Function(DateTime?) onChanged) {
+    ThemeData themeData = ThemeData(
+      primaryColor: colorteal,
+      colorScheme: const ColorScheme.light(
+        primary: colorteal,
+        onPrimary: whitecolor,
+        onSurface: colorteal,
+      ),
+    );
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.85,
       child: TextFormField(
@@ -177,10 +192,25 @@ class _FlightScreenState extends State<FlightScreen>
             initialDate: DateTime.now(),
             firstDate: DateTime(2000),
             lastDate: DateTime(2100),
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: themeData.copyWith(
+                  colorScheme: const ColorScheme.light(
+                    primary: colorteal,
+                    onPrimary: whitecolor,
+                    onSurface: colorteal,
+                  ),
+                  buttonTheme: const ButtonThemeData(
+                    textTheme: ButtonTextTheme.primary,
+                  ),
+                  dialogBackgroundColor: whitecolor,
+                ),
+                child: child!,
+              );
+            },
           );
           if (picked != null) {
             onChanged(picked);
-            // Update the text field with the selected date
             setState(() {
               _departureDate = picked;
             });
@@ -197,12 +227,9 @@ class _FlightScreenState extends State<FlightScreen>
       );
       return;
     }
-
-    // Convert city codes to uppercase
     String departureCity = _departureCity.toUpperCase();
     String arrivalCity = _arrivalCity!.toUpperCase();
 
-    // Validate the format of the city codes
     if (!RegExp(r'^[A-Z]{3}$').hasMatch(departureCity) ||
         !RegExp(r'^[A-Z]{3}$').hasMatch(arrivalCity)) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -224,8 +251,8 @@ class _FlightScreenState extends State<FlightScreen>
       );
 
       // Print the status code and response body for debugging
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      debugPrint('Response status: ${response.statusCode}');
+      debugPrint('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -233,6 +260,7 @@ class _FlightScreenState extends State<FlightScreen>
           setState(() {
             _loading = false;
           });
+
           //    BlocProvider.of<RecentSearchBloc>(context).add(AddSearchEvent(
           //   departureCity,
           //   arrivalCity,

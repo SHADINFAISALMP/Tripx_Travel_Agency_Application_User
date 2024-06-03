@@ -36,7 +36,7 @@ class GoogleBloc extends Bloc<GoogleEvent, GoogleState> {
       }
     } catch (e) {
       emit(GoogleFailureState());
-      print("error occured while google sign in $e");
+      debugPrint("error occured while google sign in $e");
     }
   }
 }

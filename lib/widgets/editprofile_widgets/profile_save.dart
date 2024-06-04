@@ -1,7 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tripx_user_application/bloc/profile/profile_bloc.dart';
-import 'package:tripx_user_application/screens/log_in_screen/log_in.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -22,25 +24,60 @@ class Editprofilesavebutton extends StatelessWidget {
   final TextEditingController _emailController;
   final TextEditingController _phoneController;
   final TextEditingController _passwordController;
-  
 
   @override
   Widget build(BuildContext context) {
-
     void updateUserDetails() async {
-    String newName = _nameController.text;
-    String newEmail = _emailController.text;
-    String newPhonenumber = _phoneController.text;
-    String newPassword = _passwordController.text;
+      try {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Center(
+              child: LoadingAnimationWidget.threeArchedCircle(
+                color: colorteal,
+                size: 60,
+              ),
+            );
+          },
+        );
 
-    context.read<ProfileBloc>().add(UpdateProfile(
-        newName: newName,
-        newEmail: newEmail,
-        newPhonenumber: newPhonenumber,
-        newPassword: newPassword));
-    debugPrint("User Email: $userEmail");
-   
-  }
+        String newName = _nameController.text;
+        String newEmail = _emailController.text;
+
+        String newPhonenumber = _phoneController.text;
+        String newPassword = _passwordController.text;
+
+        if (!isValidEmail(newEmail)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Invalid email format')),
+          );
+          return;
+        }
+
+        final Map<String, dynamic> updatedData = {
+          'name': newName,
+          'email': newEmail,
+          'phonenumber': newPhonenumber,
+          'password': newPassword,
+        };
+
+        final userDoc =
+            FirebaseFirestore.instance.collection('userdetails').doc(newEmail);
+        await userDoc.update(updatedData);
+
+        Navigator.pop(context); // Dismiss the loading dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile updated successfully')),
+        );
+        Navigator.pop(context); // Close the edit profile screen
+      } catch (e) {
+        Navigator.pop(context); // Dismiss the loading dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update profile: $e')),
+        );
+      }
+    }
+
     return GestureDetector(
       onTap: () {
         updateUserDetails();

@@ -25,6 +25,13 @@ class _ProfileState extends State<Profile> {
     _userprofile = UserProfileService.getUserProfileData(userEmail!);
   }
 
+  String _checkNullOrEmpty(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Not Available';
+    }
+    return value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +51,11 @@ class _ProfileState extends State<Profile> {
               } else {
                 final userProfile =
                     snapshot.data!.data() as Map<String, dynamic>;
+                String name = userProfile['name'];
+                String email = userProfile['email'];
+                String phoneNumber = userProfile['phonenumber'];
+                String password = userProfile['password'];
+                String imagePath = userProfile['imagepath'];
                 return Center(
                   child: Column(
                     children: [
@@ -90,13 +102,12 @@ class _ProfileState extends State<Profile> {
                                 top: 30,
                               ),
                               child: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage("${userProfile['imagepath']}"),
+                                backgroundImage: NetworkImage(imagePath),
                                 radius: 70,
                               ),
                             ),
                             mytext(
-                              userProfile['name'],
+                              name,
                               fontFamily: sedan,
                               fontSize: mediaqueryheight(0.03, context),
                               color: colorteal,
@@ -109,7 +120,7 @@ class _ProfileState extends State<Profile> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  mytext("Gmail : ${userProfile['email']}",
+                                  mytext("Gmail : $email",
                                       overflow: TextOverflow.ellipsis,
                                       fontFamily: sedan,
                                       fontSize: 20,
@@ -118,7 +129,7 @@ class _ProfileState extends State<Profile> {
                                     height: mediaqueryheight(0.01, context),
                                   ),
                                   mytext(
-                                      "Ph No : ${userProfile['phonenumber']}",
+                                      _checkNullOrEmpty("Ph No : $phoneNumber"),
                                       overflow: TextOverflow.ellipsis,
                                       fontFamily: sedan,
                                       fontSize: 20,
@@ -138,7 +149,13 @@ class _ProfileState extends State<Profile> {
                             Padding(
                               padding: EdgeInsets.only(
                                   left: mediaquerywidht(0.06, context)),
-                              child: const Profile_settings(),
+                              child: Profile_settings(
+                                name: name,
+                                email: email,
+                                phoneNumber: phoneNumber,
+                                password: password,
+                                imagePath: imagePath,
+                              ),
                             )
                           ],
                         ),

@@ -140,7 +140,7 @@ flutter:
     - assets/images/ani.gif
     - assets/images/time.png
     - assets/images/time2-removebg-preview.png
-
+    - assets/images/planes (1).png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -13,7 +13,7 @@ class AboutUs extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop(_createRoute);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_ios,
               color: whitecolor,
             )),
@@ -51,7 +51,7 @@ class AboutUs extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -71,7 +71,7 @@ class AboutUs extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -91,7 +91,7 @@ class AboutUs extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -111,7 +111,7 @@ class AboutUs extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -143,7 +143,7 @@ class AboutUs extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),

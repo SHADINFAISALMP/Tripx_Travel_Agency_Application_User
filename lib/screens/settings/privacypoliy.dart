@@ -13,7 +13,7 @@ class PrivacyPolicy extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: whitecolor,
           ),
@@ -83,7 +83,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -115,7 +115,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -228,7 +228,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -301,7 +301,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -333,7 +333,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -374,7 +374,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -434,7 +434,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -457,7 +457,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -480,7 +480,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -544,7 +544,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -567,7 +567,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -599,7 +599,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -631,7 +631,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),
@@ -672,7 +672,7 @@ class PrivacyPolicy extends StatelessWidget {
                 color: colorteal,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1.5,
               color: colorteal,
             ),

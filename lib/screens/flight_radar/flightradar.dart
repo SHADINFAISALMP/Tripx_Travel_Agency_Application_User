@@ -53,7 +53,8 @@ class _SearchpageState extends State<Flightradar> {
     setCustomMapPin();
     _timer = Timer.periodic(const Duration(seconds: 15), (timer) async {
       try {
-        _allStates = await FlightService().getAllStateBounds(_sw!, _ne!,context);
+        _allStates =
+            await FlightService().getAllStateBounds(_sw!, _ne!, context);
         setState(() {
           createMarker();
         });
@@ -73,10 +74,9 @@ class _SearchpageState extends State<Flightradar> {
 
   void handleselected() async {
     try {
-      _allStates = await FlightService().getAllStateBounds(_sw!, _ne!,context);
+      _allStates = await FlightService().getAllStateBounds(_sw!, _ne!, context);
       doSetState();
     } catch (e) {
-      // Handle the error by showing an alert or a message
       debugPrint("Error fetching data: $e");
     }
   }
@@ -124,10 +124,9 @@ class _SearchpageState extends State<Flightradar> {
   void _onmapCreated(GoogleMapController controller) async {
     _mapController = controller;
     try {
-      _allStates = await FlightService().getAllStateBounds(_sw!, _ne!,context);
+      _allStates = await FlightService().getAllStateBounds(_sw!, _ne!, context);
       doSetState();
     } catch (e) {
-      // Handle the error by showing an alert or a message
       debugPrint("Error fetching data: $e");
     }
   }

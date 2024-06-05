@@ -12,13 +12,13 @@ class Support extends StatelessWidget {
     return Scaffold(
       backgroundColor: whitecolor,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
+        preferredSize: const Size.fromHeight(70),
         child: AppBar(
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios_new_outlined,
                 color: whitecolor,
               )),
@@ -52,14 +52,14 @@ class Support extends StatelessWidget {
                 endIndent: mediaquerywidht(0.35, context),
                 color: colorteal,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.phone_in_talk_outlined,
                   color: colorteal,
                   size: 30,
                 ),
-                title: Text(
+                title: const Text(
                   "Call Support",
                   style: TextStyle(
                       color: colorteal,
@@ -83,12 +83,12 @@ class Support extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.email_outlined,
                   color: colorteal,
                   size: 30,
                 ),
-                title: Text(
+                title: const Text(
                   "Email Support",
                   style: TextStyle(
                       color: colorteal,
@@ -113,12 +113,12 @@ class Support extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.sms_outlined,
                   color: colorteal,
                   size: 30,
                 ),
-                title: Text(
+                title: const Text(
                   "SMS Support",
                   style: TextStyle(
                       color: colorteal,
@@ -142,12 +142,12 @@ class Support extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.location_on_outlined,
                   color: colorteal,
                   size: 30,
                 ),
-                title: Text(
+                title: const Text(
                   "Office Location",
                   style: TextStyle(
                       color: colorteal,
@@ -173,7 +173,7 @@ class Support extends StatelessWidget {
                   }
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "Frequently Asked Questions",
                 style: TextStyle(

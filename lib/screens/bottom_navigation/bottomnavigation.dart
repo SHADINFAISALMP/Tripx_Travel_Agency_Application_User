@@ -52,6 +52,17 @@ class _BottomnavigationState extends State<Bottomnavigation> {
                 ),
                 BottomBarItem(
                   inActiveItem: Icon(
+                    Icons.chat,
+                    color: whitecolor,
+                  ),
+                  activeItem: Icon(
+                    Icons.chat,
+                    color: colorteal,
+                  ),
+                  itemLabel: 'CHAT',
+                ),
+                BottomBarItem(
+                  inActiveItem: Icon(
                     Icons.flight,
                     color: whitecolor,
                   ),
@@ -71,6 +82,17 @@ class _BottomnavigationState extends State<Bottomnavigation> {
                     color: colorteal,
                   ),
                   itemLabel: 'MY BOOKINGS',
+                ),
+                BottomBarItem(
+                  inActiveItem: Icon(
+                    Icons.favorite,
+                    color: whitecolor,
+                  ),
+                  activeItem: Icon(
+                    Icons.favorite,
+                    color: colorteal,
+                  ),
+                  itemLabel: 'WISHLIST',
                 ),
               ],
               notchBottomBarController: _pageController,

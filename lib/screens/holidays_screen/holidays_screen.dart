@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:tripx_user_application/screens/favorites/favorite_manager.dart';
+import 'package:tripx_user_application/bloc/favorite/favorite_cubit.dart';
+import 'package:tripx_user_application/bloc/favorite/favorite_state.dart';
 import 'package:tripx_user_application/screens/package_details/package_details.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
@@ -25,18 +27,18 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
             },
             icon: const Icon(
               Icons.arrow_back_ios_new,
-              color: colorteal,
+              color: whitecolor,
             ),
           ),
-          backgroundColor: whitecolor,
+          backgroundColor: colorteal,
           centerTitle: true,
           title: mytext("HOLIDAYS PACKAGES",
               fontFamily: bodoni,
               fontSize: 22,
-              color: colorteal,
+              color: whitecolor,
               fontWeight: FontWeight.bold),
         ),
-        backgroundColor: colorteal,
+        backgroundColor: whitecolor,
         body: SafeArea(
           child: buildListView(),
         ));
@@ -56,7 +58,9 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
-              child: Text('No Packages available',),
+              child: Text(
+                'No Packages available',
+              ),
             );
           }
           final querySnapshot = snapshot.data!;
@@ -77,7 +81,6 @@ class Homescreen_list_items extends StatefulWidget {
   final BuildContext context;
   final String imagePath;
   final QueryDocumentSnapshot<Object?> item;
-
   const Homescreen_list_items({
     super.key,
     required this.context,
@@ -89,70 +92,9 @@ class Homescreen_list_items extends StatefulWidget {
   State<Homescreen_list_items> createState() => _Homescreen_list_itemsState();
 }
 
-class _Homescreen_list_itemsState extends State<Homescreen_list_items>
-    with SingleTickerProviderStateMixin {
-  bool isFavorite = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkIfFavorite();
-  }
-
-  Future<void> _checkIfFavorite() async {
-    bool favoriteStatus = await FavoriteManager.isFavorite(widget.item.id);
-    setState(() {
-      isFavorite = favoriteStatus;
-    });
-  }
-
-  Future<void> toggleFavorite() async {
-    if (isFavorite) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.orange,
-          content: Center(
-            child: Text(
-              'REMOVED FROM FAVORITES',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Bodoni',
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.orange,
-          content: Center(
-            child: Text(
-              'ADDED TO FAVORITES',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Bodoni',
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-    await FavoriteManager.toggleFavorite(widget.item.id, {
-      'imagePath': widget.imagePath,
-      'packagename': widget.item['packagename'],
-      'placenames': widget.item['placenames'],
-      'packagediscription': widget.item['packagediscription'],
-      'days': widget.item['days'],
-      'night': widget.item['night'],
-      'packageamount': widget.item['packageamount'],
-    });
-    setState(() {
-      isFavorite = !isFavorite;
-    });
-  }
+// ignore: camel_case_types
+class _Homescreen_list_itemsState extends State<Homescreen_list_items> {
+  late HomescreenListItemsCubit _cubit;
 
   String _checkNullOrEmpty(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -161,135 +103,196 @@ class _Homescreen_list_itemsState extends State<Homescreen_list_items>
     return value;
   }
 
+  bool isFavorite = false;
+  @override
+  void initState() {
+    super.initState();
+    _cubit = HomescreenListItemsCubit();
+    _checkIfFavorite();
+  }
+
+  Future<void> _checkIfFavorite() async {
+    if (mounted) {
+      _cubit.checkIfFavorite(widget.item.id);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PackageDetails(
-              itemslists: widget.item,
+    return BlocProvider(
+      create: (context) => _cubit,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PackageDetails(
+                itemslists: widget.item,
+              ),
             ),
-          ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-        decoration: BoxDecoration(
-          border: Border.all(color: orangecolor),
-          borderRadius: BorderRadius.circular(15),
-          color: whitecolor,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Stack(
+          );
+        },
+        child: BlocBuilder<HomescreenListItemsCubit, HomescreenListItemsState>(
+          builder: (context, state) {
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+              decoration: BoxDecoration(
+                border: Border.all(color: orangecolor),
+                borderRadius: BorderRadius.circular(15),
+                color: colorteal,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Image.network(
-                    widget.imagePath,
-                    height: 260,
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: GestureDetector(
-                      onTap: toggleFavorite,
-                      child: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: Colors.red,
-                        size: 30,
-                      ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Stack(
+                      children: [
+                        Image.network(
+                          widget.imagePath,
+                          height: 260,
+                          fit: BoxFit.cover,
+                        ),
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: IconButton(
+                            icon: Icon(
+                              state.isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border_outlined,
+                              color: Colors.red,
+                              size: 30,
+                            ),
+                            onPressed: () async {
+                              await context
+                                  .read<HomescreenListItemsCubit>()
+                                  .toggleFavorite(widget.item.id, {
+                                'imagePath': widget.imagePath,
+                                'packagename': widget.item['packagename'],
+                                'placenames': widget.item['placenames'],
+                                'packagediscription':
+                                    widget.item['packagediscription'],
+                                'days': widget.item['days'],
+                                'night': widget.item['night'],
+                                'packageamount': widget.item['packageamount'],
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.orange,
+                                  content: Center(
+                                    child: Text(
+                                      state.isFavorite
+                                          ? 'REMOVED FROM FAVORITES'
+                                          : 'ADDED TO FAVORITES',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Bodoni',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.tour, color: colorteal),
-                const SizedBox(width: 5),
-                mytext(
-                    _checkNullOrEmpty(widget.item['packagename']).toUpperCase(),
-                    fontFamily: bodoni,
-                    fontSize: 25,
-                    color: colorteal,
-                    fontWeight: FontWeight.bold),
-              ],
-            ),
-            SizedBox(
-              height: mediaqueryheight(0.001, context),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Icon(Icons.place, color: colorteal),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.tour, color: whitecolor),
+                      const SizedBox(width: 5),
+                      mytext(
+                        _checkNullOrEmpty(widget.item['packagename']),
+                        fontFamily: sedan,
+                        fontSize: 25,
+                        color: whitecolor,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: mediaqueryheight(0.001, context),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.place, color: whitecolor),
+                        const SizedBox(width: 5),
+                        mytext(_checkNullOrEmpty(widget.item['placenames']),
+                            fontFamily: sedan,
+                            fontSize: 18,
+                            color: whitecolor,
+                            overflow: TextOverflow.ellipsis),
+                      ],
+                    ),
+                  ),
                   const SizedBox(width: 5),
-                  mytext(_checkNullOrEmpty(widget.item['placenames']),
-                      fontFamily: sedan,
-                      fontSize: 18,
-                      color: colorteal,
-                      overflow: TextOverflow.ellipsis),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 5),
+                        mytext(
+                            _checkNullOrEmpty(
+                                widget.item['packagediscription']),
+                            fontFamily: sedan,
+                            fontSize: 18,
+                            color: whitecolor,
+                            overflow: TextOverflow.ellipsis),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: mediaqueryheight(0.01, context),
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(width: 30),
+                      const Icon(Icons.sunny, color: whitecolor),
+                      mytext(
+                        _checkNullOrEmpty(widget.item['days']),
+                        fontFamily: sedan,
+                        fontSize: 18,
+                        color: whitecolor,
+                      ),
+                      const SizedBox(width: 20),
+                      const Icon(Icons.nights_stay, color: whitecolor),
+                      mytext(
+                        _checkNullOrEmpty(widget.item['night']),
+                        fontFamily: sedan,
+                        fontSize: 18,
+                        color: whitecolor,
+                      ),
+                      const SizedBox(width: 20),
+                      const Icon(Icons.attach_money, color: whitecolor),
+                      mytext(
+                        widget.item['packageamount'],
+                        fontFamily: sedan,
+                        fontSize: 18,
+                        color: whitecolor,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
                 ],
               ),
-            ),
-            const SizedBox(width: 5),
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(width: 5),
-                  mytext(_checkNullOrEmpty(widget.item['packagediscription']),
-                      fontFamily: sedan,
-                      fontSize: 18,
-                      color: colorteal,
-                      overflow: TextOverflow.ellipsis),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: mediaqueryheight(0.01, context),
-            ),
-            Row(
-              children: [
-                const SizedBox(width: 30),
-                const Icon(Icons.sunny, color: colorteal),
-                mytext(
-                  _checkNullOrEmpty(widget.item['days']),
-                  fontFamily: bodoni,
-                  fontSize: 18,
-                  color: colorteal,
-                ),
-                const SizedBox(width: 20),
-                const Icon(Icons.nights_stay, color: colorteal),
-                mytext(
-                  _checkNullOrEmpty(widget.item['night']),
-                  fontFamily: bodoni,
-                  fontSize: 18,
-                  color: colorteal,
-                ),
-                const SizedBox(width: 20),
-                const Icon(Icons.attach_money, color: colorteal),
-                mytext(
-                  widget.item['packageamount'],
-                  fontFamily: bodoni,
-                  fontSize: 18,
-                  color: colorteal,
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-          ],
+            );
+          },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _cubit.close();
+    super.dispose();
   }
 }

@@ -12,14 +12,14 @@ import 'package:tripx_user_application/utils/mediaquery.dart';
 class FlightInfoScreen extends StatelessWidget {
   final AllState info;
 
-  const FlightInfoScreen({super.key, required this.info});
+  const FlightInfoScreen({Key? key, required this.info}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => FlightRoutesBloc()
+      create: (_) => FlightRoutesBloc(context)
         ..add(
-          FlightRoutesStated(info.callsign!, info.icao24!),
+          FlightRoutesStarted(info.callsign!, info.icao24!),
         ),
       child: Scaffold(
         backgroundColor: whitecolor,
@@ -31,8 +31,8 @@ class FlightInfoScreen extends StatelessWidget {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (State is FlightRoutesLoaded) {
-                  FlightRoutes routes = state.routes;
+                } else if (state is FlightRoutesLoaded) {
+                  FlightRoutes routes = state.route;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -204,7 +204,8 @@ class FlightInfoScreen extends StatelessWidget {
                                 context,
                                 (routes != null)
                                     ? '${routes.operatorIata}${routes.flightnumber}'
-                                    : '' ,'Flight'),
+                                    : '',
+                                'Flight'),
                             displayinfo(
                                 context,
                                 (routes != null) ? routes.state.callsign : '',

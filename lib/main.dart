@@ -13,6 +13,7 @@ import 'package:tripx_user_application/bloc/profile/profile_bloc.dart';
 import 'package:tripx_user_application/bloc/signup/signup_bloc.dart';
 import 'package:tripx_user_application/bloc/signupimage/profileimage_bloc.dart';
 import 'package:tripx_user_application/firebase_options.dart';
+import 'package:tripx_user_application/screens/flight_radar/flight_routes_bloc.dart';
 
 import 'package:tripx_user_application/screens/splash/splash_screen.dart';
 
@@ -21,6 +22,9 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MultiBlocProvider(
     providers: [
+      BlocProvider(
+        create: (context) => FlightRoutesBloc(context),
+      ),
       BlocProvider(
         create: (context) => SignupBloc(),
       ),

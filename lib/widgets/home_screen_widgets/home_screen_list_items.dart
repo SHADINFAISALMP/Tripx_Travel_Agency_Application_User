@@ -46,51 +46,55 @@ class _Homescreen_list_itemsState extends State<Homescreen_list_items> {
   }
 
   Future<void> toggleFavorite() async {
-    if (isFavorite) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.orange,
-          content: Center(
-            child: Text(
-              'REMOVED FROM FAVORITES',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Bodoni',
+    if (mounted) {
+      if (isFavorite) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.orange,
+            content: Center(
+              child: Text(
+                'REMOVED FROM FAVORITES',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Bodoni',
+                ),
               ),
             ),
           ),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.orange,
-          content: Center(
-            child: Text(
-              'ADDED TO FAVORITES',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Bodoni',
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.orange,
+            content: Center(
+              child: Text(
+                'ADDED TO FAVORITES',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Bodoni',
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
+      }
+      await FavoriteManager.toggleFavorite(widget.item.id, {
+        'imagePath': widget.imagePath,
+        'packagename': widget.item['packagename'],
+        'placenames': widget.item['placenames'],
+        'packagediscription': widget.item['packagediscription'],
+        'days': widget.item['days'],
+        'night': widget.item['night'],
+        'packageamount': widget.item['packageamount'],
+      });
+      if (mounted) {
+        setState(() {
+          isFavorite = !isFavorite;
+        });
+      }
     }
-    await FavoriteManager.toggleFavorite(widget.item.id, {
-      'imagePath': widget.imagePath,
-      'packagename': widget.item['packagename'],
-      'placenames': widget.item['placenames'],
-      'packagediscription': widget.item['packagediscription'],
-      'days': widget.item['days'],
-      'night': widget.item['night'],
-      'packageamount': widget.item['packageamount'],
-    });
-    setState(() {
-      isFavorite = !isFavorite;
-    });
   }
 
   @override

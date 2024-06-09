@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tripx_user_application/models/flightradar/all_state.dart';
 import 'package:tripx_user_application/screens/flight_radar/flight_info.dart';
 import 'package:tripx_user_application/api_services/flight_service.dart';
+import 'package:tripx_user_application/screens/flight_radar/flight_routes_bloc.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
@@ -25,7 +29,7 @@ class _SearchpageState extends State<Flightradar> {
   final Set<Marker> _markers = {};
   int _numberofFlights = 0;
   Timer? _timer;
-
+  late FlightRoutesBloc flightRoutesBloc;
   List<BoundingCountryBox> boundlist = [
     BoundingCountryBox('USA', 'United States', const LatLng(24.9493, -125.0011),
         const LatLng(49.5904, -66.9326)),
@@ -50,6 +54,7 @@ class _SearchpageState extends State<Flightradar> {
   @override
   void initState() {
     super.initState();
+    flightRoutesBloc = FlightRoutesBloc(context);
     setCustomMapPin();
     _timer = Timer.periodic(const Duration(seconds: 15), (timer) async {
       try {
@@ -66,10 +71,21 @@ class _SearchpageState extends State<Flightradar> {
   }
 
   void setCustomMapPin() async {
-    // ignore: deprecated_member_use
-    _localationpin = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 2),
-        'assets/images/plane.png');
+    final Uint8List imageData =
+        await getBytesFromAsset('assets/images/yellow.png', 100);
+    _localationpin = BitmapDescriptor.fromBytes(imageData);
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    Codec codec = await instantiateImageCodec(
+      data.buffer.asUint8List(),
+      targetWidth: width,
+    );
+    FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
   }
 
   void handleselected() async {
@@ -109,11 +125,11 @@ class _SearchpageState extends State<Flightradar> {
                 'Origin country: ${state.originCountry}\nVelocity: ${state.velocity}\nGeom. alt: ${state.geoAltituce}\nBarom. alt: ${state.baroAltitude}',
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => FlightInfoScreen(
-                            info: state,
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FlightInfoScreen(info: state),
+                ),
+              );
             },
           ),
         ));
@@ -290,6 +306,7 @@ class _SearchpageState extends State<Flightradar> {
   @override
   void dispose() {
     _timer?.cancel();
+    flightRoutesBloc.close(); // Close the bloc when disposing the widget
     super.dispose();
   }
 }

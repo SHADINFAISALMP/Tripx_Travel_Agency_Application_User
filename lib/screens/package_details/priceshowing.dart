@@ -38,7 +38,6 @@ class PriceShowing extends StatefulWidget {
 }
 
 class _PriceShowingState extends State<PriceShowing> {
-  
   void openCheckout(int grandtotal) {
     var options = {
       'key': 'rzp_test_9m06FqDA5cAjgM',
@@ -66,49 +65,49 @@ class _PriceShowingState extends State<PriceShowing> {
       children: [
         UsableContainer(
           text: 'PACKAGE COST',
-          text2: '₹ ${widget.widget.itemslists['packageamount']}',
+          text2: '₹ ${widget.widget.itemslists['packageamount']}/-',
         ),
         SizedBox(
           height: mediaqueryheight(0.03, context),
         ),
         UsableContainer(
           text: '${widget.numberofAdults} PERSON',
-          text2: '₹ ${widget.totaladultcost}',
+          text2: '₹ ${widget.totaladultcost}/-',
         ),
         SizedBox(
           height: mediaqueryheight(0.03, context),
         ),
         UsableContainer(
           text: '${widget.numberofrooms} HOTEL NIGHT',
-          text2: '₹ ${widget.totalhotelcost}',
+          text2: '₹ ${widget.totalhotelcost}/-',
         ),
         SizedBox(
           height: mediaqueryheight(0.03, context),
         ),
         UsableContainer(
-          text: '${widget.numberofChildrens} CHILD',
-          text2: '₹ ${widget.totalchildcost}',
+          text: '${widget.numberofChildrens} CHILDREN',
+          text2: '₹ ${widget.totalchildcost}/-',
         ),
         SizedBox(
           height: mediaqueryheight(0.03, context),
         ),
         UsableContainer(
           text: 'COMPANY CHARGES',
-          text2: '₹ ${widget.companycharge}',
+          text2: '₹ ${widget.companycharge}/-',
         ),
         SizedBox(
           height: mediaqueryheight(0.03, context),
         ),
         UsableContainer(
           text: 'TOTAL AMOUNT',
-          text2: '₹ ${widget.grandtotal}',
+          text2: '₹ ${widget.grandtotal}/-',
         ),
         SizedBox(
           height: mediaqueryheight(0.03, context),
         ),
         UsableContainer(
           text: 'GRAND TOTAL',
-          text2: '₹ ${widget.grandtotal}',
+          text2: '₹ ${widget.grandtotal}/-',
         ),
         SizedBox(
           height: mediaqueryheight(0.03, context),
@@ -116,7 +115,7 @@ class _PriceShowingState extends State<PriceShowing> {
         SlideAction(
           onSubmit: () {
             openCheckout(widget.grandtotal);
-            debugPrint('Grand total: ${widget.grandtotal}');
+            debugPrint('Grand total: ${widget.grandtotal}/-');
           },
           text: "PAY AMOUNT",
           sliderButtonIcon: const Icon(Icons.chevron_right),

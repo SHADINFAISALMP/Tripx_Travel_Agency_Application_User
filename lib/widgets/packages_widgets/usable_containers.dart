@@ -31,21 +31,38 @@ class UsableContainer extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            text,
-            style: const TextStyle(color: colorteal),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: mediaquerywidht(0.09, context),
+              ),
+              Text(
+                text,
+                style: const TextStyle(color: colorteal),
+              ),
+            ],
           ),
-          Text(
-            text2,
-            style: const TextStyle(color: colorteal),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                text2,
+                style: const TextStyle(color: colorteal),
+              ),
+              SizedBox(
+                width: mediaquerywidht(0.12, context),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 }
+
 class Appbarcontainer extends StatelessWidget {
   const Appbarcontainer({
     super.key,
@@ -70,10 +87,11 @@ class Appbarcontainer extends StatelessWidget {
         color: whitecolor,
       ),
       child: AppBar(
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: colorteal,
-        ),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(Icons.arrow_back_ios)),
         centerTitle: true,
         title: mytext(
           'ADD PERSON',
@@ -87,6 +105,7 @@ class Appbarcontainer extends StatelessWidget {
     );
   }
 }
+
 class Appbar extends StatelessWidget {
   const Appbar({
     super.key,
@@ -95,10 +114,11 @@ class Appbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: const Icon(
-        Icons.arrow_back_ios,
-        color: colorteal,
-      ),
+      leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back_ios)),
       centerTitle: true,
       title: mytext(
         'PRICE SUMMARY',

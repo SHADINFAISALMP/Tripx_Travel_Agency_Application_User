@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:tripx_user_application/screens/favorites/favorite_manager.dart';
 import 'package:tripx_user_application/screens/package_details/package_details.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
@@ -14,13 +15,6 @@ class HolidaysScreen extends StatefulWidget {
 }
 
 class _HolidaysScreenState extends State<HolidaysScreen> {
-  String _checkNullOrEmpty(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Not Available';
-    }
-    return value;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +56,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
-              child: Text('No Packages available'),
+              child: Text('No Packages available',),
             );
           }
           final querySnapshot = snapshot.data!;
@@ -72,25 +66,118 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                 final item = querySnapshot.docs[index];
                 List<String> images =
                     (item['imagepath'] as List<dynamic>).cast<String>();
-                return buildListItem(context, images.first, item);
+                return Homescreen_list_items(
+                    context: context, imagePath: images.first, item: item);
               });
         });
   }
+}
 
-  Widget buildListItem(BuildContext context, String imagepath,
-      QueryDocumentSnapshot<Object?> item) {
+class Homescreen_list_items extends StatefulWidget {
+  final BuildContext context;
+  final String imagePath;
+  final QueryDocumentSnapshot<Object?> item;
+
+  const Homescreen_list_items({
+    super.key,
+    required this.context,
+    required this.imagePath,
+    required this.item,
+  });
+
+  @override
+  State<Homescreen_list_items> createState() => _Homescreen_list_itemsState();
+}
+
+class _Homescreen_list_itemsState extends State<Homescreen_list_items>
+    with SingleTickerProviderStateMixin {
+  bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfFavorite();
+  }
+
+  Future<void> _checkIfFavorite() async {
+    bool favoriteStatus = await FavoriteManager.isFavorite(widget.item.id);
+    setState(() {
+      isFavorite = favoriteStatus;
+    });
+  }
+
+  Future<void> toggleFavorite() async {
+    if (isFavorite) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.orange,
+          content: Center(
+            child: Text(
+              'REMOVED FROM FAVORITES',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Bodoni',
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.orange,
+          content: Center(
+            child: Text(
+              'ADDED TO FAVORITES',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Bodoni',
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    await FavoriteManager.toggleFavorite(widget.item.id, {
+      'imagePath': widget.imagePath,
+      'packagename': widget.item['packagename'],
+      'placenames': widget.item['placenames'],
+      'packagediscription': widget.item['packagediscription'],
+      'days': widget.item['days'],
+      'night': widget.item['night'],
+      'packageamount': widget.item['packageamount'],
+    });
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+  }
+
+  String _checkNullOrEmpty(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Not Available';
+    }
+    return value;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PackageDetails(itemslists: item),
+            builder: (context) => PackageDetails(
+              itemslists: widget.item,
+            ),
           ),
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         decoration: BoxDecoration(
+          border: Border.all(color: orangecolor),
           borderRadius: BorderRadius.circular(15),
           color: whitecolor,
         ),
@@ -99,24 +186,40 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: Image.network(
-                imagepath,
-                height: 260,
-                fit: BoxFit.cover,
+              child: Stack(
+                children: [
+                  Image.network(
+                    widget.imagePath,
+                    height: 260,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: toggleFavorite,
+                      child: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: Colors.red,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.tour, color: black54),
+                const Icon(Icons.tour, color: colorteal),
                 const SizedBox(width: 5),
                 mytext(
-                  _checkNullOrEmpty(item['packagename']),
-                  fontFamily: sedan,
-                  fontSize: 25,
-                  color: colorteal,
-                ),
+                    _checkNullOrEmpty(widget.item['packagename']).toUpperCase(),
+                    fontFamily: bodoni,
+                    fontSize: 25,
+                    color: colorteal,
+                    fontWeight: FontWeight.bold),
               ],
             ),
             SizedBox(
@@ -127,9 +230,9 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(Icons.place, color: black54),
+                  const Icon(Icons.place, color: colorteal),
                   const SizedBox(width: 5),
-                  mytext(_checkNullOrEmpty(item['placenames']),
+                  mytext(_checkNullOrEmpty(widget.item['placenames']),
                       fontFamily: sedan,
                       fontSize: 18,
                       color: colorteal,
@@ -137,14 +240,14 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(width: 5),
             Padding(
               padding: const EdgeInsets.only(left: 30),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(width: 5),
-                  mytext(_checkNullOrEmpty(item['packagediscription']),
+                  mytext(_checkNullOrEmpty(widget.item['packagediscription']),
                       fontFamily: sedan,
                       fontSize: 18,
                       color: colorteal,
@@ -152,36 +255,38 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(
+              height: mediaqueryheight(0.01, context),
+            ),
             Row(
               children: [
                 const SizedBox(width: 30),
-                const Icon(Icons.sunny, color: black54),
+                const Icon(Icons.sunny, color: colorteal),
                 mytext(
-                  _checkNullOrEmpty(item['days']),
-                  fontFamily: sedan,
-                  fontSize: 18,
-                  color: colorteal,
-                ),
-                const SizedBox(width: 30),
-                const Icon(Icons.nights_stay, color: black54),
-                mytext(
-                  _checkNullOrEmpty(item['night']),
-                  fontFamily: sedan,
+                  _checkNullOrEmpty(widget.item['days']),
+                  fontFamily: bodoni,
                   fontSize: 18,
                   color: colorteal,
                 ),
                 const SizedBox(width: 20),
-                const Icon(Icons.attach_money, color: black54),
+                const Icon(Icons.nights_stay, color: colorteal),
                 mytext(
-                  item['packageamount'],
-                  fontFamily: sedan,
+                  _checkNullOrEmpty(widget.item['night']),
+                  fontFamily: bodoni,
+                  fontSize: 18,
+                  color: colorteal,
+                ),
+                const SizedBox(width: 20),
+                const Icon(Icons.attach_money, color: colorteal),
+                mytext(
+                  widget.item['packageamount'],
+                  fontFamily: bodoni,
                   fontSize: 18,
                   color: colorteal,
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
           ],
         ),
       ),

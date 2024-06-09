@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tripx_user_application/screens/favorites/favorite_manager.dart';
 import 'package:tripx_user_application/screens/package_details/package_details.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 
 // ignore: camel_case_types
-class Homescreen_list_items extends StatelessWidget {
+class Homescreen_list_items extends StatefulWidget {
+  final BuildContext context;
+  final String imagePath;
+  final QueryDocumentSnapshot<Object?> item;
   const Homescreen_list_items({
     super.key,
     required this.context,
@@ -14,14 +18,79 @@ class Homescreen_list_items extends StatelessWidget {
     required this.item,
   });
 
-  final BuildContext context;
-  final String imagePath;
-  final QueryDocumentSnapshot<Object?> item;
+  @override
+  State<Homescreen_list_items> createState() => _Homescreen_list_itemsState();
+}
+
+// ignore: camel_case_types
+class _Homescreen_list_itemsState extends State<Homescreen_list_items> {
   String _checkNullOrEmpty(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Not Available';
     }
     return value;
+  }
+
+  bool isFavorite = false;
+  @override
+  void initState() {
+    super.initState();
+    _checkIfFavorite();
+  }
+
+  Future<void> _checkIfFavorite() async {
+    bool favoriteStatus = await FavoriteManager.isFavorite(widget.item.id);
+    setState(() {
+      isFavorite = favoriteStatus;
+    });
+  }
+
+  Future<void> toggleFavorite() async {
+    if (isFavorite) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.orange,
+          content: Center(
+            child: Text(
+              'REMOVED FROM FAVORITES',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Bodoni',
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.orange,
+          content: Center(
+            child: Text(
+              'ADDED TO FAVORITES',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Bodoni',
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    await FavoriteManager.toggleFavorite(widget.item.id, {
+      'imagePath': widget.imagePath,
+      'packagename': widget.item['packagename'],
+      'placenames': widget.item['placenames'],
+      'packagediscription': widget.item['packagediscription'],
+      'days': widget.item['days'],
+      'night': widget.item['night'],
+      'packageamount': widget.item['packageamount'],
+    });
+    setState(() {
+      isFavorite = !isFavorite;
+    });
   }
 
   @override
@@ -32,7 +101,7 @@ class Homescreen_list_items extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => PackageDetails(
-              itemslists: item,
+              itemslists: widget.item,
             ),
           ),
         );
@@ -40,6 +109,7 @@ class Homescreen_list_items extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         decoration: BoxDecoration(
+          border: Border.all(color: orangecolor),
           borderRadius: BorderRadius.circular(15),
           color: colorteal,
         ),
@@ -48,10 +118,26 @@ class Homescreen_list_items extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: Image.network(
-                imagePath,
-                height: 260,
-                fit: BoxFit.cover,
+              child: Stack(
+                children: [
+                  Image.network(
+                    widget.imagePath,
+                    height: 260,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: toggleFavorite,
+                      child: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: Colors.red,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 8),
@@ -61,7 +147,7 @@ class Homescreen_list_items extends StatelessWidget {
                 const Icon(Icons.tour, color: whitecolor),
                 const SizedBox(width: 5),
                 mytext(
-                  _checkNullOrEmpty(item['packagename']),
+                  _checkNullOrEmpty(widget.item['packagename']),
                   fontFamily: sedan,
                   fontSize: 25,
                   color: whitecolor,
@@ -78,7 +164,7 @@ class Homescreen_list_items extends StatelessWidget {
                 children: [
                   const Icon(Icons.place, color: whitecolor),
                   const SizedBox(width: 5),
-                  mytext(_checkNullOrEmpty(item['placenames']),
+                  mytext(_checkNullOrEmpty(widget.item['placenames']),
                       fontFamily: sedan,
                       fontSize: 18,
                       color: whitecolor,
@@ -93,7 +179,7 @@ class Homescreen_list_items extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(width: 5),
-                  mytext(_checkNullOrEmpty(item['packagediscription']),
+                  mytext(_checkNullOrEmpty(widget.item['packagediscription']),
                       fontFamily: sedan,
                       fontSize: 18,
                       color: whitecolor,
@@ -109,7 +195,7 @@ class Homescreen_list_items extends StatelessWidget {
                 const SizedBox(width: 30),
                 const Icon(Icons.sunny, color: whitecolor),
                 mytext(
-                  _checkNullOrEmpty(item['days']),
+                  _checkNullOrEmpty(widget.item['days']),
                   fontFamily: sedan,
                   fontSize: 18,
                   color: whitecolor,
@@ -117,7 +203,7 @@ class Homescreen_list_items extends StatelessWidget {
                 const SizedBox(width: 20),
                 const Icon(Icons.nights_stay, color: whitecolor),
                 mytext(
-                  _checkNullOrEmpty(item['night']),
+                  _checkNullOrEmpty(widget.item['night']),
                   fontFamily: sedan,
                   fontSize: 18,
                   color: whitecolor,
@@ -125,7 +211,7 @@ class Homescreen_list_items extends StatelessWidget {
                 const SizedBox(width: 20),
                 const Icon(Icons.attach_money, color: whitecolor),
                 mytext(
-                  item['packageamount'],
+                  widget.item['packageamount'],
                   fontFamily: sedan,
                   fontSize: 18,
                   color: whitecolor,

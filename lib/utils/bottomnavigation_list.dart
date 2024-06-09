@@ -10,5 +10,5 @@ List<Widget> pages = [
   const ChatScreen(),
   const Flightradar(),
   const Mytickets(),
-  const Favoritepage()
+   const FavoritesPage()
 ];

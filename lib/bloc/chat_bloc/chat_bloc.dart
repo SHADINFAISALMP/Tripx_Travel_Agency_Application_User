@@ -1,61 +1,41 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tripx_user_application/bloc/chat_bloc/chat_event.dart';
-import 'package:tripx_user_application/bloc/chat_bloc/chat_state.dart';
 import 'package:tripx_user_application/screens/chat_screen/chat_Service.dart';
+import 'chat_event.dart';
+import 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  final ChatService _chatService;
+  final ChatService chatService;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  late String adminId;
 
-  ChatBloc(this._chatService) : super(ChatInitial()) {
-    on<FetchAdminId>(_onFetchAdminId);
-    on<SendMessage>(_onSendMessage);
-    on<LoadMessages>(_onLoadMessages);
-  }
+  ChatBloc(this.chatService) : super(ChatInitial()) {
+    on<LoadMessages>((event, emit) async {
+      emit(ChatLoading());
+      try {
+        DocumentSnapshot adminDoc = await FirebaseFirestore.instance
+            .collection('admindetails')
+            .doc('admin')
+            .get();
+        adminId = adminDoc.id;
 
-  Future<void> _onFetchAdminId(FetchAdminId event, Emitter<ChatState> emit) async {
-    emit(ChatLoading());
-    try {
-      DocumentSnapshot adminDoc = await FirebaseFirestore.instance
-          .collection('admindetails')
-          .doc('admin')
-          .get();
-      String adminId = adminDoc.id;
-      emit(ChatLoaded(adminId));
-    } catch (e) {
-      emit(ChatError("Failed to load admin ID"));
-    }
-  }
-
-  Future<void> _onSendMessage(SendMessage event, Emitter<ChatState> emit) async {
-    try {
-      if (state is ChatLoaded) {
-        String adminId = (state as ChatLoaded).adminId;
-        await _chatService.sendMessage(adminId, event.message);
-        print('SendMessage event handled successfully');
-      }
-    } catch (e) {
-      print('Failed to handle SendMessage event: $e');
-      emit(ChatError("Failed to send message"));
-    }
-  }
-
-  Future<void> _onLoadMessages(LoadMessages event, Emitter<ChatState> emit) async {
-    try {
-      if (state is ChatLoaded) {
-        String adminId = (state as ChatLoaded).adminId;
-        String currentUserId = FirebaseAuth.instance.currentUser!.uid;
-        Stream<QuerySnapshot> messagesStream = _chatService.getMessages(adminId, currentUserId);
-
-        await emit.forEach<QuerySnapshot>(
-          messagesStream,
-          onData: (snapshot) => ChatMessagesLoaded(snapshot.docs),
-          onError: (error, stackTrace) => ChatError("Failed to load messages"),
+        await emit.forEach(
+          chatService.getMessages(adminId, firebaseAuth.currentUser!.uid),
+          onData: (snapshot) => ChatLoaded(snapshot.docs),
+          onError: (error, stackTrace) => ChatError(error.toString()),
         );
+      } catch (e) {
+        emit(ChatError(e.toString()));
       }
-    } catch (e) {
-      emit(ChatError("Failed to load messages"));
-    }
+    });
+
+    on<SendMessage>((event, emit) async {
+      try {
+        await chatService.sendMessage(adminId, event.message);
+      } catch (e) {
+        emit(ChatError(e.toString()));
+      }
+    });
   }
 }

@@ -3,8 +3,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:tripx_user_application/bloc/chat_bloc/chat_bloc.dart';
+import 'package:tripx_user_application/bloc/chat_bloc/chat_event.dart';
+import 'package:tripx_user_application/bloc/chat_bloc/chat_state.dart';
 import 'package:tripx_user_application/screens/chat_screen/chat_Service.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
@@ -21,110 +25,94 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   late String adminId;
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchAdminId();
-  }
-
-  void fetchAdminId() async {
-    DocumentSnapshot adminDoc = await FirebaseFirestore.instance
-        .collection('admindetails')
-        .doc('admin')
-        .get();
-    setState(() {
-      adminId = adminDoc.id;
-      isLoading = false;
-    });
-  }
-
-  void _sendMessage() async {
-    if (_messagecontroller.text.isNotEmpty) {
-      await _chatService.sendMessage(adminId, _messagecontroller.text);
-
-      _messagecontroller.clear();
-    }
-  }
-
-  final TextEditingController _messagecontroller = TextEditingController();
-  final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: whitecolor,
-      appBar: AppBar(
-        backgroundColor: colorteal,
-        toolbarHeight: 80,
-        titleSpacing: 20,
-        automaticallyImplyLeading: false,
-        title: Text(
-          'CHAT WITH TRIPX',
-          style: TextStyle(
-              color: whitecolor,
-              fontWeight: FontWeight.bold,
-              fontFamily: bodoni),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () async {
-                final Uri url = Uri(scheme: 'tel', path: '9072051005');
-
-                if (await canLaunchUrl(url)) {
-                  launchUrl(url);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text(
-                      "can't do the call",
-                      style: TextStyle(color: colorteal),
-                    ),
-                    backgroundColor: whitecolor,
-                  ));
-                }
-              },
-              icon: const Icon(
-                Icons.phone_in_talk,
+    return BlocProvider(
+      create: (context) => ChatBloc(ChatService())..add(LoadMessages()),
+      child: Scaffold(
+        backgroundColor: whitecolor,
+        appBar: AppBar(
+          backgroundColor: colorteal,
+          toolbarHeight: 80,
+          titleSpacing: 20,
+          automaticallyImplyLeading: false,
+          title: Text(
+            'CHAT WITH TRIPX',
+            style: TextStyle(
                 color: whitecolor,
-              )),
-          PopupMenuButton<String>(
-            icon: const Icon(
-              Icons.more_vert_outlined,
-              color: Colors.white,
-            ),
-            onSelected: (value) {
-              if (value == 'clear') {}
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                const PopupMenuItem<String>(
-                  value: 'clear',
-                  child: Text('Clear Messages'),
-                ),
-              ];
-            },
+                fontWeight: FontWeight.bold,
+                fontFamily: bodoni),
           ),
-        ],
-      ),
-      body: isLoading
-          ? Center(
-              child: LoadingAnimationWidget.threeArchedCircle(
-                  color: colorteal, size: 60),
-            )
-          : Column(
-              children: [
-                Expanded(
-                  child: _buildMessagelist(),
-                ),
-                _buildMessageinput(),
-              ],
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  final Uri url = Uri(scheme: 'tel', path: '9072051005');
+
+                  if (await canLaunchUrl(url)) {
+                    launchUrl(url);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                        "can't do the call",
+                        style: TextStyle(color: colorteal),
+                      ),
+                      backgroundColor: whitecolor,
+                    ));
+                  }
+                },
+                icon: const Icon(
+                  Icons.phone_in_talk,
+                  color: whitecolor,
+                )),
+            PopupMenuButton<String>(
+              icon: const Icon(
+                Icons.more_vert_outlined,
+                color: Colors.white,
+              ),
+              onSelected: (value) {
+                if (value == 'clear') {}
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  const PopupMenuItem<String>(
+                    value: 'clear',
+                    child: Text('Clear Messages'),
+                  ),
+                ];
+              },
             ),
+          ],
+        ),
+        body: BlocBuilder<ChatBloc, ChatState>(
+          builder: (context, state) {
+            if (state is ChatLoading) {
+              return Center(
+                child: LoadingAnimationWidget.threeArchedCircle(
+                    color: colorteal, size: 60),
+              );
+            } else if (state is ChatLoaded) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: _buildMessagelist(state.messages),
+                  ),
+                  _buildMessageinput(context),
+                ],
+              );
+            } else if (state is ChatError) {
+              return Center(child: Text('Error: ${state.error}'));
+            }
+            return Container();
+          },
+        ),
+      ),
     );
   }
 
-  Widget _buildMessageinput() {
+  Widget _buildMessageinput(BuildContext context) {
+    final TextEditingController _messagecontroller = TextEditingController();
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
@@ -160,7 +148,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     color: colorteal,
                     iconSize: 35,
                     icon: const Icon(Icons.send),
-                    onPressed: _sendMessage,
+                    onPressed: () {
+                      context
+                          .read<ChatBloc>()
+                          .add(SendMessage(_messagecontroller.text));
+                      _messagecontroller.clear();
+                    },
                   )),
             ),
           ),
@@ -184,23 +177,9 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildMessagelist() {
-    return StreamBuilder(
-      stream: _chatService.getMessages(adminId, _firebaseAuth.currentUser!.uid),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text("Error ${snapshot.error}");
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("loading....");
-        }
-
-        return ListView(
-          children: snapshot.data!.docs
-              .map((document) => _buildMessageitem(document))
-              .toList(),
-        );
-      },
+   Widget _buildMessagelist(List<DocumentSnapshot> documents) {
+    return ListView(
+      children: documents.map((document) => _buildMessageitem(document)).toList(),
     );
   }
 }

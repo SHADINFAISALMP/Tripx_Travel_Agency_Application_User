@@ -1,11 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:tripx_user_application/bloc/signupimage/profileimage_bloc.dart';
+import 'package:tripx_user_application/data_provider/add_image_to_firebase.dart';
+import 'package:tripx_user_application/screens/log_in_screen/log_in.dart';
 import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/fonts.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
+import 'package:tripx_user_application/widgets/home_screen_widgets/Userprofile_service.dart.dart';
 
 class Editprofilesavebutton extends StatelessWidget {
   const Editprofilesavebutton({
@@ -30,7 +34,7 @@ class Editprofilesavebutton extends StatelessWidget {
           builder: (BuildContext context) {
             return Center(
               child: LoadingAnimationWidget.threeArchedCircle(
-                color: colorteal,
+                color: whitecolor,
                 size: 60,
               ),
             );
@@ -48,20 +52,39 @@ class Editprofilesavebutton extends StatelessWidget {
           'password': newPassword,
         };
 
-        final userDoc = FirebaseFirestore.instance
-            .collection('userdetails')
-            .doc('rgQJjeHxzvWIgKtQ4HXN');
-        await userDoc.update(updatedData);
+        final currentUserDoc =
+            await UserProfileService.getUserProfileData(userEmail!);
+
+        await currentUserDoc.reference.update(updatedData);
+
+        if (BlocProvider.of<ProfileimageBloc>(context).state.imageInBytes !=
+            null) {
+          final url =
+              await Addimagetofirebase().addprofileimagetofirebase(context);
+          await currentUserDoc.reference.update({"imagepath": url});
+        }
 
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')),
+          const SnackBar(
+              backgroundColor: orangecolor,
+              content: Center(
+                child: Text(
+                  'Profile updated successfully',
+                  style: TextStyle(color: whitecolor),
+                ),
+              )),
         );
         Navigator.pop(context);
       } catch (e) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update profile: $e')),
+          SnackBar(
+              backgroundColor: orangecolor,
+              content: Text(
+                'Failed to update profile: $e',
+                style: const TextStyle(color: whitecolor),
+              )),
         );
       }
     }
@@ -74,10 +97,23 @@ class Editprofilesavebutton extends StatelessWidget {
         height: mediaqueryheight(0.07, context),
         width: mediaquerywidht(0.5, context),
         decoration: BoxDecoration(
-            color: orangecolor, borderRadius: BorderRadius.circular(20)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(1, 5),
+            ),
+          ],
+          color: orangecolor,
+          borderRadius: BorderRadius.circular(20),
+        ),
         alignment: Alignment.center,
-        child:
-            mytext("Save", fontFamily: sedan, fontSize: 26, color: whitecolor),
+        child: mytext("Save",
+            fontFamily: sedan,
+            fontSize: 26,
+            color: whitecolor,
+            fontWeight: FontWeight.bold),
       ),
     );
   }

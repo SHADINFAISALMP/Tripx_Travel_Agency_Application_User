@@ -73,17 +73,17 @@ class _EditprofileState extends State<Editprofile> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
-            color: whitecolor,
+            color: colorteal,
           ),
         ),
         centerTitle: true,
-        backgroundColor: colorteal,
+        backgroundColor: whitecolor,
         title: mytext("Edit Profile",
             fontFamily: sedan,
             fontSize: mediaqueryheight(0.029, context),
-            color: whitecolor),
+            color: colorteal),
       ),
       body: FutureBuilder(
         future: _userprofile,

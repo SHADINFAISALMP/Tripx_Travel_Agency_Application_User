@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tripx_user_application/models/chat_message.dart';
@@ -43,6 +45,24 @@ class ChatService {
         .collection('messages')
         .orderBy('timestamp', descending: false)
         .snapshots();
+  }
+
+   Future<void> deleteMessage(String receiverId, String messageId) async {
+    final String currentUserId = _firebaseAuth.currentUser!.uid;
+    
+    List<String> ids = [currentUserId, receiverId];
+    ids.sort();
+    String chatRoomId = ids.join("_");
+
+    // Reference to the specific message document within the chat room
+    DocumentReference messageDocRef = _firestore
+      .collection("chatroom")
+      .doc(chatRoomId)
+      .collection("messages")
+      .doc(messageId);
+
+    // Delete the message
+    await messageDocRef.delete();
   }
 
   Stream<QuerySnapshot> getUserChats(String adminId) {

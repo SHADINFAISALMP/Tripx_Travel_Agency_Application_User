@@ -6,13 +6,13 @@ import 'package:tripx_user_application/utils/mediaquery.dart';
 class Daysnightsrow extends StatelessWidget {
   final String text;
   final String topname;
-  final String imagepath; 
+  final String imagepath;
 
   const Daysnightsrow({
     super.key,
     required this.text,
     required this.topname,
-    required this.imagepath, 
+    required this.imagepath,
   });
 
   @override
@@ -111,8 +111,7 @@ class Startdateandenddate extends StatelessWidget {
               child: Image.asset(
                 imagepath,
                 fit: BoxFit.cover,
-              )
-              ),
+              )),
           const SizedBox(width: 10),
           Flexible(
             child: Column(
@@ -158,6 +157,7 @@ class PackageDetailsContainers extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        border: Border.all(color: orangecolor),
         color: whitecolor,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         boxShadow: [

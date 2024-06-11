@@ -145,24 +145,92 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildMessageitem(DocumentSnapshot document) {
+  Widget _buildMessageItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
     final String currentUserId = _firebaseAuth.currentUser!.uid;
     bool isSentByMe = data['senderid'] == currentUserId;
 
-    return Align(
-      alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: ChatBubble(
-        message: data['message'],
-        timestamp: data['timestamp'],
-        isSentByMe: isSentByMe,
+    return Dismissible(
+      key: Key(document.id),
+      direction:
+          isSentByMe ? DismissDirection.endToStart : DismissDirection.none,
+      confirmDismiss: (direction) async {
+        return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: whitecolor,
+              title: const Text(
+                'Delete Message',
+                style: TextStyle(color: colorteal),
+              ),
+              content: const Text(
+                'Are you sure you want to delete this message?',
+                style: TextStyle(color: colorteal),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: colorteal),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.read<ChatBloc>().add(DeleteMessage(document));
+                    Navigator.of(context).pop(true);
+                  },
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+            );
+          },
+        ).then((value) {
+          if (value) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  backgroundColor: orangecolor,
+                  content: Center(
+                      child: Text(
+                    'Message deleted',
+                    style: TextStyle(
+                        color: whitecolor, fontWeight: FontWeight.bold),
+                  ))),
+            );
+          }
+          return value;
+        });
+      },
+      background: Container(
+        color: Colors.red,
+        padding: const EdgeInsets.only(right: 20),
+        alignment: Alignment.centerRight,
+        child: const Icon(
+          Icons.delete,
+          color: Colors.white,
+        ),
+      ),
+      child: GestureDetector(
+        onTap: () async {},
+        child: Align(
+          alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
+          child: ChatBubble(
+            message: data['message'],
+            timestamp: data['timestamp'],
+            isSentByMe: isSentByMe,
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildMessagelist(List<DocumentSnapshot> documents) {
     if (documents.isEmpty) {
-      return Center(
+      return const Center(
         child: Text(
           'No messages yet',
           style: TextStyle(fontSize: 18, color: Colors.grey),
@@ -171,7 +239,7 @@ class _ChatScreenState extends State<ChatScreen> {
     } else {
       return ListView(
         children:
-            documents.map((document) => _buildMessageitem(document)).toList(),
+            documents.map((document) => _buildMessageItem(document)).toList(),
       );
     }
   }

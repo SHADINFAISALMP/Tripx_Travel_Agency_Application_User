@@ -42,52 +42,6 @@ class _EditprofilecontentState extends State<Editprofilecontent> {
 
   @override
   Widget build(BuildContext context) {
-    Widget buildTextField({
-      required TextEditingController controller,
-      required String hintText,
-      required IconData icon,
-      required TextInputType keyboard,
-      int? maxlength,
-    }) {
-      return Container(
-        width: mediaquerywidht(0.9, context),
-        decoration: BoxDecoration(
-          color: whitecolor,
-
-          borderRadius: BorderRadius.circular(20.0),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-          //     spreadRadius: 4,
-          //     blurRadius: 5,
-          //     offset: const Offset(0, 8),
-          //   ),
-          // ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20.0),
-          child: TextFormField(
-            keyboardType: keyboard,
-            maxLength: maxlength,
-            controller: controller,
-            style: TextStyle(
-              height: mediaqueryheight(0.003, context),
-              color: colorteal,
-              backgroundColor: whitecolor,
-            ),
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: Icon(icon),
-              prefixIconColor: colorteal,
-              fillColor: whitecolor,
-              filled: true,
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-      );
-    }
-
     return Column(
       children: [
         SizedBox(
@@ -120,7 +74,7 @@ class _EditprofilecontentState extends State<Editprofilecontent> {
                       },
                       child: const Icon(
                         Icons.edit,
-                        color: whitecolor,
+                        color: orangecolor,
                         size: 40.0,
                       ),
                     ),
@@ -133,29 +87,126 @@ class _EditprofilecontentState extends State<Editprofilecontent> {
         SizedBox(
           height: mediaqueryheight(0.05, context),
         ),
-        buildTextField(
-            keyboard: TextInputType.name,
+        SizedBox(
+          width: mediaquerywidht(.9, context),
+          child: TextFormField(
+            keyboardType: TextInputType.name,
+            maxLength: null,
             controller: _nameController,
-            hintText: 'Enter Your Name',
-            icon: Icons.person),
+            style: const TextStyle(
+              color: colorteal,
+              fontSize: 20,
+              backgroundColor: whitecolor,
+            ),
+            decoration: InputDecoration(
+              hintText: 'Enter Your Name',
+              prefixIcon: const Icon(Icons.person),
+              prefixIconColor: colorteal,
+              fillColor: whitecolor,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: orangecolor),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                  color: orangecolor, // Border color when enabled
+                  width: 1.0,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                  color: orangecolor, // Border color when focused
+                  width: 1.0,
+                ),
+              ),
+            ),
+          ),
+        ),
         SizedBox(
           height: mediaqueryheight(0.03, context),
         ),
-        buildTextField(
-            keyboard: TextInputType.number,
-            maxlength: 10,
+        SizedBox(
+          width: mediaquerywidht(.9, context),
+          child: TextFormField(
+            keyboardType: TextInputType.number,
+            maxLength: 10,
             controller: _phoneController,
-            hintText: 'Enter Your Phone number',
-            icon: Icons.phone),
-        SizedBox(
-          height: mediaqueryheight(0.03, context),
+            style: const TextStyle(
+              fontSize: 20,
+              color: colorteal,
+              backgroundColor: whitecolor,
+            ),
+            decoration: InputDecoration(
+              hintText: 'Enter Your Phone number',
+              prefixIcon: const Icon(Icons.phone),
+              prefixIconColor: colorteal,
+              fillColor: whitecolor,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: orangecolor),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                  color: orangecolor, // Border color when enabled
+                  width: 1.0,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                  color: orangecolor, // Border color when focused
+                  width: 1.0,
+                ),
+              ),
+            ),
+          ),
         ),
-        buildTextField(
-            keyboard: TextInputType.number,
-            maxlength: 6,
+        SizedBox(
+          height: mediaqueryheight(0.02, context),
+        ),
+        SizedBox(
+          width: mediaquerywidht(0.9, context),
+          child: TextFormField(
+            keyboardType: TextInputType.name,
+            maxLength: 6,
             controller: _passwordController,
-            hintText: 'Enter Your Password',
-            icon: Icons.password),
+            style: const TextStyle(
+              fontSize: 20,
+              color: colorteal,
+              backgroundColor: whitecolor,
+            ),
+            decoration: InputDecoration(
+              hintText: 'Enter Your Password',
+              prefixIcon: const Icon(Icons.password),
+              prefixIconColor: colorteal,
+              fillColor: whitecolor,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: orangecolor),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                  color: orangecolor, // Border color when enabled
+                  width: 1.0,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                  color: orangecolor, // Border color when focused
+                  width: 1.0,
+                ),
+              ),
+            ),
+          ),
+        ),
         SizedBox(
           height: mediaqueryheight(0.07, context),
         ),

@@ -37,5 +37,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         emit(ChatError(e.toString()));
       }
     });
+    on<DeleteMessage>((event, emit) async {
+      try {
+        String messageId = event.message.id;
+        await chatService.deleteMessage(adminId, messageId);
+      } catch (e) {
+        emit(ChatError(e.toString()));
+      }
+    });
   }
 }

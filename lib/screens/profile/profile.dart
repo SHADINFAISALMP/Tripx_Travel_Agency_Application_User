@@ -60,31 +60,37 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 33),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: mediaquerywidht(0.2, context),
-                              child: IconButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                icon: const Icon(Icons.arrow_back_ios),
+                        padding: const EdgeInsets.only(top: 25),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: mediaquerywidht(0.2, context),
+                                child: IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(Icons.arrow_back_ios),
+                                  color: whitecolor,
+                                ),
+                              ),
+                              SizedBox(
+                                width: mediaquerywidht(0.20, context),
+                              ),
+                              mytext(
+                                "My Profile",
+                                fontFamily: bodoni,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
                                 color: whitecolor,
                               ),
-                            ),
-                            SizedBox(
-                              width: mediaquerywidht(0.20, context),
-                            ),
-                            mytext("My Profile",
-                                fontFamily: sedan,
-                                fontSize: 22,
-                                color: whitecolor),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(
-                        height: mediaqueryheight(0.04, context),
+                        height: mediaqueryheight(0.02, context),
                       ),
                       Container(
                         decoration: const BoxDecoration(
@@ -93,7 +99,7 @@ class _ProfileState extends State<Profile> {
                               bottomRight: Radius.circular(80),
                             ),
                             color: whitecolor),
-                        height: mediaqueryheight(0.873, context),
+                        height: mediaqueryheight(0.885, context),
                         width: mediaquerywidht(double.infinity, context),
                         child: Column(
                           children: [

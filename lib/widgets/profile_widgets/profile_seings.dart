@@ -128,7 +128,7 @@ class Profile_settings extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: mediaqueryheight(0.02, context),
+          height: mediaqueryheight(0.03, context),
         ),
         GestureDetector(
           onTap: () {
@@ -155,7 +155,7 @@ class Profile_settings extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: mediaqueryheight(0.02, context),
+          height: mediaqueryheight(0.03, context),
         ),
         GestureDetector(
           onTap: () => _showRatingDialog(context),
@@ -179,7 +179,7 @@ class Profile_settings extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: mediaqueryheight(0.02, context),
+          height: mediaqueryheight(0.03, context),
         ),
         GestureDetector(
           onTap: () => _shareApp(),
@@ -203,7 +203,7 @@ class Profile_settings extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: mediaqueryheight(0.02, context),
+          height: mediaqueryheight(0.03, context),
         ),
         GestureDetector(
           onTap: () {
@@ -230,7 +230,7 @@ class Profile_settings extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: mediaqueryheight(0.02, context),
+          height: mediaqueryheight(0.03, context),
         ),
         GestureDetector(
           onTap: () {
@@ -256,35 +256,8 @@ class Profile_settings extends StatelessWidget {
             ],
           ),
         ),
-        // SizedBox(
-        //   height: mediaqueryheight(0.02, context),
-        // ),
-        // GestureDetector(
-        //   onTap: () {
-        //     Navigator.push(context,
-        //         MaterialPageRoute(builder: (context) => const FeedBack()));
-        //   },
-        //   child: Row(
-        //     children: [
-        //       const Icon(
-        //         Icons.feed_outlined,
-        //         color: colorteal,
-        //         size: 30,
-        //       ),
-        //       SizedBox(
-        //         width: mediaquerywidht(0.05, context),
-        //       ),
-        //       mytext("Send Feedback",
-        //           fontFamily: sedan, fontSize: 20, color: colorteal),
-        //       SizedBox(
-        //         width: mediaquerywidht(0.38, context),
-        //       ),
-        //       const Icon(Icons.navigate_next_rounded),
-        //     ],
-        //   ),
-        // ),
         SizedBox(
-          height: mediaqueryheight(0.02, context),
+          height: mediaqueryheight(0.03, context),
         ),
         const Logoutbutton(),
         SizedBox(
@@ -295,8 +268,10 @@ class Profile_settings extends StatelessWidget {
             "Version 1.0.1",
             textAlign: TextAlign.start,
             style: TextStyle(
-              fontFamily: sedan,
+              fontFamily: bodoni,
+              fontWeight: FontWeight.bold,
               fontSize: 18,
+              fontStyle: FontStyle.italic,
               color: blackcolor,
             ),
           ),

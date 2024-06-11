@@ -109,7 +109,7 @@ class PackageDetails extends StatelessWidget {
                             if (await canLaunchUrl(url)) {
                               launchUrl(url);
                             } else {
-                             ScaffoldMessenger.of(context)
+                              ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
                                 content: Text(
                                   "can't do the call",
@@ -145,7 +145,7 @@ class PackageDetails extends StatelessWidget {
                             if (await canLaunchUrl(url)) {
                               await launchUrl(url);
                             } else {
-                            ScaffoldMessenger.of(context)
+                              ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
                                 content: Text(
                                   "can't do the direction",
@@ -194,12 +194,23 @@ class PackageDetails extends StatelessWidget {
 }
 
 Widget _buildActionButton(IconData icon, void Function() onPressed) {
-  return CircleAvatar(
-    radius: 25,
-    backgroundColor: Colors.teal,
-    child: IconButton(
-      icon: Icon(icon, color: Colors.white),
-      onPressed: onPressed,
+  return Container(
+    width: 50, 
+    height: 50, 
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      border: Border.all(
+        color: orangecolor, 
+        width: 2.0, 
+      ),
+    ),
+    child: CircleAvatar(
+      radius: 23,
+      backgroundColor: Colors.teal,
+      child: IconButton(
+        icon: Icon(icon, color: Colors.white),
+        onPressed: onPressed,
+      ),
     ),
   );
 }

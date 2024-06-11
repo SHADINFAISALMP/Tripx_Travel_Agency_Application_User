@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripx_user_application/bloc/boarding/boarding_bloc_bloc.dart';
 import 'package:tripx_user_application/bloc/bottomnavigation/bottomnavigation_bloc.dart';
+import 'package:tripx_user_application/bloc/chat_bloc/chat_bloc.dart';
+import 'package:tripx_user_application/bloc/chat_bloc/chat_event.dart';
 import 'package:tripx_user_application/bloc/favorite/favorite_cubit.dart';
 import 'package:tripx_user_application/bloc/flight/flight_bloc.dart';
 import 'package:tripx_user_application/bloc/flight_recents/flight_recents_bloc.dart';
@@ -14,6 +16,7 @@ import 'package:tripx_user_application/bloc/profile/profile_bloc.dart';
 import 'package:tripx_user_application/bloc/signup/signup_bloc.dart';
 import 'package:tripx_user_application/bloc/signupimage/profileimage_bloc.dart';
 import 'package:tripx_user_application/firebase_options.dart';
+import 'package:tripx_user_application/screens/chat_screen/chat_Service.dart';
 import 'package:tripx_user_application/screens/flight_radar/flight_routes_bloc.dart';
 
 import 'package:tripx_user_application/screens/splash/splash_screen.dart';
@@ -23,6 +26,9 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MultiBlocProvider(
     providers: [
+      BlocProvider(
+        create: (context) => ChatBloc(ChatService())..add(LoadMessages()),
+      ),
       BlocProvider(
         create: (context) => HomescreenListItemsCubit(),
       ),

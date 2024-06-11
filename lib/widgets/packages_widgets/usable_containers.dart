@@ -91,7 +91,7 @@ class Appbarcontainer extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: Icon(Icons.arrow_back_ios)),
+            icon: const Icon(Icons.arrow_back_ios)),
         centerTitle: true,
         title: mytext(
           'ADD PERSON',
@@ -118,7 +118,7 @@ class Appbar extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back_ios)),
+          icon: const Icon(Icons.arrow_back_ios)),
       centerTitle: true,
       title: mytext(
         'PRICE SUMMARY',

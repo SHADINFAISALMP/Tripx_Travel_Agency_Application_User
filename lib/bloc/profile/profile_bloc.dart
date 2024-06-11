@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tripx_user_application/firebase_collection_refernce/user_information.dart';
 import 'package:tripx_user_application/models/user_models.dart';
@@ -17,7 +18,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         emit(ProfileEror("invalid email format"));
         return;
       }
-      final String profileimageUrl = await _getProfileImageUrl();
+      final String profileimageUrl = await _getProfileImageUrl(event.useremail);
 
       final updateduser = UserModel(
           name: event.newName,
@@ -26,17 +27,24 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           password: event.newPassword,
           confirmpassword: event.newPassword,
           imagepath: profileimageUrl);
-      await AddUserDetailsToFirebase().updateUserData(updateduser);
+      await AddUserDetailsToFirebase()
+          .updateUserData(updateduser, event.useremail);
       emit(Profileupdated());
     } catch (e) {
       emit(ProfileEror("failed to upload profile $e"));
     }
   }
 
-  Future<String> _getProfileImageUrl() async {
-    // Implement this method to get the current user's profile image URL
-    // You can replace it with your actual implementation
-    return ''; // Return a placeholder for demonstration
+  Future<String> _getProfileImageUrl(String userEmail) async {
+    try {
+      final userDoc = await userDetails.doc(userEmail).get();
+      final userData = userDoc.data() as Map<String, dynamic>;
+      return userData[
+          'imagePath']; 
+    } catch (e) {
+      print("Error getting profile image URL: $e");
+      return ''; 
+    }
   }
 }
 
@@ -46,10 +54,11 @@ bool isValidEmail(String email) {
 }
 
 class AddUserDetailsToFirebase {
-  Future<void> updateUserData(UserModel updatedUser) async {
+  Future<bool> updateUserData(UserModel updatedUser, String userEmail) async {
     try {
       final data = updatedUser.toMap();
-      final userDoc = userDetails.doc(updatedUser.email);
+      final userDoc =
+          FirebaseFirestore.instance.collection('userdetails').doc(userEmail);
       final userDocSnapshot = await userDoc.get();
 
       if (userDocSnapshot.exists) {
@@ -58,8 +67,10 @@ class AddUserDetailsToFirebase {
         // Create a new document with the provided email
         await userDoc.set(data);
       }
+      return true;
     } catch (e) {
-      throw Exception("Error updating user data: $e");
+      print("Error updating user data: $e");
+      return false;
     }
   }
 }

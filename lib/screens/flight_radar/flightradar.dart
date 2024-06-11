@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,6 +72,7 @@ class _SearchpageState extends State<Flightradar> {
   void setCustomMapPin() async {
     final Uint8List imageData =
         await getBytesFromAsset('assets/images/yellow.png', 100);
+    // ignore: deprecated_member_use
     _localationpin = BitmapDescriptor.fromBytes(imageData);
   }
 

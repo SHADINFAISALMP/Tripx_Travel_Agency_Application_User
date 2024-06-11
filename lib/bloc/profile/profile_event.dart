@@ -8,7 +8,7 @@ class UpdateProfile extends ProfileEvent {
   final String newEmail;
   final String newPhonenumber;
   final String newPassword;
-
-  UpdateProfile({required this.newName, required this.newEmail, required this.newPhonenumber, required this.newPassword});
+  final String useremail;
+  UpdateProfile(this.useremail, {required this.newName, required this.newEmail, required this.newPhonenumber, required this.newPassword});
   
 }

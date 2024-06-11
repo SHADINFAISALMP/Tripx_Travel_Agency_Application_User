@@ -69,9 +69,14 @@ class _EditprofileState extends State<Editprofile> {
     return Scaffold(
       backgroundColor: colorteal,
       appBar: AppBar(
-        leading: const Icon(
-          Icons.arrow_back_ios_new,
-          color: whitecolor,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: whitecolor,
+          ),
         ),
         centerTitle: true,
         backgroundColor: colorteal,
@@ -95,17 +100,13 @@ class _EditprofileState extends State<Editprofile> {
           } else {
             final userProfile = snapshot.data!.data() as Map<String, dynamic>;
             _nameController.text = userProfile['name'];
-            _emailController.text = userProfile['email'];
             _phoneController.text = userProfile['phonenumber'];
             _passwordController.text = userProfile['password'];
             return SingleChildScrollView(
               child: Center(
                 child: Editprofilecontent(
-                    userProfile: userProfile,
-                    nameController: _nameController,
-                    emailController: _emailController,
-                    phoneController: _phoneController,
-                    passwordController: _passwordController),
+                  userProfile: userProfile,
+                ),
               ),
             );
           }

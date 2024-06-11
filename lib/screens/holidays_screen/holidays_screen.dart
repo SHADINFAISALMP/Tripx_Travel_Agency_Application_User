@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,6 +79,7 @@ class _HolidaysScreenState extends State<HolidaysScreen> {
   }
 }
 
+// ignore: camel_case_types
 class Homescreen_list_items extends StatefulWidget {
   final BuildContext context;
   final String imagePath;
@@ -185,7 +188,7 @@ class _Homescreen_list_itemsState extends State<Homescreen_list_items> {
                                       state.isFavorite
                                           ? 'REMOVED FROM FAVORITES'
                                           : 'ADDED TO FAVORITES',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'Bodoni',

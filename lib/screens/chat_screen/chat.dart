@@ -66,23 +66,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   Icons.phone_in_talk,
                   color: whitecolor,
                 )),
-            PopupMenuButton<String>(
-              icon: const Icon(
-                Icons.more_vert_outlined,
-                color: Colors.white,
-              ),
-              onSelected: (value) {
-                if (value == 'clear') {}
-              },
-              itemBuilder: (BuildContext context) {
-                return [
-                  const PopupMenuItem<String>(
-                    value: 'clear',
-                    child: Text('Clear Messages'),
-                  ),
-                ];
-              },
-            ),
           ],
         ),
         body: BlocBuilder<ChatBloc, ChatState>(
@@ -112,16 +95,16 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageinput(BuildContext context) {
-    final TextEditingController _messagecontroller = TextEditingController();
+    final TextEditingController messagecontroller = TextEditingController();
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
         children: [
           Expanded(
             child: TextField(
-              controller: _messagecontroller,
+              controller: messagecontroller,
               decoration: InputDecoration(
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.message,
                     color: colorteal,
                     size: 30,
@@ -132,14 +115,14 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: colorteal,
                       width: 2.0,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: colorteal,
                       width: 2.0,
                     ),
@@ -151,8 +134,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     onPressed: () {
                       context
                           .read<ChatBloc>()
-                          .add(SendMessage(_messagecontroller.text));
-                      _messagecontroller.clear();
+                          .add(SendMessage(messagecontroller.text));
+                      messagecontroller.clear();
                     },
                   )),
             ),
@@ -177,10 +160,20 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-   Widget _buildMessagelist(List<DocumentSnapshot> documents) {
-    return ListView(
-      children: documents.map((document) => _buildMessageitem(document)).toList(),
-    );
+  Widget _buildMessagelist(List<DocumentSnapshot> documents) {
+    if (documents.isEmpty) {
+      return Center(
+        child: Text(
+          'No messages yet',
+          style: TextStyle(fontSize: 18, color: Colors.grey),
+        ),
+      );
+    } else {
+      return ListView(
+        children:
+            documents.map((document) => _buildMessageitem(document)).toList(),
+      );
+    }
   }
 }
 
@@ -202,9 +195,9 @@ class ChatBubble extends StatelessWidget {
 
     return Container(
       margin: isSentByMe
-          ? EdgeInsets.only(left: 50, top: 10, bottom: 10, right: 10)
-          : EdgeInsets.only(right: 50, top: 10, bottom: 10, left: 10),
-      padding: EdgeInsets.all(12),
+          ? const EdgeInsets.only(left: 50, top: 10, bottom: 10, right: 10)
+          : const EdgeInsets.only(right: 50, top: 10, bottom: 10, left: 10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         gradient: isSentByMe
             ? LinearGradient(
@@ -221,17 +214,17 @@ class ChatBubble extends StatelessWidget {
                 end: Alignment.bottomRight,
               ),
         borderRadius: isSentByMe
-            ? BorderRadius.only(
+            ? const BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
                 bottomLeft: Radius.circular(20),
               )
-            : BorderRadius.only(
+            : const BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
                 bottomRight: Radius.circular(20),
               ),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 4,
@@ -250,7 +243,7 @@ class ChatBubble extends StatelessWidget {
               color: isSentByMe ? Colors.white : Colors.white,
             ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Text(
             formattedTime,
             style: TextStyle(

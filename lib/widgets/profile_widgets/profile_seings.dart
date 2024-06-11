@@ -3,7 +3,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tripx_user_application/screens/edit_profile/edit_profile.dart';
 import 'package:tripx_user_application/screens/settings/aboutus.dart';
-import 'package:tripx_user_application/screens/settings/feedback.dart';
 import 'package:tripx_user_application/screens/settings/privacypoliy.dart';
 import 'package:tripx_user_application/screens/settings/support.dart';
 import 'package:tripx_user_application/utils/colors.dart';
@@ -60,6 +59,7 @@ class Profile_settings extends StatelessWidget {
                   color: Colors.amber,
                 ),
                 onRatingUpdate: (rating) {
+                  // ignore: avoid_print
                   print(rating);
                 },
               ),
@@ -232,10 +232,11 @@ class Profile_settings extends StatelessWidget {
         SizedBox(
           height: mediaqueryheight(0.02, context),
         ),
-        GestureDetector(onTap: () {
-           Navigator.push(context,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const PrivacyPolicy()));
-        },
+          },
           child: Row(
             children: [
               const Icon(
@@ -255,33 +256,33 @@ class Profile_settings extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
-          height: mediaqueryheight(0.02, context),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const FeedBack()));
-          },
-          child: Row(
-            children: [
-              const Icon(
-                Icons.feed_outlined,
-                color: colorteal,
-                size: 30,
-              ),
-              SizedBox(
-                width: mediaquerywidht(0.05, context),
-              ),
-              mytext("Send Feedback",
-                  fontFamily: sedan, fontSize: 20, color: colorteal),
-              SizedBox(
-                width: mediaquerywidht(0.38, context),
-              ),
-              const Icon(Icons.navigate_next_rounded),
-            ],
-          ),
-        ),
+        // SizedBox(
+        //   height: mediaqueryheight(0.02, context),
+        // ),
+        // GestureDetector(
+        //   onTap: () {
+        //     Navigator.push(context,
+        //         MaterialPageRoute(builder: (context) => const FeedBack()));
+        //   },
+        //   child: Row(
+        //     children: [
+        //       const Icon(
+        //         Icons.feed_outlined,
+        //         color: colorteal,
+        //         size: 30,
+        //       ),
+        //       SizedBox(
+        //         width: mediaquerywidht(0.05, context),
+        //       ),
+        //       mytext("Send Feedback",
+        //           fontFamily: sedan, fontSize: 20, color: colorteal),
+        //       SizedBox(
+        //         width: mediaquerywidht(0.38, context),
+        //       ),
+        //       const Icon(Icons.navigate_next_rounded),
+        //     ],
+        //   ),
+        // ),
         SizedBox(
           height: mediaqueryheight(0.02, context),
         ),

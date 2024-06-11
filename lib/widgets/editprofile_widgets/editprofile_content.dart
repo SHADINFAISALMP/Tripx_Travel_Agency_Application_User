@@ -5,48 +5,70 @@ import 'package:tripx_user_application/utils/colors.dart';
 import 'package:tripx_user_application/utils/mediaquery.dart';
 import 'package:tripx_user_application/widgets/editprofile_widgets/profile_save.dart';
 
-class Editprofilecontent extends StatelessWidget {
+class Editprofilecontent extends StatefulWidget {
   const Editprofilecontent({
     super.key,
     required this.userProfile,
-    required TextEditingController nameController,
-    required TextEditingController emailController,
-    required TextEditingController phoneController,
-    required TextEditingController passwordController,
-  })  : _nameController = nameController,
-        _emailController = emailController,
-        _phoneController = phoneController,
-        _passwordController = passwordController;
+  });
 
   final Map<String, dynamic> userProfile;
-  final TextEditingController _nameController;
-  final TextEditingController _emailController;
-  final TextEditingController _phoneController;
-  final TextEditingController _passwordController;
+
+  @override
+  State<Editprofilecontent> createState() => _EditprofilecontentState();
+}
+
+class _EditprofilecontentState extends State<Editprofilecontent> {
+  late final TextEditingController _nameController;
+  late final TextEditingController _phoneController;
+  late final TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.userProfile['name']);
+    _phoneController =
+        TextEditingController(text: widget.userProfile['phonenumber']);
+    _passwordController =
+        TextEditingController(text: widget.userProfile['password']);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-     Widget buildTextField({
+    Widget buildTextField({
       required TextEditingController controller,
       required String hintText,
       required IconData icon,
+      required TextInputType keyboard,
+      int? maxlength,
     }) {
       return Container(
         width: mediaquerywidht(0.9, context),
         decoration: BoxDecoration(
+          color: whitecolor,
+
           borderRadius: BorderRadius.circular(20.0),
-          boxShadow: [
-            BoxShadow(
-              color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-              spreadRadius: 4,
-              blurRadius: 5,
-              offset: const Offset(0, 8),
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+          //     spreadRadius: 4,
+          //     blurRadius: 5,
+          //     offset: const Offset(0, 8),
+          //   ),
+          // ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
           child: TextFormField(
+            keyboardType: keyboard,
+            maxLength: maxlength,
             controller: controller,
             style: TextStyle(
               height: mediaqueryheight(0.003, context),
@@ -88,7 +110,8 @@ class Editprofilecontent extends StatelessWidget {
                         radius: 90.0,
                         backgroundImage: state.imageInBytes != null
                             ? MemoryImage(state.imageInBytes!) as ImageProvider
-                            : NetworkImage("${userProfile['imagepath']}"),
+                            : NetworkImage(
+                                "${widget.userProfile['imagepath']}"),
                       ),
                     ),
                     GestureDetector(
@@ -110,7 +133,8 @@ class Editprofilecontent extends StatelessWidget {
         SizedBox(
           height: mediaqueryheight(0.05, context),
         ),
-         buildTextField(
+        buildTextField(
+            keyboard: TextInputType.name,
             controller: _nameController,
             hintText: 'Enter Your Name',
             icon: Icons.person),
@@ -118,29 +142,25 @@ class Editprofilecontent extends StatelessWidget {
           height: mediaqueryheight(0.03, context),
         ),
         buildTextField(
-            controller: _emailController,
-            hintText: 'Enter Your Email',
-            icon: Icons.mail),
-        SizedBox(
-          height: mediaqueryheight(0.03, context),
-        ),
-        buildTextField(
+            keyboard: TextInputType.number,
+            maxlength: 10,
             controller: _phoneController,
             hintText: 'Enter Your Phone number',
             icon: Icons.phone),
         SizedBox(
           height: mediaqueryheight(0.03, context),
         ),
-       buildTextField(
+        buildTextField(
+            keyboard: TextInputType.number,
+            maxlength: 6,
             controller: _passwordController,
-            hintText: 'Enter Your Place',
-            icon: Icons.place),
+            hintText: 'Enter Your Password',
+            icon: Icons.password),
         SizedBox(
-          height: mediaqueryheight(0.03, context),
+          height: mediaqueryheight(0.07, context),
         ),
         Editprofilesavebutton(
             nameController: _nameController,
-            emailController: _emailController,
             phoneController: _phoneController,
             passwordController: _passwordController),
       ],

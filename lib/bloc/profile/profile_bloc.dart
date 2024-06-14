@@ -66,7 +66,6 @@ class AddUserDetailsToFirebase {
       if (userDocSnapshot.exists) {
         await userDoc.update(data);
       } else {
-        // Create a new document with the provided email
         await userDoc.set(data);
       }
       return true;

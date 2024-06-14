@@ -6,21 +6,24 @@ class Message {
   final String receiverId;
   final String message;
   final Timestamp timestamp;
+  final bool isDeleted;
 
   Message(
       {required this.senderId,
       required this.senderemail,
       required this.receiverId,
       required this.message,
-      required this.timestamp});
+      required this.timestamp,
+      required this.isDeleted});
 
   Map<String, dynamic> toMap() {
     return {
       'senderid': senderId,
       'senderemail': senderemail,
       'recieverid': receiverId,
-      'message':message,
-      'timestamp':timestamp,
+      'message': message,
+      'timestamp': timestamp,
+      'isdeleted':isDeleted
     };
   }
 }

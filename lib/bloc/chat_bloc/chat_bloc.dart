@@ -41,6 +41,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       try {
         String messageId = event.message.id;
         await chatService.deleteMessage(adminId, messageId);
+         List<DocumentSnapshot> updatedMessages = List.from((state as ChatLoaded).messages)
+          ..remove(event.message);
+        emit(ChatLoaded(updatedMessages));
       } catch (e) {
         emit(ChatError(e.toString()));
       }

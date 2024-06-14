@@ -14,11 +14,13 @@ class ChatService {
     final Timestamp timestamp = Timestamp.now();
 
     Message newMessage = Message(
-        senderId: currentUserId,
-        senderemail: currentUserEmail,
-        receiverId: receiverId,
-        message: message,
-        timestamp: timestamp);
+      senderId: currentUserId,
+      senderemail: currentUserEmail,
+      receiverId: receiverId,
+      message: message,
+      timestamp: timestamp,
+      isDeleted: false,
+    );
 
     List<String> ids = [currentUserId, receiverId];
     ids.sort();
@@ -47,21 +49,20 @@ class ChatService {
         .snapshots();
   }
 
-   Future<void> deleteMessage(String receiverId, String messageId) async {
+  Future<void> deleteMessage(String receiverId, String messageId) async {
     final String currentUserId = _firebaseAuth.currentUser!.uid;
-    
+
     List<String> ids = [currentUserId, receiverId];
     ids.sort();
     String chatRoomId = ids.join("_");
 
-    // Reference to the specific message document within the chat room
     DocumentReference messageDocRef = _firestore
-      .collection("chatroom")
-      .doc(chatRoomId)
-      .collection("messages")
-      .doc(messageId);
+        .collection("chatroom")
+        .doc(chatRoomId)
+        .collection("messages")
+        .doc(messageId);
 
-    // Delete the message
+    await messageDocRef.update({'isdeleted': true});
     await messageDocRef.delete();
   }
 
